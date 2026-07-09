@@ -1,91 +1,55 @@
-"use client";
+import { Car, UserRound, Plane, CalendarRange } from 'lucide-react';
+import Reveal from './Reveal';
 
-import { motion } from 'framer-motion';
+const services = [
+  {
+    icon: Car,
+    title: 'Location sans chauffeur',
+    text: "Prends le volant toi-même. Voiture propre, entretenue et prête à rouler, avec des papiers en règle."
+  },
+  {
+    icon: UserRound,
+    title: 'Location avec chauffeur',
+    text: "Un chauffeur qui connaît bien Douala te conduit où tu veux, en toute tranquillité."
+  },
+  {
+    icon: Plane,
+    title: 'Transfert aéroport',
+    text: "On vient te chercher ou te déposer à l’aéroport de Douala à l’heure, sans stress."
+  },
+  {
+    icon: CalendarRange,
+    title: 'À la journée ou longue durée',
+    text: "Une journée, une semaine ou plus : tarifs adaptés pour les particuliers et les entreprises."
+  }
+];
 
 export default function ServicesSection() {
   return (
-    <section className="py-24 sm:py-32" aria-labelledby="services-title">
+    <section className="bg-brand-soft">
       <div className="container">
-        <div className="mb-20 text-center">
-          <p className="font-sans text-[10px] font-bold uppercase tracking-[0.5em] text-brand-gold">Prestations</p>
-          <h2 id="services-title" className="mt-6 font-display text-4xl font-medium uppercase leading-tight tracking-tight text-white md:text-6xl">
-            L'excellence <br className="hidden md:block" /> Sans Compromis.
+        <div className="max-w-2xl">
+          <p className="text-sm font-semibold uppercase tracking-widest text-brand-red">Nos services</p>
+          <h2 className="mt-2 font-display text-3xl font-extrabold text-brand-ink sm:text-4xl">
+            Ce que nous proposons
           </h2>
+          <p className="mt-3 text-brand-gray">
+            Des solutions simples pour vos déplacements à Douala et partout au Cameroun.
+          </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3 md:grid-rows-2 lg:gap-6">
-          {/* Card 1: Large Span */}
-          <motion.article
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="group relative flex flex-col justify-end overflow-hidden rounded-[2rem] bg-brand-dark p-8 md:col-span-2 md:row-span-1 min-h-[350px] border border-white/[0.05]"
-          >
-            <div className="absolute inset-0 bg-gradient-to-tr from-brand-base via-transparent to-brand-gold/[0.02]" />
-            <div className="relative z-10">
-              <span className="mb-4 inline-block font-sans text-xs font-bold uppercase tracking-widest text-brand-gold">01</span>
-              <h3 className="font-display text-3xl font-medium text-white sm:text-4xl">Chauffeur Privé</h3>
-              <p className="mt-4 max-w-xl font-sans text-sm font-light leading-relaxed text-slate-400">
-                Discrétion absolue et professionnalisme. Nos chauffeurs formés à la conduite VIP maîtrisent parfaitement les itinéraires de Douala et ses environs pour des déplacements fluides et sécurisés.
-              </p>
-            </div>
-            {/* Minimalist icon / glow */}
-            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-gold/5 blur-3xl transition-all duration-700 group-hover:bg-brand-gold/10" />
-          </motion.article>
-
-          {/* Card 2: Small Square */}
-          <motion.article
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="group relative flex flex-col justify-end overflow-hidden rounded-[2rem] bg-brand-dark p-8 border border-white/[0.05] min-h-[350px]"
-          >
-            <div className="relative z-10">
-              <span className="mb-4 inline-block font-sans text-xs font-bold uppercase tracking-widest text-brand-gold">02</span>
-              <h3 className="font-display text-2xl font-medium text-white">Transfert <br/> Aéroport</h3>
-              <p className="mt-4 font-sans text-sm font-light leading-relaxed text-slate-400">
-                Accueil personnalisé dès votre sortie du terminal avec logistique bagages et accueil VIP intégré.
-              </p>
-            </div>
-          </motion.article>
-
-          {/* Card 3: Small Square */}
-          <motion.article
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="group relative flex flex-col justify-end overflow-hidden rounded-[2rem] bg-brand-dark p-8 border border-white/[0.05] min-h-[350px]"
-          >
-            <div className="relative z-10">
-              <span className="mb-4 inline-block font-sans text-xs font-bold uppercase tracking-widest text-brand-gold">03</span>
-              <h3 className="font-display text-2xl font-medium text-white">Location <br/> Longue Durée</h3>
-              <p className="mt-4 font-sans text-sm font-light leading-relaxed text-slate-400">
-                Contrats élites sur-mesure pour les exigences des entreprises et diplomates.
-              </p>
-            </div>
-          </motion.article>
-
-          {/* Card 4: Large Span horizontal */}
-          <motion.article
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="group relative flex flex-col justify-end overflow-hidden rounded-[2rem] bg-[#0A0A0E] p-8 md:col-span-2 md:row-span-1 border border-white/[0.05] min-h-[350px]"
-          >
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1600&q=80')] bg-cover bg-center opacity-10 grayscale mix-blend-luminosity transition-all duration-700 group-hover:opacity-25 group-hover:grayscale-0" />
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-base via-brand-base/80 to-transparent" />
-            <div className="relative z-10">
-              <span className="mb-4 inline-block font-sans text-xs font-bold uppercase tracking-widest text-brand-gold">04</span>
-              <h3 className="font-display text-3xl font-medium text-white sm:text-4xl">Sécurité <br /> Absolue</h3>
-              <p className="mt-4 max-w-xl font-sans text-sm font-light leading-relaxed text-slate-400">
-                L'ensemble de notre flotte exclusive bénéficie d'un suivi millimétré et d'une couverture "tous risques" intégrale pour garantir votre sérénité totale peu importe la route.
-              </p>
-            </div>
-          </motion.article>
-
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {services.map((s, idx) => (
+            <Reveal key={s.title} delay={idx * 80}>
+              <div className="group h-full rounded-2xl border border-brand-line bg-white p-6 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card">
+                <div className="grid h-11 w-11 place-items-center rounded-xl bg-brand-red/10 text-brand-red transition-transform duration-300 group-hover:scale-110 group-hover:bg-brand-red group-hover:text-white">
+                  <s.icon className="h-5 w-5" />
+                </div>
+                <h3 className="mt-4 font-display text-lg font-bold text-brand-ink">{s.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-brand-gray">{s.text}</p>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>

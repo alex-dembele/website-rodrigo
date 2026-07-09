@@ -1,15 +1,14 @@
 import { MetadataRoute } from 'next';
+import { site } from '@/lib/site';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://www.rodrigoservices.cm';
-
-  return [
-    { url: baseUrl, lastModified: new Date() },
-    { url: `${baseUrl}/vehicles`, lastModified: new Date() },
-    { url: `${baseUrl}/services`, lastModified: new Date() },
-    { url: `${baseUrl}/tarifs`, lastModified: new Date() },
-    { url: `${baseUrl}/about`, lastModified: new Date() },
-    { url: `${baseUrl}/contact`, lastModified: new Date() },
-    { url: `${baseUrl}/blog`, lastModified: new Date() }
-  ];
+  const base = site.url;
+  const now = new Date();
+  const routes = ['', '/vehicles', '/services', '/tarifs', '/reservation', '/about', '/contact', '/blog'];
+  return routes.map((path) => ({
+    url: `${base}${path}`,
+    lastModified: now,
+    changeFrequency: path === '' ? 'weekly' : 'monthly',
+    priority: path === '' ? 1 : path === '/reservation' || path === '/vehicles' ? 0.9 : 0.6
+  }));
 }

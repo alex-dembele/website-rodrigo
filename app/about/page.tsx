@@ -1,73 +1,85 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { Check } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import WhatsAppButton from '@/components/WhatsAppButton';
+import MapEmbed from '@/components/MapEmbed';
+import { site } from '@/lib/site';
+
+export const metadata: Metadata = {
+  title: 'À propos de Rodrigo Services',
+  description:
+    'Rodrigo Services est une petite entreprise de location de voiture basée à Bonamoussadi, Douala. Des voitures fiables, des prix clairs et un service de proximité.',
+  alternates: { canonical: '/about' }
+};
+
+const values = ['Prix honnêtes', 'Voitures entretenues', 'Proximité et écoute', 'Réponse rapide'];
 
 export default function AboutPage() {
   return (
-    <main className="bg-brand-base min-h-screen flex flex-col">
+    <>
       <Navbar />
-      <div className="flex-1">
-        <section className="container py-32">
-          {/* Header */}
-          <div className="space-y-6 text-center mb-32 mt-12">
-            <p className="font-sans text-[10px] font-bold uppercase tracking-[0.5em] text-brand-gold">Notre Maison</p>
-            <h1 className="font-display text-5xl font-medium uppercase leading-[0.9] tracking-tight text-white md:text-7xl">
-              L'Héritage <br/> Rodrigo
+      <main className="bg-brand-cream">
+        <section className="border-b border-brand-line bg-white">
+          <div className="container py-10 sm:py-12">
+            <p className="text-sm font-semibold uppercase tracking-widest text-brand-red">À propos</p>
+            <h1 className="mt-2 font-display text-3xl font-extrabold text-brand-ink sm:text-4xl">
+              Une location de voiture proche de vous
             </h1>
           </div>
+        </section>
 
-          <div className="grid gap-16 lg:grid-cols-[1fr_1fr] lg:items-center">
-            <div className="space-y-8 pr-8">
-              <h2 className="font-display text-3xl font-medium uppercase leading-tight text-white">
-                Redéfinir le Standard de l'Excellence au Cameroun
-              </h2>
-              <p className="font-sans text-sm font-light leading-relaxed text-slate-400">
-                Basée à Douala, Rodrigo Services s'est imposée comme la référence absolue en matière de mobilité de prestige. Nous ne louons pas de simples véhicules ; nous orchestons des expériences de conduite sans le moindre compromis sur la sécurité, le confort et l'esthétique.
+        <section className="container py-10 sm:py-12">
+          <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
+            <div className="space-y-4 text-brand-gray">
+              <p>
+                Rodrigo Services est une petite entreprise camerounaise de location de voiture, basée à
+                <strong className="text-brand-ink"> {site.address}, {site.city}</strong>. Notre objectif est
+                simple : vous proposer des voitures fiables à des prix clairs, sans complications.
               </p>
+              <p>
+                Que ce soit pour un rendez-vous en ville, un déplacement en famille, un transfert à
+                l’aéroport ou une location de plusieurs jours, on s’adapte à votre besoin — avec ou sans
+                chauffeur.
+              </p>
+              <p>
+                On répond vite par WhatsApp et par téléphone, et le paiement se fait en Mobile Money
+                (Orange Money ou MTN MoMo), comme vous en avez l’habitude.
+              </p>
+              <Link
+                href="/reservation"
+                className="mt-2 inline-flex items-center justify-center rounded-full bg-brand-red px-7 py-3.5 font-semibold text-white shadow-red transition-transform hover:-translate-y-0.5"
+              >
+                Réserver une voiture
+              </Link>
             </div>
-            
-            <div className="space-y-12 rounded-[2.5rem] border border-white/[0.05] bg-brand-dark p-12">
-              <div>
-                <p className="font-sans text-[10px] font-bold uppercase tracking-widest text-brand-gold mb-4">Notre mission</p>
-                <p className="font-sans text-xl font-light leading-relaxed text-white">Offrir une expérience de mobilité sûre, élégante et absolue aux clients locaux et internationaux de passage sur nos terres.</p>
-              </div>
-              
-              <div className="border-t border-white/[0.05] pt-8">
-                <p className="font-sans text-[10px] font-bold uppercase tracking-widest text-brand-gold mb-6">Nos Valeurs Cardinales</p>
-                <ul className="grid grid-cols-2 gap-4 font-sans text-sm font-light text-slate-400">
-                  <li className="flex items-center gap-3">
-                    <span className="h-[1px] w-4 bg-brand-gold"></span> Sécurité Absolue
+
+            <div className="rounded-2xl border border-brand-line bg-white p-6 shadow-soft">
+              <h2 className="font-display text-lg font-bold text-brand-ink">Ce qui compte pour nous</h2>
+              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                {values.map((v) => (
+                  <li key={v} className="flex items-center gap-2 text-brand-ink">
+                    <Check className="h-5 w-5 text-brand-red" /> {v}
                   </li>
-                  <li className="flex items-center gap-3">
-                    <span className="h-[1px] w-4 bg-brand-gold"></span> Confiance
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <span className="h-[1px] w-4 bg-brand-gold"></span> Fierté Camerounaise
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <span className="h-[1px] w-4 bg-brand-gold"></span> Confort Ultime
-                  </li>
-                </ul>
+                ))}
+              </ul>
+              <div className="mt-6 rounded-xl bg-brand-soft p-4 text-sm text-brand-gray">
+                <p><strong className="text-brand-ink">Adresse :</strong> {site.address}, {site.city}</p>
+                <p className="mt-1"><strong className="text-brand-ink">Téléphone :</strong> {site.phone}</p>
+                <p className="mt-1"><strong className="text-brand-ink">Email :</strong> {site.email}</p>
               </div>
             </div>
           </div>
-          
-          <div className="mt-32 grid gap-12 md:grid-cols-2 lg:gap-24">
-            <article className="space-y-6">
-              <h2 className="font-display text-2xl font-medium uppercase text-white">Pourquoi nous choisir ?</h2>
-              <p className="font-sans text-sm font-light leading-relaxed text-slate-400">
-                Une flotte méticuleusement entretenue, des chauffeurs familiers des codes du luxe et formés à la conduite défensive. Une assistance locale 24/7 pour que votre esprit soit dédié à votre voyage, pas à votre trajet.
-              </p>
-            </article>
-            <article className="space-y-6">
-              <h2 className="font-display text-2xl font-medium uppercase text-white">Notre engagement</h2>
-              <p className="font-sans text-sm font-light leading-relaxed text-slate-400">
-                L'intégrité avant tout. Des tarifs transparents, un service courtois et professionnel avec une communication bilingue impeccable (Français/Anglais). L'attente de nos clients est le niveau minimum que nous devions dépasser.
-              </p>
-            </article>
+
+          <div className="mt-12">
+            <h2 className="mb-5 font-display text-2xl font-extrabold text-brand-ink">Où nous trouver</h2>
+            <MapEmbed />
           </div>
         </section>
-      </div>
+      </main>
       <Footer />
-    </main>
+      <WhatsAppButton />
+    </>
   );
 }

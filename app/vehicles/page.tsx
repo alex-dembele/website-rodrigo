@@ -1,31 +1,46 @@
+import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { vehicles } from '@/lib/vehicles';
+import WhatsAppButton from '@/components/WhatsAppButton';
 import VehicleCard from '@/components/VehicleCard';
+import Reveal from '@/components/Reveal';
+import { vehicles } from '@/lib/vehicles';
+
+export const metadata: Metadata = {
+  title: 'Nos voitures à louer à Douala',
+  description:
+    'Découvrez les voitures de Rodrigo Services à Douala : Toyota Avensis (berline), Toyota RAV4 (SUV) et bientôt le pick-up Hilux. Tarifs en FCFA, avec ou sans chauffeur.',
+  alternates: { canonical: '/vehicles' }
+};
 
 export default function VehiclesPage() {
   return (
-    <main className="bg-brand-base min-h-screen flex flex-col">
+    <>
       <Navbar />
-      <div className="flex-1">
-        <section className="container py-32">
-          <div className="space-y-6 text-center mb-20 mt-12">
-            <p className="font-sans text-[10px] font-bold uppercase tracking-[0.5em] text-brand-gold">Conduite d'exception</p>
-            <h1 className="font-display text-5xl font-medium uppercase leading-[0.9] tracking-tight text-white md:text-7xl">
-              Notre <br/> Flotte
-            </h1>
-            <p className="mx-auto max-w-2xl font-sans text-sm font-light leading-relaxed text-slate-400">
-              Découvrez notre gamme de voitures sélectionnées pour offrir confort, performance et sécurité absolues.
+      <main className="bg-brand-cream">
+        <section className="border-b border-brand-line bg-white">
+          <div className="container py-10 sm:py-12">
+            <p className="text-sm font-semibold uppercase tracking-widest text-brand-red">Notre flotte</p>
+            <h1 className="mt-2 font-display text-3xl font-extrabold text-brand-ink sm:text-4xl">Nos voitures</h1>
+            <p className="mt-2 max-w-2xl text-brand-gray">
+              Des véhicules Toyota fiables et entretenus, à des prix clairs. Choisis ta voiture et réserve
+              en quelques clics.
             </p>
           </div>
-          <div className="grid gap-8 md:grid-cols-2 lg:gap-12">
-            {vehicles.map((vehicle) => (
-              <VehicleCard key={vehicle.id} vehicle={vehicle} />
+        </section>
+
+        <section className="container py-10 sm:py-12">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {vehicles.map((v, idx) => (
+              <Reveal key={v.id} delay={idx * 90} className="h-full">
+                <VehicleCard vehicle={v} />
+              </Reveal>
             ))}
           </div>
         </section>
-      </div>
+      </main>
       <Footer />
-    </main>
+      <WhatsAppButton />
+    </>
   );
 }

@@ -1,71 +1,69 @@
 import Link from 'next/link';
+import { LogoMark } from './Logo';
+import { site, waLink } from '@/lib/site';
 
-const footerLinks = [
-  { label: 'La Flotte', href: '/vehicles' },
-  { label: 'Prestations', href: '/services' },
-  { label: 'Tarification', href: '/tarifs' },
-  { label: 'Journal', href: '/blog' }
+const nav = [
+  { label: 'Nos voitures', href: '/vehicles' },
+  { label: 'Services', href: '/services' },
+  { label: 'Tarifs', href: '/tarifs' },
+  { label: 'Réserver', href: '/reservation' },
+  { label: 'À propos', href: '/about' },
+  { label: 'Contact', href: '/contact' }
 ];
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-brand-base pt-24 text-slate-300 border-t border-white/[0.05]">
-      {/* Glow décoratif */}
-      <div className="absolute left-1/2 top-0 -z-10 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-gold/5 blur-[120px]" />
-      
-      <div className="container relative z-10 mb-24 grid gap-16 lg:grid-cols-2">
-        <div className="space-y-6">
-          <p className="font-sans text-[10px] font-bold uppercase tracking-[0.5em] text-brand-gold">Rodrigo Services</p>
-          <p className="max-w-md font-sans text-sm font-light leading-relaxed text-slate-400">
-            L'excellence automobile à Douala. Des véhicules prestigieux, une sécurité absolue et un service sur-mesure pour vous accompagner lors de tous vos déplacements.
+    <footer className="border-t border-brand-line bg-brand-soft">
+      <div className="container grid gap-10 py-14 md:grid-cols-[1.3fr_1fr_1fr]">
+        <div className="space-y-4">
+          <div className="flex items-center gap-2.5">
+            <LogoMark className="h-9 w-auto" />
+            <span className="font-display text-lg font-extrabold text-brand-ink">Rodrigo Services</span>
+          </div>
+          <p className="max-w-sm text-sm leading-relaxed text-brand-gray">
+            Location de voiture à Douala, avec ou sans chauffeur. Des véhicules fiables et
+            entretenus, à des prix clairs, pour la ville comme pour vos déplacements au Cameroun.
           </p>
-          
-          <div className="mt-8 flex gap-4">
-            <a href="#" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.02] text-sm transition-colors hover:border-brand-gold hover:text-brand-gold">
-              <span className="sr-only">Instagram</span>
-              IG
-            </a>
-            <a href="#" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.02] text-sm transition-colors hover:border-brand-gold hover:text-brand-gold">
-              <span className="sr-only">LinkedIn</span>
-              IN
-            </a>
+          <div className="flex gap-3 pt-1">
+            {site.social.facebook !== '#' && (
+              <a href={site.social.facebook} className="text-sm font-medium text-brand-gray hover:text-brand-red">Facebook</a>
+            )}
+            <a href={waLink('Bonjour, je souhaite des informations.')} target="_blank" rel="noreferrer" className="text-sm font-medium text-brand-gray hover:text-brand-red">WhatsApp</a>
           </div>
         </div>
-        
-        <div className="grid grid-cols-2 gap-8 lg:ml-auto">
-          <div>
-            <h3 className="font-sans text-[10px] font-bold uppercase tracking-widest text-slate-600">Navigation</h3>
-            <ul className="mt-6 flex flex-col gap-4">
-              {footerLinks.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="font-sans text-xs font-light text-slate-300 transition-colors hover:text-brand-gold">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="font-sans text-[10px] font-bold uppercase tracking-widest text-slate-600">Contact</h3>
-            <ul className="mt-6 flex flex-col gap-4 font-sans text-xs font-light text-slate-300">
-              <li>+237 6 77 77 77 77</li>
-              <li>contact@rodrigoservices.cm</li>
-              <li>Douala, Cameroun</li>
-            </ul>
-          </div>
+
+        <div>
+          <h3 className="text-xs font-bold uppercase tracking-widest text-brand-gray">Navigation</h3>
+          <ul className="mt-4 flex flex-col gap-2.5">
+            {nav.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="text-sm text-brand-ink transition-colors hover:text-brand-red">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h3 className="text-xs font-bold uppercase tracking-widest text-brand-gray">Contact</h3>
+          <ul className="mt-4 flex flex-col gap-2.5 text-sm text-brand-ink">
+            <li>
+              <a href={`tel:${site.phone.replace(/\s/g, '')}`} className="hover:text-brand-red">{site.phone}</a>
+            </li>
+            <li>
+              <a href={`mailto:${site.email}`} className="hover:text-brand-red">{site.email}</a>
+            </li>
+            <li className="text-brand-gray">{site.address}</li>
+            <li className="text-brand-gray">{site.city}, {site.country}</li>
+          </ul>
         </div>
       </div>
-      
-      {/* Massive Typography Footer */}
-      <div className="w-full flex items-center justify-center overflow-hidden flex-col">
-        <h2 className="font-display text-[15vw] leading-[0.75] font-medium uppercase text-white/[0.02] select-none pointer-events-none whitespace-nowrap overflow-hidden">
-          RODRIGO
-        </h2>
-        <div className="w-full border-t border-white/[0.05] py-6 text-center">
-          <p className="font-sans text-[10px] font-bold uppercase tracking-widest text-slate-600">
-            © 2026 Rodrigo Services. L'Élégance en mouvement.
-          </p>
+
+      <div className="border-t border-brand-line">
+        <div className="container flex flex-col items-center justify-between gap-2 py-5 text-xs text-brand-gray sm:flex-row">
+          <p>© {new Date().getFullYear()} Rodrigo Services — Location de voiture à Douala.</p>
+          <p>Paiement Orange Money & MTN Mobile Money.</p>
         </div>
       </div>
     </footer>
