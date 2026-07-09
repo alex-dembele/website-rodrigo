@@ -1,50 +1,68 @@
+import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import WhatsAppButton from '@/components/WhatsAppButton';
+
+export const metadata: Metadata = {
+  title: 'Conseils location de voiture à Douala',
+  description:
+    'Nos conseils pratiques pour louer une voiture à Douala : papiers, caution, chauffeur, paiement Orange Money et MTN MoMo.',
+  alternates: { canonical: '/blog' }
+};
 
 const articles = [
   {
-    title: '5 conseils pour conduire en toute sérénité à Douala',
-    excerpt: 'Optimisez votre trajet dans la métropole avec des recommandations de sécurité et des astuces locales.',
-    date: '15 mai 2026'
+    title: 'Louer une voiture à Douala : comment ça marche',
+    excerpt:
+      'Papiers à prévoir, caution, prise en charge du véhicule et restitution : le déroulé complet d’une location chez Rodrigo Services.',
+    date: '9 juillet 2026'
   },
   {
-    title: 'Transfert aéroport : l’expérience premium avec Rodrigo',
-    excerpt: 'Préparez votre arrivée à Douala avec nos conseils pour un transfert fluide et confortable.',
-    date: '10 mai 2026'
+    title: 'Avec ou sans chauffeur : que choisir ?',
+    excerpt:
+      'Selon ton trajet, ton budget et ton habitude de conduite, on t’explique quelle formule est la plus intéressante.',
+    date: '2 juillet 2026'
   },
   {
-    title: 'Pourquoi choisir un 4x4 pour les routes du Cameroun',
-    excerpt: 'Découvrez les avantages d’une voiture tout-terrain pour explorer les routes intérieures et les destinations touristiques.',
-    date: '5 mai 2026'
+    title: 'Payer par Orange Money ou MTN MoMo',
+    excerpt:
+      'Comment régler ton acompte en Mobile Money simplement, et garder une preuve de paiement pour ta réservation.',
+    date: '25 juin 2026'
   }
 ];
 
 export default function BlogPage() {
   return (
-    <main>
+    <>
       <Navbar />
-      <section className="container py-24">
-        <div className="space-y-6 text-center">
-          <p className="text-sm uppercase tracking-[0.28em] text-amber-300">Blog</p>
-          <h1 className="text-4xl font-semibold text-white md:text-5xl">Conseils de voyage et actualités</h1>
-          <p className="mx-auto max-w-2xl text-base leading-8 text-slate-300">
-            Informations utiles pour vos déplacements à Douala et le Cameroun, avec un ton local et professionnel.
-          </p>
-        </div>
-        <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-          {articles.map((article) => (
-            <article key={article.title} className="rounded-[2rem] border border-white/10 bg-slate-950/80 p-8 shadow-card transition hover:-translate-y-1">
-              <p className="text-sm uppercase tracking-[0.2em] text-emerald-300">{article.date}</p>
-              <h2 className="mt-4 text-2xl font-semibold text-white">{article.title}</h2>
-              <p className="mt-4 text-slate-300 leading-7">{article.excerpt}</p>
-              <button className="mt-6 rounded-full bg-amber-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-300">
-                Lire l’article
-              </button>
-            </article>
-          ))}
-        </div>
-      </section>
+      <main className="bg-brand-cream">
+        <section className="border-b border-brand-line bg-white">
+          <div className="container py-10 sm:py-12">
+            <p className="text-sm font-semibold uppercase tracking-widest text-brand-red">Conseils</p>
+            <h1 className="mt-2 font-display text-3xl font-extrabold text-brand-ink sm:text-4xl">
+              Nos conseils pour louer sereinement
+            </h1>
+            <p className="mt-2 max-w-2xl text-brand-gray">
+              Des articles simples pour t’aider à bien préparer ta location à Douala.
+            </p>
+          </div>
+        </section>
+
+        <section className="container py-10 sm:py-12">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {articles.map((a) => (
+              <article key={a.title} className="flex flex-col rounded-2xl border border-brand-line bg-white p-6 shadow-soft transition hover:-translate-y-1 hover:shadow-card">
+                <p className="text-xs font-semibold uppercase tracking-wider text-brand-red">{a.date}</p>
+                <h2 className="mt-2 font-display text-lg font-bold text-brand-ink">{a.title}</h2>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-brand-gray">{a.excerpt}</p>
+                <span className="mt-4 text-sm font-semibold text-brand-gray">Bientôt en ligne</span>
+              </article>
+            ))}
+          </div>
+        </section>
+      </main>
       <Footer />
-    </main>
+      <WhatsAppButton />
+    </>
   );
 }

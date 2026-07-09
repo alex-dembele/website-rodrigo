@@ -1,109 +1,87 @@
-export type VehicleType = 'Berline' | 'SUV' | '4x4' | 'Luxe' | 'Économique';
+export type VehicleType = 'Berline' | 'SUV' | 'Pick-up 4x4';
 
 export interface Vehicle {
   id: string;
   name: string;
   type: VehicleType;
+  /** Prix par jour en FCFA, sans chauffeur */
   pricePerDay: number;
   seats: number;
-  transmission: string;
+  doors: number;
+  transmission: 'Manuelle' | 'Automatique';
   fuel: string;
+  airConditioning: boolean;
+  /** Image principale (dans /public/cars/) */
   image: string;
   gallery: string[];
   description: string;
+  features: string[];
   available: boolean;
-  tags?: string[];
+  /** true = pas encore en service ("bientôt disponible") */
+  comingSoon?: boolean;
 }
 
+// Supplément journalier si le client choisit un chauffeur (FCFA / jour)
+export const DRIVER_PRICE_PER_DAY = 10000;
+
+/**
+ * ⚠️ Ajuste les PRIX (pricePerDay) selon tes tarifs réels.
+ * Les photos sont dans /public/cars/ — remplace les images provisoires
+ * par tes vraies photos en gardant les mêmes noms de fichiers.
+ */
 export const vehicles: Vehicle[] = [
   {
-    id: 'mercedes-glc',
-    name: 'Mercedes GLC 300',
-    type: 'Luxe',
-    pricePerDay: 175,
+    id: 'toyota-avensis',
+    name: 'Toyota Avensis',
+    type: 'Berline',
+    pricePerDay: 25000,
     seats: 5,
-    transmission: 'Automatique',
+    doors: 4,
+    transmission: 'Manuelle',
     fuel: 'Essence',
-    image: 'https://images.unsplash.com/photo-1549921296-3bfa6a1f4bf8?auto=format&fit=crop&w=1400&q=80',
-    gallery: [
-      'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1400&q=80',
-      'https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1400&q=80',
-      'https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1400&q=80'
-    ],
-    description: 'Confort premium, espace généreux et design moderne pour vos déplacements officiels ou privés à Douala.',
-    available: true,
-    tags: ['Sièges massants', 'Climatisation Multizone']
+    airConditioning: true,
+    image: '/cars/avensis-1.jpg',
+    gallery: ['/cars/avensis-1.jpg', '/cars/avensis-2.jpg'],
+    description:
+      "Berline confortable et économique, parfaite pour la ville, les rendez-vous professionnels et les trajets en famille à Douala.",
+    features: ['Climatisation', '5 places', 'Coffre spacieux', 'Faible consommation'],
+    available: true
   },
   {
     id: 'toyota-rav4',
-    name: 'Toyota RAV4 Hybrid',
+    name: 'Toyota RAV4',
     type: 'SUV',
-    pricePerDay: 115,
+    pricePerDay: 40000,
     seats: 5,
+    doors: 5,
     transmission: 'Automatique',
-    fuel: 'Hybride',
-    image: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1400&q=80',
-    gallery: [
-      'https://images.unsplash.com/photo-1511323508556-1066590ede3a?auto=format&fit=crop&w=1400&q=80',
-      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=80',
-      'https://images.unsplash.com/photo-1512089747450-08b3f5a2c3c2?auto=format&fit=crop&w=1400&q=80'
-    ],
-    description: 'SUV fiable, spacieux et idéal pour les familles et les trajets à Douala avec style et sérénité.',
-    available: true,
-    tags: ['Hybride économique', 'Spacieux']
+    fuel: 'Essence',
+    airConditioning: true,
+    image: '/cars/rav4-1.jpg',
+    gallery: ['/cars/rav4-1.jpg'],
+    description:
+      "SUV robuste et surélevé, idéal pour les routes de la ville comme pour les sorties hors de Douala. Confortable pour 5 personnes avec bagages.",
+    features: ['Climatisation', '5 places', 'Boîte automatique', 'Position de conduite haute'],
+    available: true
   },
   {
-    id: 'hyundai-accent',
-    name: 'Hyundai Accent',
-    type: 'Économique',
-    pricePerDay: 55,
+    id: 'toyota-hilux',
+    name: 'Toyota Hilux',
+    type: 'Pick-up 4x4',
+    pricePerDay: 60000,
     seats: 5,
+    doors: 4,
     transmission: 'Manuelle',
-    fuel: 'Essence',
-    image: 'https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1400&q=80',
-    gallery: [
-      'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1400&q=80',
-      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=80',
-      'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1400&q=80'
-    ],
-    description: 'Solution économique, compacte et idéale pour se déplacer facilement dans Douala et ses environs.',
-    available: true,
-    tags: ['Climatisation renforcée', 'Idéal trafic urbain']
-  },
-  {
-    id: 'toyota-landcruiser',
-    name: 'Toyota Land Cruiser',
-    type: '4x4',
-    pricePerDay: 190,
-    seats: 7,
-    transmission: 'Automatique',
     fuel: 'Diesel',
-    image: 'https://images.unsplash.com/photo-1542232178-4d79fa3ef155?auto=format&fit=crop&w=1400&q=80',
-    gallery: [
-      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=80',
-      'https://images.unsplash.com/photo-1518146517052-7b54b23d3ff3?auto=format&fit=crop&w=1400&q=80',
-      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=80'
-    ],
-    description: '4x4 robuste pour les routes du Cameroun, voyages d’affaires ou escapades en famille en toute confiance.',
-    available: true,
-    tags: ['Routes non bitumées', 'Suspensions renforcées']
-  },
-  {
-    id: 'bmw-5-series',
-    name: 'BMW Série 5',
-    type: 'Berline',
-    pricePerDay: 150,
-    seats: 5,
-    transmission: 'Automatique',
-    fuel: 'Essence',
-    image: 'https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1400&q=80',
-    gallery: [
-      'https://images.unsplash.com/photo-1483721310020-03333e577078?auto=format&fit=crop&w=1400&q=80',
-      'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1400&q=80',
-      'https://images.unsplash.com/photo-1449057528837-7cf2110d1cf6?auto=format&fit=crop&w=1400&q=80'
-    ],
-    description: 'Berline élégante pour une route confortable et un service haut de gamme à Douala.',
-    available: true,
-    tags: ['Sièges Cuir', 'Insonorisation premium']
+    airConditioning: true,
+    image: '/cars/hilux-1.jpg',
+    gallery: ['/cars/hilux-1.jpg'],
+    description:
+      "Pick-up tout-terrain double cabine pour les chantiers, le transport et les longues routes. Bientôt disponible à la location.",
+    features: ['4x4', 'Double cabine', 'Benne de chargement', 'Tout-terrain'],
+    available: false,
+    comingSoon: true
   }
 ];
+
+export const availableVehicles = vehicles.filter((v) => v.available);

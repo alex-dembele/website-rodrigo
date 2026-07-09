@@ -1,61 +1,98 @@
-# Rodrigo Services – Mobilité d'Exception au Cameroun 🏎️
+# Rodrigo Services — Location de voiture à Douala
 
-![Rodrigo Services](https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1200&q=80)
+Site web de **Rodrigo Services**, petite entreprise de location de voiture à Douala (Cameroun) :
+location avec ou sans chauffeur, transfert aéroport, paiement **Orange Money & MTN Mobile Money**.
 
-Bienvenue sur le dépôt officiel du site **Rodrigo Services**, une plateforme premium de location de véhicules et de services de transfert aéroport, basée à Douala au Cameroun.
-
-Le projet a été intégralement pensé et réalisé avec une esthétique **Luxe / Brutaliste** (Inspiration Apple Store & Awwwards), en combinant le *glassmorphism*, les *grilles Bento* asymétriques et des typographies cinématiques.
-
-## ✨ Caractéristiques Visuelles & Fonctionnalités
-
-- **Thème "Midnight & Gold"** : Un fond d'écran obsidienne texturé, réchauffé par des halos dorés incandescents rappelant les phares de véhicules haut de gamme.
-- **Grilles Bento & Typographie "Clash Display"** : Design asymétrique de l'information avec des en-têtes architecturaux colossaux.
-- **Tunnel de Réservation Immersif** : Un composant d'encaissement luxueux à écran scindé (Layout Apple Store) avec "Floating Labels".
-- **Composants "Awwwards-style"** : Carrousel de voitures infini, animations fluides (`mix-blend-screen`), et bordures ultra-fines (`border-white/[0.05]`).
-- **Full Responsive** : L'expérience reste exceptionnelle, fluide et lisible, d'un écran 4K à un iPhone.
-
-## 🚀 Technologies Embarquées
-
-| Technologie | Description |
-|---|---|
-| **[Next.js 14](https://nextjs.org/)** | Framework React propulsé par l'App Router pour une navigation fluide et un SEO optimal. |
-| **[Tailwind CSS](https://tailwindcss.com/)** | Styling utilitaire ultra-rapide, finement configuré avec notre propre *Design System*. |
-| **[Framer Motion](https://www.framer.com/motion/)** | Animations interactives, fluides et professionnelles au défilement. |
-| **[TypeScript](https://www.typescriptlang.org/)** | Typage statique robuste protégeant l'intégrité du code (`Vehicle` interfaces, etc). |
-
-## 🛠️ Installation & Démarrage
-
-### Pré-requis
-- Node.js (version 18+ recommandée)
-- Npm, Yarn, ou Pnpm
-
-### Instructions
-
-1. **Cloner le répertoire**
-   ```bash
-   git clone https://github.com/alex-dembele/website-rodrigo.git
-   cd website-rodrigo
-   ```
-
-2. **Installer les dépendances**
-   ```bash
-   npm install
-   ```
-
-3. **Allumer les moteurs**
-   ```bash
-   npm run dev
-   ```
-
-4. **Explorer**
-   Ouvrez `http://localhost:3000` sur votre navigateur pour lancer l'expérience.
-
-## 📁 Architecture du Projet
-
-- `app/` : Définition des pages Next.js (`/`, `/vehicles`, `/services`, `/contact`, `/about`...).
-- `components/` : Tous nos composants modulaires (Hero, Bento Grids, Formulaires de paiement...).
-- `lib/` : Utilitaires et structure de données locale (La base de la flotte).
-- `public/` : Assets statiques et iconographie.
+Site construit avec **Next.js 15** + **Tailwind CSS** + **TypeScript**.
 
 ---
-*© 2026 Rodrigo Services. L'Élégance en Mouvement.*
+
+## 🚀 Démarrer
+
+```bash
+npm install
+npm run dev      # http://localhost:3000
+```
+
+Pour la version de production :
+
+```bash
+npm run build
+npm start
+```
+
+---
+
+## ✏️ Ce que tu peux modifier facilement (sans être développeur)
+
+Tout est regroupé dans le dossier `lib/`. Change juste les valeurs.
+
+### 1. Coordonnées, WhatsApp, numéros Orange Money / MoMo → `lib/site.ts`
+
+- `phone`, `email`, `address` : tes coordonnées.
+- `whatsapp` : ton numéro **au format international sans espaces ni +** (ex. `237676712191`).
+- `payment.momo.number` et `payment.orange.number` : **⚠️ mets tes vrais numéros marchands.**
+  > Le numéro Orange Money est un exemple (`+237 6XX…`) : remplace-le par le tien.
+- `payment.depositPercent` : pourcentage d'acompte demandé (30 % par défaut).
+
+### 2. Voitures et prix → `lib/vehicles.ts`
+
+- `pricePerDay` : prix **par jour, en FCFA** (nombre, sans espace : `25000`).
+- `DRIVER_PRICE_PER_DAY` : supplément chauffeur par jour.
+- `available: false` + `comingSoon: true` : voiture pas encore dispo (ex. la Hilux).
+
+### 3. Photos des voitures → dossier `public/cars/`
+
+Les images actuelles sont des **provisoires**. Remplace-les par tes vraies photos
+**en gardant exactement les mêmes noms de fichiers** :
+
+| Fichier | Voiture |
+|---|---|
+| `public/cars/avensis-1.jpg` | Toyota Avensis (photo principale) |
+| `public/cars/avensis-2.jpg` | Toyota Avensis (2e photo) |
+| `public/cars/rav4-1.jpg` | Toyota RAV4 |
+| `public/cars/hilux-1.jpg` | Toyota Hilux |
+| `public/hero.jpg` | Grande photo d'accueil (optionnel) |
+
+> Formats conseillés : `.jpg`, largeur ~1200 px, format paysage 4:3.
+> Le logo est vectoriel (`components/Logo.tsx`). Pour utiliser ton logo image à la place,
+> dépose-le dans `public/brand/logo.png`.
+
+---
+
+## 💳 Paiement (Orange Money & MTN MoMo)
+
+Il n'y a **pas d'API de paiement** branchée (choix assumé, gratuit et immédiat) :
+
+1. Le client remplit le formulaire de réservation.
+2. Il envoie sa demande par **WhatsApp** (ou email) en un clic — le message contient
+   voiture, dates, durée, total et acompte, déjà calculés.
+3. Il paie l'**acompte** par Orange Money / MoMo au numéro affiché.
+4. Tu confirmes la réservation à la main.
+
+> 💡 Plus tard, si tu veux l'encaissement **automatique** OM+MoMo, on peut brancher un
+> agrégateur camerounais (Fapshi, Campay, Notch Pay). Le code est déjà organisé pour ça.
+
+---
+
+## 🔎 Référencement (SEO)
+
+- Métadonnées + Open Graph par page (`app/layout.tsx` et chaque page).
+- Données structurées `AutoRental` (Google) dans `app/layout.tsx`.
+- `sitemap.xml` et `robots.txt` générés automatiquement.
+- **⚠️ Avant la mise en ligne**, change l'URL du site dans `lib/site.ts` (`url`) avec ton vrai domaine.
+
+---
+
+## 📁 Structure
+
+- `app/` : pages (accueil, `/vehicles`, `/tarifs`, `/services`, `/reservation`, `/about`, `/contact`, `/blog`).
+- `components/` : composants (Navbar, Footer, formulaire de réservation, cartes voitures…).
+- `lib/site.ts` : **config à éditer** (contacts, paiement).
+- `lib/vehicles.ts` : **flotte à éditer** (voitures, prix).
+- `lib/booking.ts` : calcul des prix et génération du message WhatsApp/email.
+- `public/` : images, logo, favicon.
+
+---
+
+© Rodrigo Services — Location de voiture à Douala.
