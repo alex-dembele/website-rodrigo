@@ -32,7 +32,8 @@ export const site = {
   mapsQuery: 'Rodrigo Services Terminus Bonamoussadi Douala',
 
   // --- Paiement Mobile Money ---
-  // ⚠️ REMPLACE par tes vrais numéros marchands OM / MoMo
+  // ⚠️ Laisse `number` vide tant que le numéro marchand n'est pas connu :
+  // le site affiche alors « communiqué à la confirmation » au lieu d'un faux numéro.
   payment: {
     momo: {
       label: 'MTN Mobile Money',
@@ -41,7 +42,7 @@ export const site = {
     },
     orange: {
       label: 'Orange Money',
-      number: '+237 6XX XX XX XX',
+      number: '',
       ussd: '#150#'
     },
     // Acompte demandé pour valider une réservation (en %)
