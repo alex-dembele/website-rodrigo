@@ -42,7 +42,7 @@ export default function VehicleMedia({ images, alt, className = '' }: Props) {
       <button
         type="button"
         onClick={() => { setI(0); setOpen(true); }}
-        className={`group relative block w-full overflow-hidden bg-gradient-to-br from-brand-soft to-white ${className}`}
+        className={`group relative block w-full overflow-hidden bg-[#EDEDF0] ${className}`}
         aria-label={`Voir les photos — ${alt}`}
       >
         <Image

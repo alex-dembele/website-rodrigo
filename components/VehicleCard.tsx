@@ -18,7 +18,7 @@ export default function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
             className="h-full"
           />
         ) : (
-          <div className="flex h-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-brand-soft to-white text-brand-gray">
+          <div className="flex h-full flex-col items-center justify-center gap-2 bg-[#EDEDF0] text-brand-gray">
             <CarFront className="h-10 w-10 opacity-40" />
             <p className="text-sm font-medium">Photos bientôt disponibles</p>
           </div>
