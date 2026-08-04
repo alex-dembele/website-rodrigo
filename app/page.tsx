@@ -12,7 +12,7 @@ import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import VehicleCard from '@/components/VehicleCard';
 import Reveal from '@/components/Reveal';
-import { vehicles } from '@/lib/vehicles';
+import { availableVehicles } from '@/lib/vehicles';
 import { site } from '@/lib/site';
 
 const heroPoints = ['Avec ou sans chauffeur', 'Paiement OM & MoMo', 'Réponse rapide'];
@@ -85,8 +85,8 @@ export default function Home() {
           </Reveal>
 
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {vehicles.map((v, idx) => (
-              <Reveal key={v.id} delay={idx * 90}>
+            {availableVehicles.map((v, idx) => (
+              <Reveal key={v.id} delay={idx * 90} className="h-full">
                 <VehicleCard vehicle={v} />
               </Reveal>
             ))}

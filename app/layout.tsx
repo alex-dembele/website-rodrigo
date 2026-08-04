@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { site } from '@/lib/site';
-import { vehicles } from '@/lib/vehicles';
+import { vehicles, vehicleLabel } from '@/lib/vehicles';
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -79,7 +79,14 @@ function StructuredData() {
       .filter((v) => v.available)
       .map((v) => ({
         '@type': 'Offer',
-        itemOffered: { '@type': 'Car', name: v.name, vehicleTransmission: v.transmission, fuelType: v.fuel, seatingCapacity: v.seats },
+        itemOffered: {
+          '@type': 'Car',
+          name: vehicleLabel(v),
+          vehicleTransmission: v.transmission,
+          fuelType: v.fuel,
+          seatingCapacity: v.seats,
+          image: v.gallery[0] ? `${site.url}${v.gallery[0]}` : undefined
+        },
         priceCurrency: 'XAF',
         price: v.pricePerDay,
         priceSpecification: { '@type': 'UnitPriceSpecification', price: v.pricePerDay, priceCurrency: 'XAF', unitCode: 'DAY' }

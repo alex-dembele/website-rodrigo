@@ -9,7 +9,7 @@ export const site = {
   legalName: 'Rodrigo Services – Location de voiture',
   tagline: 'Location de voiture à Douala, avec ou sans chauffeur',
   description:
-    "Rodrigo Services loue des voitures fiables et abordables à Douala : berline Toyota Avensis, SUV Toyota RAV4 et bientôt un pick-up Hilux tout-terrain. Avec ou sans chauffeur, transfert aéroport, paiement Orange Money & MTN MoMo.",
+    "Rodrigo Services loue des voitures fiables et abordables à Douala : Toyota Avensis en boîte manuelle ou automatique, SUV Toyota RAV4 et bientôt un pick-up Hilux tout-terrain. Avec ou sans chauffeur, transfert aéroport, paiement Orange Money & MTN MoMo.",
 
   // URL du site en production (à mettre à jour quand tu auras ton domaine)
   url: 'https://www.rodrigoservices.cm',
