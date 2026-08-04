@@ -17,7 +17,7 @@ export default function Footer() {
       <div className="container grid gap-10 py-14 md:grid-cols-[1.3fr_1fr_1fr]">
         <div className="space-y-4">
           <div className="flex items-center gap-2.5">
-            <LogoMark className="h-9 w-auto" />
+            <LogoMark className="h-9 w-9" />
             <span className="font-display text-lg font-extrabold text-brand-ink">Rodrigo Services</span>
           </div>
           <p className="max-w-sm text-sm leading-relaxed text-brand-gray">
