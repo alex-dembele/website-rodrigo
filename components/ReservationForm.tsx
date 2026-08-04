@@ -286,12 +286,16 @@ export default function ReservationForm({
         <div className="flex items-center gap-3">
           <div className="min-w-0">
             <p className="text-[11px] uppercase tracking-wider text-brand-gray">
-              {q.days} jour{q.days > 1 ? 's' : ''} · acompte {fcfa(q.deposit)}
+              {q.days} jour{q.days > 1 ? 's' : ''} · acompte{' '}
+              <span data-testid="deposit">{fcfa(q.deposit)}</span>
             </p>
-            <p className="font-display text-lg font-extrabold leading-tight text-brand-ink">{fcfa(q.total)}</p>
+            <p data-testid="total" className="font-display text-lg font-extrabold leading-tight text-brand-ink">
+              {fcfa(q.total)}
+            </p>
           </div>
           <button
             type="button"
+            data-testid="submit-whatsapp"
             onClick={submitWhatsApp}
             className="ml-auto inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-brand-red px-5 py-3 font-semibold text-white shadow-red"
           >
@@ -380,17 +384,20 @@ function Summary({
       </dl>
       <div className="mt-3 flex items-center justify-between">
         <span className="font-semibold text-brand-ink">Total estimé</span>
-        <span className="font-display text-2xl font-extrabold text-brand-ink">{fcfa(total)}</span>
+        <span data-testid="total" className="font-display text-2xl font-extrabold text-brand-ink">
+          {fcfa(total)}
+        </span>
       </div>
       <div className="mt-2 flex items-center justify-between rounded-lg bg-brand-red/5 px-3 py-2">
         <span className="text-sm font-medium text-brand-redDark">
           Acompte {site.payment.depositPercent}%
         </span>
-        <span className="font-bold text-brand-red">{fcfa(deposit)}</span>
+        <span data-testid="deposit" className="font-bold text-brand-red">{fcfa(deposit)}</span>
       </div>
 
       <button
         type="button"
+        data-testid="submit-whatsapp"
         onClick={onWa}
         className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-red px-6 py-3.5 font-semibold text-white shadow-red transition-transform hover:-translate-y-0.5"
       >
