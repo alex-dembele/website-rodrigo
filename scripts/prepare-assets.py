@@ -10,7 +10,7 @@ pas servis par le site. Ce script les découpe en photos individuelles dans
 
 Dépendance : Pillow (`pip install Pillow`).
 """
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFont
 import os
 
 SRC = 'assets-source'
@@ -19,11 +19,29 @@ BOLD = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
 REG = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
 
 
+def trim_studio_background(t):
+    """
+    Rogne le fond studio uniforme autour du sujet pour que la voiture
+    remplisse la vignette. Sans effet sur les photos d'intérieur, dont le
+    sujet touche déjà les bords.
+    """
+    bg = t.convert('RGB').getpixel((1, 1))
+    diff = ImageChops.difference(t.convert('RGB'), Image.new('RGB', t.size, bg))
+    mask = diff.convert('L').point(lambda p: 255 if p > 20 else 0)
+    box = mask.getbbox()
+    if not box:
+        return t
+    mx, my = int(t.width * 0.02), int(t.height * 0.04)
+    return t.crop((max(0, box[0] - mx), max(0, box[1] - my),
+                   min(t.width, box[2] + mx), min(t.height, box[3] + my)))
+
+
 def tile(im, box, name, quality=86):
     """Découpe une vignette de la planche et l'enregistre en JPEG optimisé."""
     t = im.crop(box)
     w, h = t.size
     t = t.crop((2, 2, w - 2, h - 2))  # marge : évite les lignes de séparation
+    t = trim_studio_background(t)
     t.thumbnail((1400, 1400), Image.LANCZOS)
     t.convert('RGB').save(f'{CARS}/{name}.jpg', 'JPEG', quality=quality, optimize=True, progressive=True)
     print(f'{CARS}/{name}.jpg', t.size)
