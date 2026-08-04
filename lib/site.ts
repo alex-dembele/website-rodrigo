@@ -9,17 +9,18 @@ export const site = {
   legalName: 'Rodrigo Services – Location de voiture',
   tagline: 'Location de voiture à Douala, avec ou sans chauffeur',
   description:
-    "Rodrigo Services loue des voitures fiables et abordables à Douala : berline Toyota Avensis, SUV Toyota RAV4 et bientôt un pick-up Hilux tout-terrain. Avec ou sans chauffeur, transfert aéroport, paiement Orange Money & MTN MoMo.",
+    "Rodrigo Services loue des voitures fiables et abordables à Douala : Toyota Avensis en boîte manuelle ou automatique, SUV Toyota RAV4 et bientôt un pick-up Hilux tout-terrain. Avec ou sans chauffeur, transfert aéroport, paiement Orange Money & MTN MoMo.",
 
   // URL du site en production (à mettre à jour quand tu auras ton domaine)
   url: 'https://www.rodrigoservices.cm',
 
   // --- Contacts ---
-  // Numéro principal (Cameroun) — sert au téléphone ET à WhatsApp
+  // Numéro appelé depuis le site (agence de Douala)
   phone: '+237 676 71 21 91',
-  phoneIntl: '+49 176 630 48 623', // numéro international (Allemagne)
-  // Format international sans espaces ni "+" pour les liens wa.me / tel:
-  whatsapp: '237676712191',
+  // Numéro WhatsApp de l'agence — c'est lui qui reçoit les réservations
+  whatsappDisplay: '+49 1577 2809304',
+  // Même numéro au format wa.me : international, sans "+" ni espaces
+  whatsapp: '4915772809304',
   email: 'rodrigoservices39@gmail.com',
 
   // --- Adresse ---
@@ -31,7 +32,8 @@ export const site = {
   mapsQuery: 'Rodrigo Services Terminus Bonamoussadi Douala',
 
   // --- Paiement Mobile Money ---
-  // ⚠️ REMPLACE par tes vrais numéros marchands OM / MoMo
+  // ⚠️ Laisse `number` vide tant que le numéro marchand n'est pas connu :
+  // le site affiche alors « communiqué à la confirmation » au lieu d'un faux numéro.
   payment: {
     momo: {
       label: 'MTN Mobile Money',
@@ -40,7 +42,7 @@ export const site = {
     },
     orange: {
       label: 'Orange Money',
-      number: '+237 6XX XX XX XX',
+      number: '',
       ussd: '#150#'
     },
     // Acompte demandé pour valider une réservation (en %)
@@ -58,6 +60,11 @@ export const site = {
 // Lien WhatsApp prêt à l'emploi avec message pré-rempli
 export function waLink(message: string) {
   return `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(message)}`;
+}
+
+// Lien d'appel nettoyé : "+237 676 71 21 91" -> "tel:+237676712191"
+export function telLink(number: string = site.phone) {
+  return `tel:${number.replace(/[^\d+]/g, '')}`;
 }
 
 // Formatage des montants en francs CFA : 25000 -> "25 000 FCFA"

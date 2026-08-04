@@ -40,6 +40,7 @@ export default function TarifsPage() {
               <article className="flex h-full flex-col rounded-2xl border border-brand-line bg-white p-6 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card">
                 <p className="text-sm font-semibold text-brand-gray">{v.type}</p>
                 <h2 className="mt-1 font-display text-xl font-bold text-brand-ink">{v.name}</h2>
+                {v.variant && <p className="text-sm font-semibold text-brand-red">{v.variant}</p>}
                 <p className="mt-4 font-display text-3xl font-extrabold text-brand-ink">
                   {fcfa(v.pricePerDay)}
                   <span className="text-base font-medium text-brand-gray">/jour</span>

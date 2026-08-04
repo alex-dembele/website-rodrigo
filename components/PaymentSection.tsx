@@ -61,12 +61,16 @@ export default function PaymentSection() {
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div className="rounded-xl border border-[#FFCC00]/50 bg-[#FFCC00]/10 p-4">
               <p className="font-bold text-brand-ink">MTN Mobile Money</p>
-              <p className="mt-1 text-sm text-brand-gray">{site.payment.momo.number}</p>
+              <p className="mt-1 text-sm text-brand-gray">
+                {site.payment.momo.number || 'Numéro communiqué à la confirmation'}
+              </p>
               <p className="text-sm text-brand-gray">Code {site.payment.momo.ussd}</p>
             </div>
             <div className="rounded-xl border border-[#FF6600]/50 bg-[#FF6600]/10 p-4">
               <p className="font-bold text-brand-ink">Orange Money</p>
-              <p className="mt-1 text-sm text-brand-gray">{site.payment.orange.number}</p>
+              <p className="mt-1 text-sm text-brand-gray">
+                {site.payment.orange.number || 'Numéro communiqué à la confirmation'}
+              </p>
               <p className="text-sm text-brand-gray">Code {site.payment.orange.ussd}</p>
             </div>
           </div>

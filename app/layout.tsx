@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { site } from '@/lib/site';
-import { vehicles } from '@/lib/vehicles';
+import { vehicles, vehicleLabel } from '@/lib/vehicles';
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     images: ['/og.jpg']
   },
   icons: {
-    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }, { url: '/icon.png', type: 'image/png' }],
+    icon: [{ url: '/icon.png', type: 'image/png' }],
     apple: '/apple-icon.png'
   },
   robots: { index: true, follow: true },
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
 };
 
 function StructuredData() {
-  const phoneIntl = site.phone.replace(/\s/g, '');
+  const clean = (n: string) => n.replace(/[^\d+]/g, '');
   const json = {
     '@context': 'https://schema.org',
     '@type': 'AutoRental',
@@ -58,7 +58,10 @@ function StructuredData() {
     url: site.url,
     image: `${site.url}/og.jpg`,
     logo: `${site.url}/brand/logo.png`,
-    telephone: phoneIntl,
+    telephone: clean(site.phone),
+    contactPoint: [
+      { '@type': 'ContactPoint', contactType: 'reservations', telephone: clean(site.whatsappDisplay), availableLanguage: ['fr', 'en'] }
+    ],
     email: site.email,
     priceRange: 'FCFA',
     currenciesAccepted: 'XAF',
@@ -76,7 +79,14 @@ function StructuredData() {
       .filter((v) => v.available)
       .map((v) => ({
         '@type': 'Offer',
-        itemOffered: { '@type': 'Car', name: v.name, vehicleTransmission: v.transmission, fuelType: v.fuel, seatingCapacity: v.seats },
+        itemOffered: {
+          '@type': 'Car',
+          name: vehicleLabel(v),
+          vehicleTransmission: v.transmission,
+          fuelType: v.fuel,
+          seatingCapacity: v.seats,
+          image: v.gallery[0] ? `${site.url}${v.gallery[0]}` : undefined
+        },
         priceCurrency: 'XAF',
         price: v.pricePerDay,
         priceSpecification: { '@type': 'UnitPriceSpecification', price: v.pricePerDay, priceCurrency: 'XAF', unitCode: 'DAY' }

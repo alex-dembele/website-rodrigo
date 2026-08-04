@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { Phone } from 'lucide-react';
 import Logo from './Logo';
-import { site, waLink } from '@/lib/site';
+import { site, waLink, telLink } from '@/lib/site';
 
 const navItems = [
   { label: 'Accueil', href: '/' },
@@ -38,7 +39,7 @@ export default function Navbar() {
 
         <div className="hidden items-center gap-3 lg:flex">
           <a
-            href={`tel:${site.phone.replace(/\s/g, '')}`}
+            href={telLink()}
             className="text-sm font-semibold text-brand-ink transition-colors hover:text-brand-red"
           >
             {site.phone}
@@ -51,16 +52,31 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="flex flex-col gap-1.5 p-2 lg:hidden"
-          aria-label="Menu principal"
-          aria-expanded={isOpen}
-        >
-          <span className={`block h-[2px] w-6 bg-brand-ink transition-transform ${isOpen ? 'translate-y-2 rotate-45' : ''}`} />
-          <span className={`block h-[2px] w-6 bg-brand-ink transition-opacity ${isOpen ? 'opacity-0' : ''}`} />
-          <span className={`block h-[2px] w-6 bg-brand-ink transition-transform ${isOpen ? '-translate-y-2 -rotate-45' : ''}`} />
-        </button>
+        <div className="flex items-center gap-1 lg:hidden">
+          <Link
+            href="/reservation"
+            className="rounded-full bg-brand-red px-4 py-2 text-sm font-semibold text-white shadow-red"
+          >
+            Réserver
+          </Link>
+          <a
+            href={telLink()}
+            aria-label={`Appeler ${site.phone}`}
+            className="grid h-10 w-10 place-items-center rounded-full border border-brand-line text-brand-ink"
+          >
+            <Phone className="h-4 w-4 text-brand-red" />
+          </a>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex flex-col gap-1.5 p-2"
+            aria-label="Menu principal"
+            aria-expanded={isOpen}
+          >
+            <span className={`block h-[2px] w-6 bg-brand-ink transition-transform ${isOpen ? 'translate-y-2 rotate-45' : ''}`} />
+            <span className={`block h-[2px] w-6 bg-brand-ink transition-opacity ${isOpen ? 'opacity-0' : ''}`} />
+            <span className={`block h-[2px] w-6 bg-brand-ink transition-transform ${isOpen ? '-translate-y-2 -rotate-45' : ''}`} />
+          </button>
+        </div>
       </div>
 
       {isOpen && (

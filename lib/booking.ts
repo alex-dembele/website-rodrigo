@@ -1,5 +1,5 @@
 import { site, fcfa } from './site';
-import { vehicles, DRIVER_PRICE_PER_DAY, type Vehicle } from './vehicles';
+import { findVehicle, vehicleLabel, DRIVER_PRICE_PER_DAY, type Vehicle } from './vehicles';
 
 export const PICKUP_LOCATIONS = [
   'Agence — Terminus Bonamoussadi',
@@ -42,7 +42,7 @@ export function countDays(pickup: string, ret: string): number {
 
 /** Calcule le devis à partir des choix du client. */
 export function quote(input: Pick<BookingInput, 'vehicleId' | 'pickupDate' | 'returnDate' | 'withDriver'>): Quote {
-  const vehicle = vehicles.find((v) => v.id === input.vehicleId);
+  const vehicle = findVehicle(input.vehicleId);
   const days = countDays(input.pickupDate, input.returnDate);
   const base = vehicle ? vehicle.pricePerDay * days : 0;
   const driver = input.withDriver ? DRIVER_PRICE_PER_DAY * days : 0;
@@ -66,7 +66,7 @@ export function buildBookingMessage(input: BookingInput): string {
   const lines = [
     `Nouvelle demande de réservation — ${site.name}`,
     '',
-    `Voiture : ${q.vehicle?.name ?? '—'}${q.vehicle ? ` (${q.vehicle.type})` : ''}`,
+    `Voiture : ${q.vehicle ? `${vehicleLabel(q.vehicle)} (${q.vehicle.type})` : '—'}`,
     `Prise en charge : ${input.pickupLocation || '—'}`,
     `Du : ${formatDate(input.pickupDate)}`,
     `Au : ${formatDate(input.returnDate)}`,
@@ -86,7 +86,8 @@ export function buildBookingMessage(input: BookingInput): string {
 }
 
 export function mailtoLink(input: BookingInput): string {
-  const subject = `Réservation ${quote(input).vehicle?.name ?? ''} — ${input.name}`.trim();
+  const v = quote(input).vehicle;
+  const subject = `Réservation ${v ? vehicleLabel(v) : ''} — ${input.name}`.trim();
   const body = buildBookingMessage(input);
   return `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
