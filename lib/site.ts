@@ -15,11 +15,12 @@ export const site = {
   url: 'https://www.rodrigoservices.cm',
 
   // --- Contacts ---
-  // Numéro principal (Cameroun) — sert au téléphone ET à WhatsApp
+  // Numéro appelé depuis le site (agence de Douala)
   phone: '+237 676 71 21 91',
-  phoneIntl: '+49 176 630 48 623', // numéro international (Allemagne)
-  // Format international sans espaces ni "+" pour les liens wa.me / tel:
-  whatsapp: '237676712191',
+  // Numéro WhatsApp de l'agence — c'est lui qui reçoit les réservations
+  whatsappDisplay: '+49 1577 2809304',
+  // Même numéro au format wa.me : international, sans "+" ni espaces
+  whatsapp: '4915772809304',
   email: 'rodrigoservices39@gmail.com',
 
   // --- Adresse ---
@@ -58,6 +59,11 @@ export const site = {
 // Lien WhatsApp prêt à l'emploi avec message pré-rempli
 export function waLink(message: string) {
   return `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(message)}`;
+}
+
+// Lien d'appel nettoyé : "+237 676 71 21 91" -> "tel:+237676712191"
+export function telLink(number: string = site.phone) {
+  return `tel:${number.replace(/[^\d+]/g, '')}`;
 }
 
 // Formatage des montants en francs CFA : 25000 -> "25 000 FCFA"

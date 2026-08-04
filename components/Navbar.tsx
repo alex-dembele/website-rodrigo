@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Logo from './Logo';
-import { site, waLink } from '@/lib/site';
+import { site, waLink, telLink } from '@/lib/site';
 
 const navItems = [
   { label: 'Accueil', href: '/' },
@@ -38,7 +38,7 @@ export default function Navbar() {
 
         <div className="hidden items-center gap-3 lg:flex">
           <a
-            href={`tel:${site.phone.replace(/\s/g, '')}`}
+            href={telLink()}
             className="text-sm font-semibold text-brand-ink transition-colors hover:text-brand-red"
           >
             {site.phone}

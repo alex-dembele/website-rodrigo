@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { LogoMark } from './Logo';
-import { site, waLink } from '@/lib/site';
+import { site, waLink, telLink } from '@/lib/site';
 
 const nav = [
   { label: 'Nos voitures', href: '/vehicles' },
@@ -49,7 +49,14 @@ export default function Footer() {
           <h3 className="text-xs font-bold uppercase tracking-widest text-brand-gray">Contact</h3>
           <ul className="mt-4 flex flex-col gap-2.5 text-sm text-brand-ink">
             <li>
-              <a href={`tel:${site.phone.replace(/\s/g, '')}`} className="hover:text-brand-red">{site.phone}</a>
+              <a href={telLink()} className="hover:text-brand-red">{site.phone}</a>
+              <span className="ml-2 text-xs text-brand-gray">Appels</span>
+            </li>
+            <li>
+              <a href={waLink('Bonjour, je souhaite louer une voiture.')} target="_blank" rel="noreferrer" className="hover:text-brand-red">
+                {site.whatsappDisplay}
+              </a>
+              <span className="ml-2 text-xs text-brand-gray">WhatsApp</span>
             </li>
             <li>
               <a href={`mailto:${site.email}`} className="hover:text-brand-red">{site.email}</a>

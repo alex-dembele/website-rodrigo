@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Phone, Mail, MapPin, MessageCircle } from 'lucide-react';
-import { site, waLink } from '@/lib/site';
+import { site, waLink, telLink } from '@/lib/site';
 
 export default function ContactForm() {
   const [name, setName] = useState('');
@@ -44,7 +44,24 @@ export default function ContactForm() {
           <ul className="mt-6 space-y-4">
             <li className="flex items-center gap-3">
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-red/10 text-brand-red"><Phone className="h-5 w-5" /></span>
-              <a href={`tel:${site.phone.replace(/\s/g, '')}`} className="font-semibold text-brand-ink hover:text-brand-red">{site.phone}</a>
+              <div>
+                <a href={telLink()} className="font-semibold text-brand-ink hover:text-brand-red">{site.phone}</a>
+                <p className="text-xs text-brand-gray">Appels — agence de Douala</p>
+              </div>
+            </li>
+            <li className="flex items-center gap-3">
+              <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-red/10 text-brand-red"><MessageCircle className="h-5 w-5" /></span>
+              <div>
+                <a
+                  href={waLink('Bonjour, je souhaite louer une voiture.')}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-semibold text-brand-ink hover:text-brand-red"
+                >
+                  {site.whatsappDisplay}
+                </a>
+                <p className="text-xs text-brand-gray">WhatsApp — réponse rapide</p>
+              </div>
             </li>
             <li className="flex items-center gap-3">
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-red/10 text-brand-red"><Mail className="h-5 w-5" /></span>
