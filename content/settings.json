@@ -1,0 +1,37 @@
+{
+  "name": "Rodrigo Auto Services",
+  "legalName": "Rodrigo Auto Services – Location de voiture",
+  "tagline": "Location de voiture à Douala, avec ou sans chauffeur",
+  "description": "Rodrigo Auto Services loue des voitures fiables et abordables à Douala : Toyota Avensis en boîte manuelle ou automatique, SUV Toyota RAV4 et pick-up Hilux 4x4. Avec ou sans chauffeur, transfert aéroport, paiement Orange Money & MTN MoMo.",
+  "url": "https://www.rodrigoservices.cm",
+  "phone": "+237 676 71 21 91",
+  "whatsappDisplay": "+49 1577 2809304",
+  "whatsapp": "4915772809304",
+  "email": "rodrigoservices39@gmail.com",
+  "address": "Terminus Bonamoussadi, face Hôtel Merveille",
+  "city": "Douala",
+  "country": "Cameroun",
+  "geo": { "lat": 4.0921, "lng": 9.7454 },
+  "mapsQuery": "Rodrigo Auto Services Terminus Bonamoussadi Douala",
+  "driverPricePerDay": 10000,
+  "payment": {
+    "momo": {
+      "label": "MTN Mobile Money",
+      "number": "+237 676 71 21 91",
+      "holder": "Emmanuel Nations Azemkeng",
+      "ussd": "*126#"
+    },
+    "orange": {
+      "label": "Orange Money",
+      "number": "+237 695 85 99 80",
+      "holder": "Emmanuel Nations Azemkeng",
+      "ussd": "#150#"
+    },
+    "depositPercent": 30
+  },
+  "social": {
+    "facebook": "#",
+    "instagram": "#",
+    "tiktok": "#"
+  }
+}

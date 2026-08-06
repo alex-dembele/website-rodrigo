@@ -1,3 +1,4 @@
+import { site } from './site';
 import { vehiclesData } from './vehicles.data';
 
 export type VehicleType = 'Berline' | 'SUV' | 'Pick-up 4x4';
@@ -26,8 +27,9 @@ export interface Vehicle {
   comingSoon?: boolean;
 }
 
-// Supplément journalier si le client choisit un chauffeur (FCFA / jour)
-export const DRIVER_PRICE_PER_DAY = 10000;
+// Supplément journalier si le client choisit un chauffeur (FCFA / jour).
+// Modifiable depuis l'espace d'administration (content/settings.json).
+export const DRIVER_PRICE_PER_DAY = site.driverPricePerDay;
 
 // Les fiches sont dans content/vehicles/*.json et sont vérifiées puis
 // converties en lib/vehicles.data.ts avant chaque build. Pour ajouter une
