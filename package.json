@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "flotte:generer": "node scripts/build-vehicles.mjs",
+    "voiture:ajouter": "python3 scripts/add-vehicle.py",
     "pretest": "npm run flotte:generer",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
