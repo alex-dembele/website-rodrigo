@@ -40,13 +40,13 @@ export const site = {
     momo: {
       label: 'MTN Mobile Money',
       number: '+237 676 71 21 91',
-      holder: 'Rodrigo Auto Services',
+      holder: 'Emmanuel Nations Azemkeng',
       ussd: '*126#'
     },
     orange: {
       label: 'Orange Money',
       number: '+237 695 85 99 80',
-      holder: 'Emmanuel Nations',
+      holder: 'Emmanuel Nations Azemkeng',
       ussd: '#150#'
     },
     // Acompte demandé pour valider une réservation (en %)
