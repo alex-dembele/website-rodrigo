@@ -9,7 +9,7 @@ import { vehicles } from '@/lib/vehicles';
 export const metadata: Metadata = {
   title: 'Nos voitures à louer à Douala',
   description:
-    'Découvrez les voitures de Rodrigo Services à Douala : Toyota Avensis (berline), Toyota RAV4 (SUV) et bientôt le pick-up Hilux. Tarifs en FCFA, avec ou sans chauffeur.',
+    'Découvrez les voitures de Rodrigo Services à Douala : Toyota Avensis berline en boîte manuelle ou automatique et SUV Toyota RAV4. Tarifs en FCFA, avec ou sans chauffeur.',
   alternates: { canonical: '/vehicles' }
 };
 

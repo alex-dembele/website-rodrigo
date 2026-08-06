@@ -11,7 +11,7 @@ import Reveal from '@/components/Reveal';
 export const metadata: Metadata = {
   title: 'Tarifs de location de voiture à Douala',
   description:
-    'Tarifs clairs en FCFA pour la location de voiture à Douala chez Rodrigo Services : Avensis, RAV4, Hilux. Option chauffeur, acompte par Orange Money et MTN MoMo.',
+    'Tarifs clairs en FCFA pour la location de voiture à Douala chez Rodrigo Services : Toyota Avensis et Toyota RAV4. Option chauffeur, acompte par Orange Money et MTN MoMo.',
   alternates: { canonical: '/tarifs' }
 };
 

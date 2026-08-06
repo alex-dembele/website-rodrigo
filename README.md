@@ -51,7 +51,8 @@ Tout est regroupé dans le dossier `lib/`. Change juste les valeurs.
 - `variant` : précision affichée sous le nom (`Boîte manuelle`, `Boîte automatique`).
 - `bestFor` : la phrase qui aide le client à choisir, affichée sur la carte.
 - `DRIVER_PRICE_PER_DAY` : supplément chauffeur par jour.
-- `available: false` + `comingSoon: true` : voiture pas encore dispo (ex. la Hilux).
+- `available: false` + `comingSoon: true` : voiture annoncée mais pas encore en service.
+  Elle apparaît avec le badge « Bientôt » et sans bouton de réservation.
 - `gallery: []` : pas encore de photo → le site affiche un cadre « photos bientôt
   disponibles » au lieu d'une image trompeuse.
 
