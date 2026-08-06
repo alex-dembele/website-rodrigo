@@ -69,8 +69,8 @@ export const vehiclesData: Vehicle[] = [
     "fuel": "Essence",
     "airConditioning": true,
     "gallery": [
-      "/cars/rav4-2.jpg",
       "/cars/rav4-1.jpg",
+      "/cars/rav4-2.jpg",
       "/cars/rav4-3.jpg",
       "/cars/rav4-4.jpg",
       "/cars/rav4-5.jpg",
@@ -85,5 +85,29 @@ export const vehiclesData: Vehicle[] = [
       "Grand volume"
     ],
     "available": true
+  },
+  {
+    "id": "hilux",
+    "name": "Toyota Hilux",
+    "type": "Pick-up 4x4",
+    "pricePerDay": 60000,
+    "seats": 5,
+    "doors": 4,
+    "transmission": "Manuelle",
+    "fuel": "Diesel",
+    "airConditioning": true,
+    "gallery": [
+      "/cars/hilux-1.jpg"
+    ],
+    "bestFor": "Chantiers, pistes et longues routes hors de Douala",
+    "description": "Pick-up tout-terrain double cabine : 5 places à l'avant et une benne pour le matériel. Le véhicule qui passe là où une berline s'arrête — chantiers, plantations et routes dégradées.",
+    "features": [
+      "4x4",
+      "Double cabine",
+      "Benne de chargement",
+      "Climatisation"
+    ],
+    "available": true,
+    "variant": "Double cabine 4x4"
   }
 ];
