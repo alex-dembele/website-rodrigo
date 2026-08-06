@@ -61,7 +61,7 @@ test.describe('Pages du site', () => {
     await page.goto('/');
     const body = page.locator('body');
     await expect(body).toContainText('+237 676 71 21 91');
-    await expect(body).toContainText('Rodrigo Services');
+    await expect(body).toContainText('Rodrigo Auto Services');
     await expect(body).toContainText('+237 695 85 99 80');
     await expect(body).toContainText('Emmanuel Nations');
   });

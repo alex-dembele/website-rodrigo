@@ -7,9 +7,9 @@ import MapEmbed from '@/components/MapEmbed';
 import Reveal from '@/components/Reveal';
 
 export const metadata: Metadata = {
-  title: 'Contact — Rodrigo Services Douala',
+  title: 'Contact — Rodrigo Auto Services Douala',
   description:
-    'Contactez Rodrigo Services à Bonamoussadi, Douala pour louer une voiture : téléphone, WhatsApp et email. Réponse rapide.',
+    'Contactez Rodrigo Auto Services à Bonamoussadi, Douala pour louer une voiture : téléphone, WhatsApp et email. Réponse rapide.',
   alternates: { canonical: '/contact' }
 };
 

@@ -8,9 +8,9 @@ import MapEmbed from '@/components/MapEmbed';
 import { site } from '@/lib/site';
 
 export const metadata: Metadata = {
-  title: 'À propos de Rodrigo Services',
+  title: 'À propos de Rodrigo Auto Services',
   description:
-    'Rodrigo Services est une petite entreprise de location de voiture basée à Bonamoussadi, Douala. Des voitures fiables, des prix clairs et un service de proximité.',
+    'Rodrigo Auto Services est une petite entreprise de location de voiture basée à Bonamoussadi, Douala. Des voitures fiables, des prix clairs et un service de proximité.',
   alternates: { canonical: '/about' }
 };
 
@@ -34,7 +34,7 @@ export default function AboutPage() {
           <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
             <div className="space-y-4 text-brand-gray">
               <p>
-                Rodrigo Services est une petite entreprise camerounaise de location de voiture, basée à
+                Rodrigo Auto Services est une petite entreprise camerounaise de location de voiture, basée à
                 <strong className="text-brand-ink"> {site.address}, {site.city}</strong>. Notre objectif est
                 simple : vous proposer des voitures fiables à des prix clairs, sans complications.
               </p>

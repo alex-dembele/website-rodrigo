@@ -33,10 +33,8 @@ export const articles: Article[] = [
     slug: 'louer-une-voiture-a-douala',
     title: 'Louer une voiture à Douala : comment ça marche',
     shortTitle: 'Louer une voiture à Douala',
-    description:
-      'Papiers à prévoir, acompte, remise du véhicule, carburant, restitution : le déroulé complet d’une location de voiture à Douala chez Rodrigo Services.',
-    excerpt:
-      'Papiers à prévoir, caution, prise en charge du véhicule et restitution : le déroulé complet d’une location chez Rodrigo Services.',
+    description: `Papiers à prévoir, acompte, remise du véhicule, carburant, restitution : le déroulé complet d’une location de voiture à Douala chez ${site.name}.`,
+    excerpt: `Papiers à prévoir, caution, prise en charge du véhicule et restitution : le déroulé complet d’une location chez ${site.name}.`,
     date: '2026-07-09',
     readingMinutes: 5,
     body: [

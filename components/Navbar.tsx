@@ -21,7 +21,7 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-brand-line bg-white/90 backdrop-blur-md">
       <div className="container flex items-center justify-between py-3.5">
-        <Link href="/" aria-label="Rodrigo Services — accueil">
+        <Link href="/" aria-label={`${site.name} — accueil`}>
           <Logo />
         </Link>
 

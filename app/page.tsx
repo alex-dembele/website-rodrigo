@@ -65,7 +65,7 @@ export default function Home() {
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-brand-line bg-[#EDEDF0] shadow-card">
                 <Image
                   src={heroVehicle.gallery[0]}
-                  alt={`${vehicleLabel(heroVehicle)} en location chez Rodrigo Services à Douala`}
+                  alt={`${vehicleLabel(heroVehicle)} en location chez Rodrigo Auto Services à Douala`}
                   fill
                   priority
                   className="object-contain transition-transform duration-700 hover:scale-105"

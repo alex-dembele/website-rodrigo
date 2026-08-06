@@ -8,7 +8,7 @@ import { site } from '@/lib/site';
 export const metadata: Metadata = {
   title: 'Réserver une voiture à Douala',
   description:
-    'Réservez en ligne votre voiture à Douala avec Rodrigo Services : choisissez le véhicule, les dates, avec ou sans chauffeur. Confirmation par WhatsApp, acompte par Orange Money ou MTN MoMo.',
+    'Réservez en ligne votre voiture à Douala avec Rodrigo Auto Services : choisissez le véhicule, les dates, avec ou sans chauffeur. Confirmation par WhatsApp, acompte par Orange Money ou MTN MoMo.',
   alternates: { canonical: '/reservation' }
 };
 

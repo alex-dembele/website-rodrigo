@@ -1,6 +1,6 @@
-# Rodrigo Services — Location de voiture à Douala
+# Rodrigo Auto Services — Location de voiture à Douala
 
-Site web de **Rodrigo Services**, petite entreprise de location de voiture à Douala (Cameroun) :
+Site web de **Rodrigo Auto Services**, petite entreprise de location de voiture à Douala (Cameroun) :
 location avec ou sans chauffeur, transfert aéroport, paiement **Orange Money & MTN Mobile Money**.
 
 Site construit avec **Next.js 15** + **Tailwind CSS** + **TypeScript**.
@@ -147,4 +147,4 @@ l'agence, des avis clients réguliers et quelques liens depuis des sites camerou
 
 ---
 
-© Rodrigo Services — Location de voiture à Douala.
+© Rodrigo Auto Services — Location de voiture à Douala.

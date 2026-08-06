@@ -1,15 +1,15 @@
 /**
- * Configuration centrale de Rodrigo Services.
+ * Configuration centrale de Rodrigo Auto Services.
  * ⚠️ MODIFIE UNIQUEMENT LES VALEURS CI-DESSOUS pour mettre à jour tout le site
  * (numéros de téléphone, WhatsApp, Orange Money / MTN MoMo, adresse, etc.).
  */
 
 export const site = {
-  name: 'Rodrigo Services',
-  legalName: 'Rodrigo Services – Location de voiture',
+  name: 'Rodrigo Auto Services',
+  legalName: 'Rodrigo Auto Services – Location de voiture',
   tagline: 'Location de voiture à Douala, avec ou sans chauffeur',
   description:
-    "Rodrigo Services loue des voitures fiables et abordables à Douala : Toyota Avensis en boîte manuelle ou automatique et SUV Toyota RAV4. Avec ou sans chauffeur, transfert aéroport, paiement Orange Money & MTN MoMo.",
+    "Rodrigo Auto Services loue des voitures fiables et abordables à Douala : Toyota Avensis en boîte manuelle ou automatique et SUV Toyota RAV4. Avec ou sans chauffeur, transfert aéroport, paiement Orange Money & MTN MoMo.",
 
   // URL du site en production (à mettre à jour quand tu auras ton domaine)
   url: 'https://www.rodrigoservices.cm',
@@ -29,7 +29,7 @@ export const site = {
   country: 'Cameroun',
   // Coordonnées approximatives de Bonamoussadi (Douala) — pour le SEO local
   geo: { lat: 4.0921, lng: 9.7454 },
-  mapsQuery: 'Rodrigo Services Terminus Bonamoussadi Douala',
+  mapsQuery: 'Rodrigo Auto Services Terminus Bonamoussadi Douala',
 
   // --- Paiement Mobile Money ---
   // `holder` = nom exact du bénéficiaire affiché par l'opérateur avant validation ;
@@ -40,7 +40,7 @@ export const site = {
     momo: {
       label: 'MTN Mobile Money',
       number: '+237 676 71 21 91',
-      holder: 'Rodrigo Services',
+      holder: 'Rodrigo Auto Services',
       ussd: '*126#'
     },
     orange: {

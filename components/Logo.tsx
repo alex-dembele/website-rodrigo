@@ -27,8 +27,8 @@ export default function Logo({ light = false }: { light?: boolean }) {
         >
           Rodrigo
         </span>
-        <span className="font-display text-[11px] font-semibold uppercase tracking-[0.25em] text-brand-red">
-          Services
+        <span className="font-display text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-red">
+          Auto Services
         </span>
       </span>
     </span>
