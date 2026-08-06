@@ -48,16 +48,37 @@ Tout est regroupé dans le dossier `lib/`. Change juste les valeurs.
   avant d'envoyer l'argent — les deux comptes peuvent être à des noms différents.
 - `payment.depositPercent` : pourcentage d'acompte demandé (30 % par défaut).
 
-### 2. Voitures et prix → `lib/vehicles.ts`
+### 2. Voitures et prix → `content/vehicles/`
 
-- `pricePerDay` : prix **par jour, en FCFA** (nombre, sans espace : `25000`).
+Une voiture = un fichier `content/vehicles/<identifiant>.json`. Pour en **ajouter** une :
+
+```bash
+npm run voiture:ajouter
+```
+
+La commande pose les questions une par une, prépare les photos (redimensionnement,
+compression, rognage du fond studio, renommage) et écrit la fiche. Il ne reste
+qu'à relire, tester et pousser.
+
+Pour **modifier** un prix ou retirer une voiture de la location, ouvre son fichier :
+
+- `pricePerDay` : prix **par jour, en FCFA** (nombre, sans espace ni « FCFA » : `25000`).
 - `variant` : précision affichée sous le nom (`Boîte manuelle`, `Boîte automatique`).
 - `bestFor` : la phrase qui aide le client à choisir, affichée sur la carte.
-- `DRIVER_PRICE_PER_DAY` : supplément chauffeur par jour.
-- `available: false` + `comingSoon: true` : voiture annoncée mais pas encore en service.
-  Elle apparaît avec le badge « Bientôt » et sans bouton de réservation.
-- `gallery: []` : pas encore de photo → le site affiche un cadre « photos bientôt
-  disponibles » au lieu d'une image trompeuse.
+- `order` : ordre d'affichage sur le site (le plus petit en premier).
+- `available: false` : la voiture disparaît du formulaire de réservation.
+  Avec `comingSoon: true`, elle reste visible avec le badge « Bientôt ».
+- `gallery: []` : pas encore de photo → cadre « photos bientôt disponibles » au lieu
+  d'une image trompeuse. Interdit si la voiture est disponible.
+
+Le supplément chauffeur (`DRIVER_PRICE_PER_DAY`) reste dans `lib/vehicles.ts`.
+
+> Les fiches sont **vérifiées avant chaque `dev`, `build` et `test`** : prix numérique,
+> type connu, identifiant unique, photos réellement présentes. Une erreur de saisie
+> arrête la construction avec un message en clair — elle ne peut pas arriver en ligne.
+> Pour vérifier sans rien lancer d'autre : `npm run flotte:generer`.
+>
+> `lib/vehicles.data.ts` est **généré** à partir de ces fiches : ne le modifie pas à la main.
 
 ### 3. Photos des voitures → dossier `public/cars/`
 
@@ -69,8 +90,8 @@ studio, détoure le logo et régénère l'image de partage :
 python3 scripts/prepare-assets.py   # nécessite Pillow : pip install Pillow
 ```
 
-Pour ajouter une voiture : dépose ses photos dans `public/cars/` (`.jpg`, ~1200 px de
-large) et liste-les dans le champ `gallery` du véhicule.
+Pour une nouvelle voiture, laisse plutôt `npm run voiture:ajouter` s'occuper des photos :
+il accepte des photos de téléphone brutes et les prépare (1400 px max, ~50 Ko chacune).
 
 | Fichier | Voiture |
 |---|---|
@@ -137,12 +158,16 @@ l'agence, des avis clients réguliers et quelques liens depuis des sites camerou
   `/contact`, `/blog` et `/blog/[slug]` pour les articles).
 - `components/` : composants (Navbar, Footer, formulaire de réservation, cartes voitures…).
 - `lib/site.ts` : **config à éditer** (contacts, paiement).
-- `lib/vehicles.ts` : **flotte à éditer** (voitures, prix).
+- `content/vehicles/` : **flotte à éditer** (une voiture = un fichier JSON).
+- `lib/vehicles.ts` : types de la flotte et supplément chauffeur.
+- `lib/vehicles.data.ts` : *généré* depuis `content/vehicles/` — ne pas modifier.
 - `lib/articles.ts` : **articles à éditer** (conseils publiés sur `/blog`).
 - `lib/booking.ts` : calcul des prix et génération du message WhatsApp/email.
 - `public/` : images publiées (photos, logo, icônes).
 - `assets-source/` : originaux fournis par le client (non publiés).
 - `scripts/prepare-assets.py` : découpe des photos et génération des images de marque.
+- `scripts/build-vehicles.mjs` : vérifie les fiches de voitures et génère `lib/vehicles.data.ts`.
+- `scripts/add-vehicle.py` : la commande `npm run voiture:ajouter`.
 - `tests/` : tests Playwright du parcours de réservation et des pages.
 
 ---
