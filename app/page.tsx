@@ -12,11 +12,12 @@ import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import VehicleCard from '@/components/VehicleCard';
 import Reveal from '@/components/Reveal';
-import { availableVehicles } from '@/lib/vehicles';
+import { availableVehicles, vehicleLabel } from '@/lib/vehicles';
 import { site, fcfa, telLink } from '@/lib/site';
 
 const heroPoints = ['Avec ou sans chauffeur', 'Paiement OM & MoMo', 'Réponse rapide'];
-const cheapestPrice = Math.min(...availableVehicles.map((v) => v.pricePerDay));
+// La voiture mise en avant dans le hero : le badge doit annoncer SES infos.
+const heroVehicle = availableVehicles.find((v) => v.id === 'rav4') ?? availableVehicles[0];
 
 export default function Home() {
   return (
@@ -63,8 +64,8 @@ export default function Home() {
             <div className="relative animate-fade-up" style={{ animationDelay: '0.2s' }}>
               <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-brand-line bg-[#EDEDF0] shadow-card">
                 <Image
-                  src="/cars/rav4-2.jpg"
-                  alt="Toyota RAV4 en location chez Rodrigo Services à Douala"
+                  src={heroVehicle.gallery[0]}
+                  alt={`${vehicleLabel(heroVehicle)} en location chez Rodrigo Auto Services à Douala`}
                   fill
                   priority
                   className="object-contain transition-transform duration-700 hover:scale-105"
@@ -72,9 +73,11 @@ export default function Home() {
                 />
               </div>
               <div className="absolute -bottom-4 left-4 rounded-xl border border-brand-line bg-white px-4 py-2.5 shadow-card sm:left-6">
-                <p className="text-[11px] uppercase tracking-wider text-brand-gray">à partir de</p>
+                <p className="text-[11px] uppercase tracking-wider text-brand-gray">
+                  {heroVehicle.name} · {heroVehicle.type} · {heroVehicle.transmission}
+                </p>
                 <p className="font-display text-lg font-extrabold leading-tight text-brand-ink">
-                  {fcfa(cheapestPrice)}<span className="text-sm font-medium text-brand-gray">/jour</span>
+                  {fcfa(heroVehicle.pricePerDay)}<span className="text-sm font-medium text-brand-gray">/jour</span>
                 </p>
               </div>
             </div>

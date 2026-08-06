@@ -463,15 +463,16 @@ function PaymentDetails({ deposit, open }: { deposit: number; open: boolean }) {
       </summary>
       <p className="mt-3 text-sm text-brand-gray">
         L’acompte de {site.payment.depositPercent}% bloque la voiture ; le reste se règle à la remise
-        du véhicule. Bénéficiaire : <strong className="text-brand-ink">Rodrigo Services</strong>.
+        du véhicule. Vérifie le nom du bénéficiaire avant de valider le transfert.
       </p>
       <div className="mt-4 grid gap-3 sm:grid-cols-2">
         {methods.map((m) => (
           <div key={m.label} className="rounded-xl bg-brand-soft p-4">
             <p className="font-semibold text-brand-ink">{m.label}</p>
-            <p className="mt-1 text-sm text-brand-gray">
+            <p className="mt-1 font-semibold tracking-wide text-brand-ink">
               {m.number || 'Numéro communiqué à la confirmation'}
             </p>
+            <p className="text-sm text-brand-gray">Bénéficiaire : {m.holder}</p>
             <p className="text-sm text-brand-gray">Code {m.ussd}</p>
           </div>
         ))}

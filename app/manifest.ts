@@ -1,9 +1,10 @@
 import { MetadataRoute } from 'next';
+import { site } from '@/lib/site';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Rodrigo Services — Location de voiture à Douala',
-    short_name: 'Rodrigo Services',
+    name: `${site.name} — Location de voiture à Douala`,
+    short_name: site.name,
     description: 'Location de voiture à Douala, avec ou sans chauffeur. Paiement Orange Money & MTN MoMo.',
     start_url: '/',
     display: 'standalone',

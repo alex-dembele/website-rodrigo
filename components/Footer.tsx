@@ -18,7 +18,7 @@ export default function Footer() {
         <div className="space-y-4">
           <div className="flex items-center gap-2.5">
             <LogoMark className="h-9 w-9" />
-            <span className="font-display text-lg font-extrabold text-brand-ink">Rodrigo Services</span>
+            <span className="font-display text-lg font-extrabold text-brand-ink">{site.name}</span>
           </div>
           <p className="max-w-sm text-sm leading-relaxed text-brand-gray">
             Location de voiture à Douala, avec ou sans chauffeur. Des véhicules fiables et
@@ -69,7 +69,7 @@ export default function Footer() {
 
       <div className="border-t border-brand-line">
         <div className="container flex flex-col items-center justify-between gap-2 py-5 text-xs text-brand-gray sm:flex-row">
-          <p>© {new Date().getFullYear()} Rodrigo Services — Location de voiture à Douala.</p>
+          <p>© {new Date().getFullYear()} {site.name} — Location de voiture à Douala.</p>
           <p>Paiement Orange Money & MTN Mobile Money.</p>
         </div>
       </div>

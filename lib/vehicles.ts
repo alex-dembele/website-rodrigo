@@ -103,24 +103,6 @@ export const vehicles: Vehicle[] = [
       "SUV robuste et surélevé, idéal pour la ville comme pour les sorties hors de Douala. Confortable pour 5 personnes avec bagages.",
     features: ['Climatisation', 'Boîte automatique', 'Position de conduite haute', 'Grand volume'],
     available: true
-  },
-  {
-    id: 'hilux',
-    name: 'Toyota Hilux',
-    type: 'Pick-up 4x4',
-    pricePerDay: 60000,
-    seats: 5,
-    doors: 4,
-    transmission: 'Manuelle',
-    fuel: 'Diesel',
-    airConditioning: true,
-    gallery: [],
-    bestFor: 'Chantiers, transport et longues routes',
-    description:
-      "Pick-up tout-terrain double cabine pour les chantiers, le transport et les longues routes. Bientôt disponible à la location.",
-    features: ['4x4', 'Double cabine', 'Benne de chargement', 'Tout-terrain'],
-    available: false,
-    comingSoon: true
   }
 ];
 

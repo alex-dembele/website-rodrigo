@@ -1,23 +1,12 @@
 import Link from 'next/link';
 import Reveal from './Reveal';
+import { articles } from '@/lib/articles';
 
-const posts = [
-  {
-    title: 'Louer une voiture à Douala : comment ça marche',
-    excerpt: 'Papiers nécessaires, caution, prise en charge : tout ce qu’il faut savoir avant de louer chez nous.',
-    href: '/blog'
-  },
-  {
-    title: 'Avec ou sans chauffeur : que choisir ?',
-    excerpt: 'On t’aide à choisir la formule la plus adaptée selon ton trajet et ton budget.',
-    href: '/blog'
-  },
-  {
-    title: 'Payer par Orange Money ou MTN MoMo',
-    excerpt: 'Le guide simple pour régler ton acompte en Mobile Money en toute sécurité.',
-    href: '/blog'
-  }
-];
+const posts = articles.map((a) => ({
+  title: a.title,
+  excerpt: a.excerpt,
+  href: `/blog/${a.slug}`
+}));
 
 export default function BlogPreview() {
   return (

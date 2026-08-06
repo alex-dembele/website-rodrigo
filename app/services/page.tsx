@@ -8,7 +8,7 @@ import PaymentSection from '@/components/PaymentSection';
 export const metadata: Metadata = {
   title: 'Services de location et transfert à Douala',
   description:
-    'Location avec ou sans chauffeur, transfert aéroport, location à la journée ou longue durée à Douala avec Rodrigo Services.',
+    'Location avec ou sans chauffeur, transfert aéroport, location à la journée ou longue durée à Douala avec Rodrigo Auto Services.',
   alternates: { canonical: '/services' }
 };
 

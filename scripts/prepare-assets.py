@@ -124,8 +124,8 @@ def write_brand(mark):
     m.thumbnail((260, 260), Image.LANCZOS)
     logo.paste(m, (20, (320 - m.height) // 2), m)
     d = ImageDraw.Draw(logo)
-    d.text((300, 105), 'RODRIGO', font=ImageFont.truetype(BOLD, 76), fill=(21, 21, 23, 255))
-    d.text((303, 190), 'S E R V I C E S', font=ImageFont.truetype(BOLD, 40), fill=(209, 38, 48, 255))
+    d.text((300, 100), 'RODRIGO', font=ImageFont.truetype(BOLD, 76), fill=(21, 21, 23, 255))
+    d.text((303, 186), 'AUTO SERVICES', font=ImageFont.truetype(BOLD, 46), fill=(209, 38, 48, 255))
     logo.save('public/brand/logo.png')
     print('public/brand/mark.png, logo.png, icônes OK')
 
@@ -151,8 +151,8 @@ def write_og(mark):
     m = mark.copy()
     m.thumbnail((110, 110), Image.LANCZOS)
     og.paste(m, (56, 60), m)
-    d.text((56, 210), 'RODRIGO', font=ImageFont.truetype(BOLD, 62), fill=(21, 21, 23))
-    d.text((58, 282), 'S E R V I C E S', font=ImageFont.truetype(BOLD, 30), fill=(209, 38, 48))
+    d.text((56, 205), 'RODRIGO', font=ImageFont.truetype(BOLD, 62), fill=(21, 21, 23))
+    d.text((58, 277), 'AUTO SERVICES', font=ImageFont.truetype(BOLD, 36), fill=(209, 38, 48))
     f = ImageFont.truetype(REG, 27)
     for i, line in enumerate(['Location de voiture', 'à Douala, avec ou', 'sans chauffeur']):
         d.text((56, 370 + i * 38), line, font=f, fill=(91, 96, 105))

@@ -6,8 +6,8 @@ import { vehicles, vehicleLabel } from '@/lib/vehicles';
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: 'Rodrigo Services — Location de voiture à Douala (avec ou sans chauffeur)',
-    template: '%s | Rodrigo Services Douala'
+    default: `${site.name} — Location de voiture à Douala (avec ou sans chauffeur)`,
+    template: `%s | ${site.name} Douala`
   },
   description: site.description,
   keywords: [
@@ -17,26 +17,28 @@ export const metadata: Metadata = {
     'location avec chauffeur Douala',
     'transfert aéroport Douala',
     'agence location voiture Bonamoussadi',
-    'Rodrigo Services',
+    site.name,
     'Toyota Avensis location',
     'Toyota RAV4 location',
     'paiement Orange Money MTN MoMo'
   ],
-  applicationName: 'Rodrigo Services',
-  authors: [{ name: 'Rodrigo Services' }],
+  applicationName: site.name,
+  authors: [{ name: site.name }],
   alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
     locale: 'fr_CM',
     url: site.url,
-    siteName: 'Rodrigo Services',
-    title: 'Rodrigo Services — Location de voiture à Douala',
+    siteName: site.name,
+    title: `${site.name} — Location de voiture à Douala`,
     description: site.description,
-    images: [{ url: '/og.jpg', width: 1200, height: 630, alt: 'Rodrigo Services — Location de voiture à Douala' }]
+    images: [
+      { url: '/og.jpg', width: 1200, height: 630, alt: `${site.name} — Location de voiture à Douala` }
+    ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Rodrigo Services — Location de voiture à Douala',
+    title: `${site.name} — Location de voiture à Douala`,
     description: site.description,
     images: ['/og.jpg']
   },

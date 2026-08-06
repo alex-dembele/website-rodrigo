@@ -60,24 +60,26 @@ export default function PaymentSection() {
           <h3 className="font-display text-lg font-bold text-brand-ink">Moyens de paiement acceptés</h3>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div className="rounded-xl border border-[#FFCC00]/50 bg-[#FFCC00]/10 p-4">
-              <p className="font-bold text-brand-ink">MTN Mobile Money</p>
-              <p className="mt-1 text-sm text-brand-gray">
+              <p className="font-bold text-brand-ink">{site.payment.momo.label}</p>
+              <p className="mt-1 font-semibold text-brand-ink">
                 {site.payment.momo.number || 'Numéro communiqué à la confirmation'}
               </p>
+              <p className="text-sm text-brand-gray">Bénéficiaire : {site.payment.momo.holder}</p>
               <p className="text-sm text-brand-gray">Code {site.payment.momo.ussd}</p>
             </div>
             <div className="rounded-xl border border-[#FF6600]/50 bg-[#FF6600]/10 p-4">
-              <p className="font-bold text-brand-ink">Orange Money</p>
-              <p className="mt-1 text-sm text-brand-gray">
+              <p className="font-bold text-brand-ink">{site.payment.orange.label}</p>
+              <p className="mt-1 font-semibold text-brand-ink">
                 {site.payment.orange.number || 'Numéro communiqué à la confirmation'}
               </p>
+              <p className="text-sm text-brand-gray">Bénéficiaire : {site.payment.orange.holder}</p>
               <p className="text-sm text-brand-gray">Code {site.payment.orange.ussd}</p>
             </div>
           </div>
           <p className="mt-4 rounded-xl bg-brand-soft p-4 text-sm text-brand-gray">
-            Bénéficiaire : <strong className="text-brand-ink">Rodrigo Services</strong>. Après le transfert,
-            garde ton SMS de confirmation et envoie-nous le numéro de transaction — on valide ta réservation
-            tout de suite.
+            Vérifie le nom du bénéficiaire affiché par ton opérateur avant de valider. Après le
+            transfert, garde ton SMS de confirmation et envoie-nous le numéro de transaction — on
+            valide ta réservation tout de suite.
           </p>
         </div>
       </div>
