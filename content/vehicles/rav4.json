@@ -1,0 +1,24 @@
+{
+  "id": "rav4",
+  "order": 3,
+  "name": "Toyota RAV4",
+  "type": "SUV",
+  "pricePerDay": 40000,
+  "seats": 5,
+  "doors": 5,
+  "transmission": "Automatique",
+  "fuel": "Essence",
+  "airConditioning": true,
+  "gallery": [
+    "/cars/rav4-2.jpg",
+    "/cars/rav4-1.jpg",
+    "/cars/rav4-3.jpg",
+    "/cars/rav4-4.jpg",
+    "/cars/rav4-5.jpg",
+    "/cars/rav4-6.jpg"
+  ],
+  "bestFor": "Routes dégradées, familles et bagages",
+  "description": "SUV robuste et surélevé, idéal pour la ville comme pour les sorties hors de Douala. Confortable pour 5 personnes avec bagages.",
+  "features": ["Climatisation", "Boîte automatique", "Position de conduite haute", "Grand volume"],
+  "available": true
+}

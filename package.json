@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "predev": "npm run flotte:generer",
     "dev": "next dev",
+    "prebuild": "npm run flotte:generer",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "flotte:generer": "node scripts/build-vehicles.mjs",
+    "pretest": "npm run flotte:generer",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
     "test:report": "playwright show-report"
