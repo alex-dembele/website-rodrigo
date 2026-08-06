@@ -32,17 +32,21 @@ export const site = {
   mapsQuery: 'Rodrigo Services Terminus Bonamoussadi Douala',
 
   // --- Paiement Mobile Money ---
-  // ⚠️ Laisse `number` vide tant que le numéro marchand n'est pas connu :
-  // le site affiche alors « communiqué à la confirmation » au lieu d'un faux numéro.
+  // `holder` = nom exact du bénéficiaire affiché par l'opérateur avant validation ;
+  // le client doit pouvoir le vérifier avant d'envoyer l'acompte.
+  // ⚠️ Laisse `number` vide tant qu'un numéro n'est pas connu : le site affiche
+  // alors « communiqué à la confirmation » au lieu d'un faux numéro.
   payment: {
     momo: {
       label: 'MTN Mobile Money',
       number: '+237 676 71 21 91',
+      holder: 'Rodrigo Services',
       ussd: '*126#'
     },
     orange: {
       label: 'Orange Money',
-      number: '',
+      number: '+237 695 85 99 80',
+      holder: 'Emmanuel Nations',
       ussd: '#150#'
     },
     // Acompte demandé pour valider une réservation (en %)
