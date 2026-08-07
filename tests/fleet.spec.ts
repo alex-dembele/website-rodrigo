@@ -79,3 +79,18 @@ test.describe('Galerie photo', () => {
     await expect(page).toHaveURL(/\/reservation/);
   });
 });
+
+test.describe('Voiture mise en avant', () => {
+  test('le hero affiche la voiture désignée dans les fiches', async ({ page }) => {
+    const enAvant = fiches.find((f) => f.hero);
+    expect(enAvant, 'une fiche doit porter "hero": true').toBeTruthy();
+
+    await page.goto('/');
+    const photo = page.locator('main img').first();
+    await expect(photo).toHaveAttribute('src', new RegExp(encodeURIComponent(enAvant!.gallery[0])));
+  });
+
+  test('une seule voiture est mise en avant', () => {
+    expect(fiches.filter((f) => f.hero)).toHaveLength(1);
+  });
+});

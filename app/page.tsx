@@ -12,12 +12,12 @@ import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import VehicleCard from '@/components/VehicleCard';
 import Reveal from '@/components/Reveal';
-import { availableVehicles, vehicleLabel } from '@/lib/vehicles';
+import { availableVehicles, heroVehicle, vehicleLabel } from '@/lib/vehicles';
 import { site, fcfa, telLink } from '@/lib/site';
 
 const heroPoints = ['Avec ou sans chauffeur', 'Paiement OM & MoMo', 'Réponse rapide'];
-// La voiture mise en avant dans le hero : le badge doit annoncer SES infos.
-const heroVehicle = availableVehicles.find((v) => v.id === 'rav4') ?? availableVehicles[0];
+// La voiture mise en avant dans le hero se choisit dans sa fiche (champ `hero`)
+// ou depuis l'espace de gestion ; le badge annonce SES infos.
 
 export default function Home() {
   return (

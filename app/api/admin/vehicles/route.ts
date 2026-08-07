@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isLoggedIn } from '@/lib/admin/session';
-import { commitFiles, listDir, type FileChange } from '@/lib/admin/github';
+import { commitFiles, listDir, readFile, type FileChange } from '@/lib/admin/github';
 import { validateVehicle, toVehicleFile, type VehiclePayload } from '@/lib/admin/vehicle-form';
 
 export const dynamic = 'force-dynamic';
@@ -48,6 +48,25 @@ export async function POST(request: Request) {
       path: `content/vehicles/${payload.id}.json`,
       content: `${JSON.stringify(toVehicleFile(payload, gallery), null, 2)}\n`
     });
+
+    // Une seule voiture peut occuper le hero de l'accueil : celle qu'on vient
+    // de désigner retire la mise en avant des autres, dans le même commit.
+    if (payload.hero) {
+      const fiches = (await listDir('content/vehicles')).filter(
+        (f) => f.endsWith('.json') && f !== `${payload.id}.json`
+      );
+      for (const fiche of fiches) {
+        const contenu = await readFile(`content/vehicles/${fiche}`);
+        if (!contenu) continue;
+        const autre = JSON.parse(contenu);
+        if (!autre.hero) continue;
+        delete autre.hero;
+        changes.push({
+          path: `content/vehicles/${fiche}`,
+          content: `${JSON.stringify(autre, null, 2)}\n`
+        });
+      }
+    }
 
     const commit = await commitFiles(
       changes,

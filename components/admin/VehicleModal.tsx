@@ -38,7 +38,8 @@ export default function VehicleModal({ vehicle, existingIds, onClose, onSaved }:
     bestFor: vehicle?.bestFor ?? '',
     description: vehicle?.description ?? '',
     features: (vehicle?.features ?? []).join('\n'),
-    available: vehicle?.available ?? true
+    available: vehicle?.available ?? true,
+    hero: vehicle?.hero ?? false
   });
   const [gallery, setGallery] = useState<string[]>(vehicle?.gallery ?? []);
   const [photos, setPhotos] = useState<PhotoPreparee[]>([]);
@@ -99,6 +100,7 @@ export default function VehicleModal({ vehicle, existingIds, onClose, onSaved }:
       description: form.description,
       features: form.features.split('\n').map((f) => f.trim()).filter(Boolean),
       available: form.available,
+      hero: form.hero,
       gallery,
       newPhotos: photos.map((p) => p.base64)
     };
@@ -305,6 +307,18 @@ export default function VehicleModal({ vehicle, existingIds, onClose, onSaved }:
                 <span className="block text-sm text-brand-gray">
                   Décoche pendant qu’elle est louée ou au garage : elle disparaît du formulaire de
                   réservation, sans être supprimée.
+                </span>
+              </span>
+            </label>
+
+            <label className="mt-3 flex items-start gap-3 rounded-xl bg-brand-soft p-4">
+              <input type="checkbox" className="mt-0.5 h-5 w-5 accent-brand-red" checked={form.hero}
+                onChange={(e) => set('hero', e.target.checked)} />
+              <span>
+                <span className="font-medium text-brand-ink">Mettre en avant sur l’accueil</span>
+                <span className="block text-sm text-brand-gray">
+                  Sa photo s’affiche en grand tout en haut de la page d’accueil. Une seule voiture
+                  à la fois : cocher ici la retire de l’autre.
                 </span>
               </span>
             </label>
