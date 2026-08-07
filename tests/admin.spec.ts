@@ -72,3 +72,13 @@ test.describe('Espace de gestion', () => {
     expect(robots).toContain('/admin');
   });
 });
+
+test.describe('Accès à l’espace de gestion', () => {
+  test('un lien du pied de page y mène, sans avoir à taper l’adresse', async ({ page }) => {
+    await page.goto('/');
+    const lien = page.getByRole('link', { name: /Gérer le site/ });
+    await expect(lien).toBeVisible();
+    await lien.click();
+    await expect(page.getByRole('heading', { name: 'Espace de gestion' })).toBeVisible();
+  });
+});
