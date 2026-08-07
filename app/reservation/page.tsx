@@ -54,7 +54,11 @@ export default async function ReservationPage({
           />
         </section>
       </main>
-      <Footer />
+      {/* la barre de réservation est collée en bas sur mobile : on lui réserve
+          sa place pour qu'elle ne recouvre jamais la fin du pied de page */}
+      <div className="pb-24 lg:pb-0">
+        <Footer />
+      </div>
     </>
   );
 }

@@ -106,7 +106,7 @@ export default function ReservationForm({
   const labelCls = 'mb-1.5 block text-sm font-semibold text-brand-ink';
 
   return (
-    <div className="grid gap-8 pb-28 lg:grid-cols-[1fr_380px] lg:items-start lg:pb-0">
+    <div className="grid gap-8 lg:grid-cols-[1fr_380px] lg:items-start">
       <div className="space-y-5">
         {/* 1. Voiture */}
         <section className="rounded-2xl border border-brand-line bg-white p-5 shadow-soft sm:p-6">
