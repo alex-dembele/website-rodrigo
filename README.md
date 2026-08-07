@@ -45,8 +45,12 @@ site : **compter 1 à 2 minutes** avant que la modification soit visible en lign
 
 ### Mise en service (une seule fois)
 
-1. Créer un jeton GitHub **fine-grained** limité à ce dépôt, permission
-   « Contents: Read and write ».
+1. Créer un jeton GitHub **fine-grained** limité à ce dépôt, avec la permission
+   *Repository permissions → **Contents: Read and write***.
+   > ⚠️ En lecture seule, l'espace de gestion affiche bien les voitures mais
+   > **aucun enregistrement ne passe** : GitHub répond « Resource not accessible
+   > by personal access token ». C'est l'erreur la plus fréquente à la mise en
+   > service.
 2. Sur Vercel → *Settings* → *Environment Variables*, définir les variables listées
    dans [`.env.example`](.env.example) : `ADMIN_PASSWORD`, `CONTENT_REPO_TOKEN`,
    `CONTENT_REPO`, `CONTENT_BRANCH`.

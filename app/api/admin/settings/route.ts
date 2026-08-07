@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { isLoggedIn } from '@/lib/admin/session';
 import { commitFiles, readFile } from '@/lib/admin/github';
+import { messageOperateur } from '@/lib/admin/messages';
 
 export const dynamic = 'force-dynamic';
 
@@ -85,6 +86,6 @@ export async function POST(request: Request) {
     );
     return NextResponse.json({ ok: true, commit });
   } catch (e) {
-    return NextResponse.json({ error: `${e}` }, { status: 500 });
+    return NextResponse.json({ error: messageOperateur(e) }, { status: 500 });
   }
 }

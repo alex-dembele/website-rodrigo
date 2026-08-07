@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { isLoggedIn } from '@/lib/admin/session';
 import { commitFiles, listDir, readFile, type FileChange } from '@/lib/admin/github';
 import { validateVehicle, toVehicleFile, type VehiclePayload } from '@/lib/admin/vehicle-form';
+import { messageOperateur } from '@/lib/admin/messages';
 
 export const dynamic = 'force-dynamic';
 
@@ -74,7 +75,7 @@ export async function POST(request: Request) {
     );
     return NextResponse.json({ ok: true, commit, gallery });
   } catch (e) {
-    return NextResponse.json({ error: `${e}` }, { status: 500 });
+    return NextResponse.json({ error: messageOperateur(e) }, { status: 500 });
   }
 }
 
@@ -98,6 +99,6 @@ export async function DELETE(request: Request) {
     const commit = await commitFiles(changes, `flotte: retire ${name || id}`);
     return NextResponse.json({ ok: true, commit });
   } catch (e) {
-    return NextResponse.json({ error: `${e}` }, { status: 500 });
+    return NextResponse.json({ error: messageOperateur(e) }, { status: 500 });
   }
 }

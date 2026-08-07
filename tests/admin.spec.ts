@@ -82,3 +82,45 @@ test.describe('Accès à l’espace de gestion', () => {
     await expect(page.getByRole('heading', { name: 'Espace de gestion' })).toBeVisible();
   });
 });
+
+/**
+ * Le serveur de test n'a pas de dépôt configuré : tout enregistrement échoue
+ * côté serveur. C'est exactement le cas qui doit rester visible pour le gérant
+ * — un échec silencieux lui ferait croire que sa modification est passée.
+ */
+test.describe('Retour après une modification', () => {
+  async function seConnecterAdmin(page: import('@playwright/test').Page) {
+    await page.goto('/admin');
+    await page.getByLabel('Mot de passe').fill(MOT_DE_PASSE_TEST);
+    await page.getByRole('button', { name: 'Entrer' }).click();
+    await expect(page.getByRole('button', { name: 'Ajouter une voiture' })).toBeVisible();
+  }
+
+  test('un enregistrement qui échoue est annoncé, pas avalé', async ({ page }) => {
+    await seConnecterAdmin(page);
+    await page.getByRole('button', { name: 'Ajouter une voiture' }).click();
+
+    await page.getByLabel('Modèle').fill('Toyota Corolla');
+    await page.getByLabel('Prix par jour, sans chauffeur').fill('20000');
+    await page.getByLabel('Phrase qui aide à choisir').fill('Petite et économique');
+    await page.getByLabel('Description').fill('Une berline compacte pour la ville.');
+    // sans photo : on la déclare indisponible pour que la fiche soit valable
+    await page.locator('label', { hasText: 'Disponible à la location' }).getByRole('checkbox').uncheck();
+
+    await page.getByRole('button', { name: 'Enregistrer' }).click();
+
+    // le bouton doit se débloquer et une explication doit apparaître
+    await expect(page.getByText(/pas encore activé|échoué|connexion/i).first()).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Enregistrer' })).toBeEnabled();
+  });
+
+  test('une suppression qui échoue est annoncée', async ({ page }) => {
+    await seConnecterAdmin(page);
+    await page.getByRole('button', { name: /^Supprimer / }).first().click();
+    await page.getByRole('button', { name: 'Supprimer définitivement' }).click();
+
+    await expect(page.getByRole('status')).toBeVisible();
+    await expect(page.getByText(/n’a pas pu être supprimée|Pas de connexion/)).toBeVisible();
+    await expect(page.getByText('Rien n’a été modifié sur le site.')).toBeVisible();
+  });
+});

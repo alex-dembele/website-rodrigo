@@ -23,19 +23,30 @@ export default function AdminApp({ configured }: { configured: boolean }) {
   const [onglet, setOnglet] = useState<Onglet>('voitures');
   const [edition, setEdition] = useState<{ open: boolean; vehicle: FicheVehicule | null }>({ open: false, vehicle: null });
   const [suppression, setSuppression] = useState<FicheVehicule | null>(null);
-  const [succes, setSucces] = useState('');
+  // Un seul message à l'écran, réussite comme échec : le gérant doit toujours
+  // savoir si son enregistrement est passé.
+  const [message, setMessage] = useState<{ ton: 'succes' | 'erreur'; texte: string } | null>(null);
   const [occupe, setOccupe] = useState(false);
 
   const charger = useCallback(async () => {
-    const response = await fetch('/api/admin/content');
-    if (response.status === 401) {
-      setState('connexion');
-      return;
+    try {
+      const response = await fetch('/api/admin/content');
+      if (response.status === 401) {
+        setState('connexion');
+        return;
+      }
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error ?? 'Lecture impossible.');
+      setVehicles(data.vehicles ?? []);
+      setSettings(data.settings ?? null);
+      setState('pret');
+    } catch (e) {
+      setMessage({
+        ton: 'erreur',
+        texte: e instanceof Error && e.message ? e.message : 'Impossible de charger tes voitures.'
+      });
+      setState('pret');
     }
-    const data = await response.json();
-    setVehicles(data.vehicles ?? []);
-    setSettings(data.settings ?? null);
-    setState('pret');
   }, []);
 
   useEffect(() => {
@@ -47,44 +58,65 @@ export default function AdminApp({ configured }: { configured: boolean }) {
     e.preventDefault();
     setErreur('');
     setOccupe(true);
-    const response = await fetch('/api/admin/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password })
-    });
-    setOccupe(false);
-    if (!response.ok) {
-      const data = await response.json().catch(() => ({}));
-      setErreur(data.error ?? 'Connexion impossible.');
-      return;
+    try {
+      const response = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      });
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        setErreur(data.error ?? 'Connexion impossible.');
+        return;
+      }
+      setPassword('');
+      setState('chargement');
+      charger();
+    } catch {
+      setErreur('Pas de connexion. Vérifie ton réseau et réessaie.');
+    } finally {
+      setOccupe(false);
     }
-    setPassword('');
-    setState('chargement');
-    charger();
   }
 
   async function deconnexion() {
-    await fetch('/api/admin/logout', { method: 'POST' });
+    await fetch('/api/admin/logout', { method: 'POST' }).catch(() => {});
     setState('connexion');
   }
 
-  function apresEnregistrement(message: string) {
+  function apresEnregistrement(texte: string) {
     setEdition({ open: false, vehicle: null });
-    setSucces(message);
+    setMessage({ ton: 'succes', texte });
+    // le message est en haut de page : on y ramène le gérant, sinon il ne le
+    // voit pas après avoir rempli un long formulaire sur téléphone
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     charger();
   }
 
   async function supprimer(vehicle: FicheVehicule) {
     setOccupe(true);
-    const response = await fetch('/api/admin/vehicles', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: vehicle.id, name: vehicle.name })
-    });
-    setOccupe(false);
-    setSuppression(null);
-    if (response.ok) apresEnregistrement(`${vehicle.name} retirée du site.`);
-    else setErreur('La suppression a échoué. Réessaie.');
+    try {
+      const response = await fetch('/api/admin/vehicles', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: vehicle.id, name: vehicle.name })
+      });
+      const data = await response.json().catch(() => ({}));
+      setSuppression(null);
+      if (response.ok) {
+        apresEnregistrement(`${vehicle.name} retirée du site.`);
+      } else {
+        setMessage({
+          ton: 'erreur',
+          texte: `${vehicle.name} n’a pas pu être supprimée. ${data.error ?? ''}`.trim()
+        });
+      }
+    } catch {
+      setSuppression(null);
+      setMessage({ ton: 'erreur', texte: 'Pas de connexion : rien n’a été supprimé.' });
+    } finally {
+      setOccupe(false);
+    }
   }
 
   if (state === 'chargement') {
@@ -177,17 +209,42 @@ export default function AdminApp({ configured }: { configured: boolean }) {
       </header>
 
       <main className="container py-6 sm:py-8">
-        {succes && (
-          <div className="mb-6 flex items-start gap-3 rounded-2xl border border-green-600/25 bg-green-50 p-4">
-            <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-700" />
-            <div>
-              <p className="font-semibold text-green-900">{succes}</p>
-              <p className="mt-0.5 flex items-center gap-1.5 text-sm text-green-800">
-                <Clock className="h-4 w-4" />
-                Le site public se met à jour tout seul dans 1 à 2 minutes.
+        {message && (
+          <div
+            role="status"
+            className={`mb-6 flex items-start gap-3 rounded-2xl border p-4 ${
+              message.ton === 'succes'
+                ? 'border-green-600/25 bg-green-50'
+                : 'border-brand-red/30 bg-brand-red/5'
+            }`}
+          >
+            {message.ton === 'succes' ? (
+              <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-700" />
+            ) : (
+              <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-brand-red" />
+            )}
+            <div className="min-w-0">
+              <p className={`font-semibold ${message.ton === 'succes' ? 'text-green-900' : 'text-brand-redDark'}`}>
+                {message.texte}
               </p>
+              {message.ton === 'succes' ? (
+                <p className="mt-0.5 flex items-center gap-1.5 text-sm text-green-800">
+                  <Clock className="h-4 w-4 shrink-0" />
+                  C’est enregistré. Le site public se met à jour tout seul dans 1 à 2 minutes.
+                </p>
+              ) : (
+                <p className="mt-0.5 text-sm text-brand-redDark/80">
+                  Rien n’a été modifié sur le site. Réessaie, et si ça persiste, préviens ton
+                  développeur.
+                </p>
+              )}
             </div>
-            <button onClick={() => setSucces('')} className="ml-auto text-sm font-semibold text-green-800">
+            <button
+              onClick={() => setMessage(null)}
+              className={`ml-auto shrink-0 text-sm font-semibold ${
+                message.ton === 'succes' ? 'text-green-800' : 'text-brand-red'
+              }`}
+            >
               Fermer
             </button>
           </div>

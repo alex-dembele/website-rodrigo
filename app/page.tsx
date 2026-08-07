@@ -51,11 +51,11 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-6 flex flex-wrap gap-3 animate-fade-up" style={{ animationDelay: '0.32s' }}>
-                <Link href="/reservation" className="inline-flex flex-1 items-center justify-center rounded-full bg-brand-red px-7 py-3.5 font-semibold text-white shadow-red transition-transform hover:-translate-y-0.5 sm:flex-none">
+              <div className="mt-6 grid grid-cols-1 gap-3 sm:flex sm:flex-wrap animate-fade-up" style={{ animationDelay: '0.32s' }}>
+                <Link href="/reservation" className="inline-flex items-center justify-center rounded-full bg-brand-red px-7 py-3.5 font-semibold text-white shadow-red transition-transform hover:-translate-y-0.5">
                   Réserver maintenant
                 </Link>
-                <a href={telLink()} className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-brand-line bg-white px-7 py-3.5 font-semibold text-brand-ink transition hover:border-brand-red/40 hover:-translate-y-0.5 sm:flex-none">
+                <a href={telLink()} className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-line bg-white px-7 py-3.5 font-semibold text-brand-ink transition hover:border-brand-red/40 hover:-translate-y-0.5">
                   <Phone className="h-5 w-5 text-brand-red" /> Appeler
                 </a>
               </div>

@@ -66,6 +66,13 @@ test.describe('Galerie photo', () => {
     const galerie = page.getByRole('dialog');
     await expect(galerie).toBeVisible();
 
+    // la photo doit vraiment s'afficher : un conteneur effondré la rend invisible
+    const photo = galerie.locator('img').first();
+    await expect(photo).toBeVisible();
+    const taille = await photo.boundingBox();
+    expect(taille!.height).toBeGreaterThan(200);
+    expect(taille!.width).toBeGreaterThan(200);
+
     // la galerie doit couvrir l'écran, pas être enfermée dans la carte
     const boite = await galerie.boundingBox();
     const ecran = page.viewportSize()!;
