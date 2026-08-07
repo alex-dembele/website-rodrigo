@@ -75,13 +75,15 @@ export default function VehicleMedia({ images, alt, className = '' }: Props) {
           role="dialog"
           aria-modal="true"
         >
-          <div className="relative max-h-[82vh] w-full max-w-5xl grow" onClick={(e) => e.stopPropagation()}>
+          {/* hauteur explicite : une image `fill` se pose sur un parent dimensionné,
+              un simple max-h laisserait le conteneur s'effondrer à zéro */}
+          <div className="relative h-[80vh] w-full max-w-5xl" onClick={(e) => e.stopPropagation()}>
             <Image src={images[i]} alt={`${alt} — photo ${i + 1}`} fill className="object-contain" sizes="100vw" />
           </div>
 
           {/* les commandes passent au-dessus de la photo, quelle que soit sa taille */}
           <button
-            className="absolute right-4 top-4 z-10 grid h-11 w-11 place-items-center rounded-full bg-white/15 text-white transition hover:bg-white/30"
+            className="absolute right-4 top-4 z-10 grid h-11 w-11 place-items-center rounded-full bg-black/50 text-white transition hover:bg-black/70"
             onClick={() => setOpen(false)}
             aria-label="Fermer"
           >
@@ -92,19 +94,19 @@ export default function VehicleMedia({ images, alt, className = '' }: Props) {
             <>
               <button
                 onClick={(e) => { e.stopPropagation(); prev(); }}
-                className="absolute left-4 z-10 grid h-12 w-12 place-items-center rounded-full bg-white/15 text-white transition hover:bg-white/30"
+                className="absolute left-2 z-10 grid h-12 w-12 sm:left-4 place-items-center rounded-full bg-black/50 text-white transition hover:bg-black/70"
                 aria-label="Photo précédente"
               >
                 <ChevronLeft className="h-7 w-7" />
               </button>
               <button
                 onClick={(e) => { e.stopPropagation(); next(); }}
-                className="absolute right-4 z-10 grid h-12 w-12 place-items-center rounded-full bg-white/15 text-white transition hover:bg-white/30"
+                className="absolute right-2 z-10 grid h-12 w-12 sm:right-4 place-items-center rounded-full bg-black/50 text-white transition hover:bg-black/70"
                 aria-label="Photo suivante"
               >
                 <ChevronRight className="h-7 w-7" />
               </button>
-              <div className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 rounded-full bg-white/15 px-4 py-1.5 text-sm font-medium text-white">
+              <div className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 rounded-full bg-black/50 px-4 py-1.5 text-sm font-medium text-white">
                 {i + 1} / {count}
               </div>
             </>
