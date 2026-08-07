@@ -46,18 +46,23 @@ export default function SettingsForm({
   async function save() {
     setErrors([]);
     setSaving(true);
-    const response = await fetch('/api/admin/settings', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form)
-    });
-    const data = await response.json().catch(() => ({}));
-    setSaving(false);
-    if (!response.ok) {
-      setErrors(data.errors ?? [data.error ?? 'L’enregistrement a échoué. Réessaie.']);
-      return;
+    try {
+      const response = await fetch('/api/admin/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setErrors(data.errors ?? [data.error ?? 'L’enregistrement a échoué. Réessaie.']);
+        return;
+      }
+      onSaved('Informations enregistrées.');
+    } catch {
+      setErrors(['Pas de connexion. Rien n’a été enregistré — vérifie ton réseau et réessaie.']);
+    } finally {
+      setSaving(false);
     }
-    onSaved('Informations enregistrées.');
   }
 
   return (

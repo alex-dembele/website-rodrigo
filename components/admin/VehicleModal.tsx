@@ -105,19 +105,25 @@ export default function VehicleModal({ vehicle, existingIds, onClose, onSaved }:
       newPhotos: photos.map((p) => p.base64)
     };
 
-    const response = await fetch('/api/admin/vehicles', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const data = await response.json().catch(() => ({}));
-    setSaving(false);
+    try {
+      const response = await fetch('/api/admin/vehicles', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json().catch(() => ({}));
 
-    if (!response.ok) {
-      setErrors(data.errors ?? [data.error ?? 'L’enregistrement a échoué. Réessaie.']);
-      return;
+      if (!response.ok) {
+        setErrors(data.errors ?? [data.error ?? 'L’enregistrement a échoué. Réessaie.']);
+        return;
+      }
+      onSaved(`${form.name} enregistrée.`);
+    } catch {
+      // sans ce filet, le bouton restait bloqué sur « Enregistrement… »
+      setErrors(['Pas de connexion. Rien n’a été enregistré — vérifie ton réseau et réessaie.']);
+    } finally {
+      setSaving(false);
     }
-    onSaved(`${form.name} enregistrée.`);
   }
 
   return createPortal(

@@ -3,6 +3,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { isLoggedIn } from '@/lib/admin/session';
 import { githubConfigured, listDir, readFile as readRepoFile } from '@/lib/admin/github';
+import { messageOperateur } from '@/lib/admin/messages';
 
 export const dynamic = 'force-dynamic';
 
@@ -56,6 +57,6 @@ export async function GET() {
       live: depot !== null
     });
   } catch (e) {
-    return NextResponse.json({ error: `Lecture impossible : ${e}` }, { status: 500 });
+    return NextResponse.json({ error: messageOperateur(e) }, { status: 500 });
   }
 }
