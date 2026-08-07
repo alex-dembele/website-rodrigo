@@ -34,7 +34,11 @@ npm test                          # build + serveur + tests, sur ordinateur et m
 
 Le gérant modifie le site lui-même depuis **`/admin`**, sans rien installer et depuis
 son téléphone : ajouter une voiture avec ses photos, changer un prix, masquer une
-voiture louée, corriger un numéro de téléphone ou un compte Mobile Money.
+voiture louée, choisir celle qui s'affiche en haut de l'accueil, corriger un numéro
+de téléphone ou un compte Mobile Money.
+
+On y accède par le bouton **« Gérer le site »** en bas de chaque page, ou
+directement par `/admin`.
 
 Chaque enregistrement écrit un commit dans ce dépôt et l'hébergeur reconstruit le
 site : **compter 1 à 2 minutes** avant que la modification soit visible en ligne.
@@ -97,6 +101,8 @@ Pour **modifier** un prix ou retirer une voiture de la location, ouvre son fichi
 - `variant` : précision affichée sous le nom (`Boîte manuelle`, `Boîte automatique`).
 - `bestFor` : la phrase qui aide le client à choisir, affichée sur la carte.
 - `order` : ordre d'affichage sur le site (le plus petit en premier).
+- `hero: true` : la voiture mise en avant en haut de l'accueil. **Une seule** doit
+  la porter ; l'espace de gestion s'en assure automatiquement.
 - `available: false` : la voiture disparaît du formulaire de réservation.
   Avec `comingSoon: true`, elle reste visible avec le badge « Bientôt ».
 - `gallery: []` : pas encore de photo → cadre « photos bientôt disponibles » au lieu
@@ -128,7 +134,9 @@ il accepte des photos de téléphone brutes et les prépare (1400 px max, ~50 Ko
 |---|---|
 | `public/cars/avensis-manuelle-*.jpg` | Toyota Avensis boîte manuelle |
 | `public/cars/avensis-auto-*.jpg` | Toyota Avensis boîte automatique |
-| `public/cars/rav4-*.jpg` | Toyota RAV4 |
+| `public/cars/avensis-bleue-*.jpg` | Toyota Avensis bleue |
+| `public/cars/rav4-grise-*.jpg` | Toyota RAV4 grise |
+| `public/cars/rav4-rouge-*.jpg` | Toyota RAV4 rouge |
 | `public/cars/hilux-*.jpg` | Toyota Hilux double cabine |
 | `public/brand/mark.png` | Monogramme du logo (en-tête, icônes) |
 | `public/og.jpg` | Image affichée quand on partage le lien |
