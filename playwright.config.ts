@@ -1,5 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
+export const MOT_DE_PASSE_TEST = 'mot-de-passe-de-test';
+
 /**
  * Tests de bout en bout : ils vérifient surtout que le parcours de
  * réservation reste simple et fonctionnel (choix de la voiture, dates,
@@ -25,6 +27,14 @@ export default defineConfig({
     command: 'npm run build && npm run start -- --port 3000',
     url: 'http://127.0.0.1:3000',
     reuseExistingServer: !process.env.CI,
-    timeout: 180_000
+    timeout: 180_000,
+    env: {
+      // Mot de passe valable uniquement pour le serveur local des tests.
+      ADMIN_PASSWORD: MOT_DE_PASSE_TEST,
+      // Neutralise le dépôt, même si un .env en définit un : les tests lisent
+      // les fiches du disque et ne peuvent commiter nulle part.
+      CONTENT_REPO: '',
+      CONTENT_REPO_TOKEN: ''
+    }
   }
 });

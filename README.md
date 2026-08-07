@@ -30,11 +30,46 @@ npm test                          # build + serveur + tests, sur ordinateur et m
 
 ---
 
-## ✏️ Ce que tu peux modifier facilement (sans être développeur)
+## 🔑 L'espace de gestion — la façon la plus simple
 
-Tout est regroupé dans le dossier `lib/`. Change juste les valeurs.
+Le gérant modifie le site lui-même depuis **`/admin`**, sans rien installer et depuis
+son téléphone : ajouter une voiture avec ses photos, changer un prix, masquer une
+voiture louée, choisir celle qui s'affiche en haut de l'accueil, corriger un numéro
+de téléphone ou un compte Mobile Money.
 
-### 1. Coordonnées, WhatsApp, numéros Orange Money / MoMo → `lib/site.ts`
+On y accède par le bouton **« Gérer le site »** en bas de chaque page, ou
+directement par `/admin`.
+
+Chaque enregistrement écrit un commit dans ce dépôt et l'hébergeur reconstruit le
+site : **compter 1 à 2 minutes** avant que la modification soit visible en ligne.
+
+### Mise en service (une seule fois)
+
+1. Créer un jeton GitHub **fine-grained** limité à ce dépôt, permission
+   « Contents: Read and write ».
+2. Sur Vercel → *Settings* → *Environment Variables*, définir les variables listées
+   dans [`.env.example`](.env.example) : `ADMIN_PASSWORD`, `CONTENT_REPO_TOKEN`,
+   `CONTENT_REPO`, `CONTENT_BRANCH`.
+   > Le préfixe `GITHUB_` est **réservé par Vercel** et refusé à la création :
+   > c'est pourquoi ces variables portent un nom neutre.
+3. **Redéployer** : les variables ne s'appliquent pas au déploiement déjà en ligne.
+   `/admin` est alors actif ; sans `ADMIN_PASSWORD`, la page affiche « pas encore
+   activé » et refuse toute connexion.
+
+Le mot de passe n'est jamais envoyé au navigateur : la page reçoit seulement
+l'information qu'un mot de passe existe. La session est un cookie signé qui expire
+au bout de 12 heures, et `/admin` est exclu des moteurs de recherche.
+
+> Changer le mot de passe déconnecte automatiquement tout le monde.
+
+---
+
+## ✏️ Modifier le contenu à la main (développeur)
+
+L'espace de gestion écrit dans `content/`. On peut aussi éditer ces fichiers
+directement.
+
+### 1. Coordonnées, WhatsApp, numéros Orange Money / MoMo → `content/settings.json`
 
 - `phone`, `email`, `address` : tes coordonnées.
 - `whatsapp` : le numéro qui **reçoit les réservations**, au format international sans
@@ -47,17 +82,43 @@ Tout est regroupé dans le dossier `lib/`. Change juste les valeurs.
   l'opérateur l'affiche avant validation. Il est montré au client pour qu'il vérifie
   avant d'envoyer l'argent — les deux comptes peuvent être à des noms différents.
 - `payment.depositPercent` : pourcentage d'acompte demandé (30 % par défaut).
+- `driverPricePerDay` : supplément chauffeur, par jour.
 
-### 2. Voitures et prix → `lib/vehicles.ts`
+`lib/site.ts` se contente de relire ce fichier : il n'y a rien à changer dans le code.
 
-- `pricePerDay` : prix **par jour, en FCFA** (nombre, sans espace : `25000`).
+### 2. Voitures et prix → `content/vehicles/`
+
+Une voiture = un fichier `content/vehicles/<identifiant>.json`. Pour en **ajouter** une :
+
+```bash
+npm run voiture:ajouter
+```
+
+La commande pose les questions une par une, prépare les photos (redimensionnement,
+compression, rognage du fond studio, renommage) et écrit la fiche. Il ne reste
+qu'à relire, tester et pousser.
+
+Pour **modifier** un prix ou retirer une voiture de la location, ouvre son fichier :
+
+- `pricePerDay` : prix **par jour, en FCFA** (nombre, sans espace ni « FCFA » : `25000`).
 - `variant` : précision affichée sous le nom (`Boîte manuelle`, `Boîte automatique`).
 - `bestFor` : la phrase qui aide le client à choisir, affichée sur la carte.
-- `DRIVER_PRICE_PER_DAY` : supplément chauffeur par jour.
-- `available: false` + `comingSoon: true` : voiture annoncée mais pas encore en service.
-  Elle apparaît avec le badge « Bientôt » et sans bouton de réservation.
-- `gallery: []` : pas encore de photo → le site affiche un cadre « photos bientôt
-  disponibles » au lieu d'une image trompeuse.
+- `order` : ordre d'affichage sur le site (le plus petit en premier).
+- `hero: true` : la voiture mise en avant en haut de l'accueil. **Une seule** doit
+  la porter ; l'espace de gestion s'en assure automatiquement.
+- `available: false` : la voiture disparaît du formulaire de réservation.
+  Avec `comingSoon: true`, elle reste visible avec le badge « Bientôt ».
+- `gallery: []` : pas encore de photo → cadre « photos bientôt disponibles » au lieu
+  d'une image trompeuse. Interdit si la voiture est disponible.
+
+Le supplément chauffeur se règle dans `content/settings.json` (`driverPricePerDay`).
+
+> Les fiches sont **vérifiées avant chaque `dev`, `build` et `test`** : prix numérique,
+> type connu, identifiant unique, photos réellement présentes. Une erreur de saisie
+> arrête la construction avec un message en clair — elle ne peut pas arriver en ligne.
+> Pour vérifier sans rien lancer d'autre : `npm run flotte:generer`.
+>
+> `lib/vehicles.data.ts` est **généré** à partir de ces fiches : ne le modifie pas à la main.
 
 ### 3. Photos des voitures → dossier `public/cars/`
 
@@ -69,14 +130,17 @@ studio, détoure le logo et régénère l'image de partage :
 python3 scripts/prepare-assets.py   # nécessite Pillow : pip install Pillow
 ```
 
-Pour ajouter une voiture : dépose ses photos dans `public/cars/` (`.jpg`, ~1200 px de
-large) et liste-les dans le champ `gallery` du véhicule.
+Pour une nouvelle voiture, laisse plutôt `npm run voiture:ajouter` s'occuper des photos :
+il accepte des photos de téléphone brutes et les prépare (1400 px max, ~50 Ko chacune).
 
 | Fichier | Voiture |
 |---|---|
 | `public/cars/avensis-manuelle-*.jpg` | Toyota Avensis boîte manuelle |
 | `public/cars/avensis-auto-*.jpg` | Toyota Avensis boîte automatique |
-| `public/cars/rav4-*.jpg` | Toyota RAV4 |
+| `public/cars/avensis-bleue-*.jpg` | Toyota Avensis bleue |
+| `public/cars/rav4-grise-*.jpg` | Toyota RAV4 grise |
+| `public/cars/rav4-rouge-*.jpg` | Toyota RAV4 rouge |
+| `public/cars/hilux-*.jpg` | Toyota Hilux double cabine |
 | `public/brand/mark.png` | Monogramme du logo (en-tête, icônes) |
 | `public/og.jpg` | Image affichée quand on partage le lien |
 
@@ -123,7 +187,7 @@ Il n'y a **pas d'API de paiement** branchée (choix assumé, gratuit et immédia
 - Données structurées `AutoRental` (Google) dans `app/layout.tsx`.
 - `BlogPosting`, `FAQPage` et `BreadcrumbList` sur chaque article de conseils.
 - `sitemap.xml` et `robots.txt` générés automatiquement, articles compris.
-- **⚠️ Avant la mise en ligne**, change l'URL du site dans `lib/site.ts` (`url`) avec ton vrai domaine.
+- **⚠️ Avant la mise en ligne**, change l'URL du site dans `content/settings.json` (`url`) avec ton vrai domaine.
 
 Le référencement technique ne suffit pas à sortir premier sur « location de voiture à
 Douala » : il faut aussi une **fiche Google Business Profile** vérifiée à l'adresse de
@@ -136,13 +200,19 @@ l'agence, des avis clients réguliers et quelques liens depuis des sites camerou
 - `app/` : pages (accueil, `/vehicles`, `/tarifs`, `/services`, `/reservation`, `/about`,
   `/contact`, `/blog` et `/blog/[slug]` pour les articles).
 - `components/` : composants (Navbar, Footer, formulaire de réservation, cartes voitures…).
-- `lib/site.ts` : **config à éditer** (contacts, paiement).
-- `lib/vehicles.ts` : **flotte à éditer** (voitures, prix).
+- `content/settings.json` : **config à éditer** (contacts, paiement, acompte).
+- `lib/admin/` : session, écriture GitHub et validation de l'espace de gestion.
+- `app/admin/` + `components/admin/` : l'espace de gestion lui-même.
+- `content/vehicles/` : **flotte à éditer** (une voiture = un fichier JSON).
+- `lib/vehicles.ts` : types de la flotte et supplément chauffeur.
+- `lib/vehicles.data.ts` : *généré* depuis `content/vehicles/` — ne pas modifier.
 - `lib/articles.ts` : **articles à éditer** (conseils publiés sur `/blog`).
 - `lib/booking.ts` : calcul des prix et génération du message WhatsApp/email.
 - `public/` : images publiées (photos, logo, icônes).
 - `assets-source/` : originaux fournis par le client (non publiés).
 - `scripts/prepare-assets.py` : découpe des photos et génération des images de marque.
+- `scripts/build-vehicles.mjs` : vérifie les fiches de voitures et génère `lib/vehicles.data.ts`.
+- `scripts/add-vehicle.py` : la commande `npm run voiture:ajouter`.
 - `tests/` : tests Playwright du parcours de réservation et des pages.
 
 ---

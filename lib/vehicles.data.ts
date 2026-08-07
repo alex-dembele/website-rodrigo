@@ -1,0 +1,171 @@
+// ⚠️ FICHIER GÉNÉRÉ — ne pas modifier à la main.
+// Source : content/vehicles/*.json — régénéré par `npm run flotte:generer`.
+import type { Vehicle } from './vehicles';
+
+export const vehiclesData: Vehicle[] = [
+  {
+    "id": "avensis-manuelle",
+    "name": "Toyota Avensis",
+    "type": "Berline",
+    "pricePerDay": 25000,
+    "seats": 5,
+    "doors": 5,
+    "transmission": "Manuelle",
+    "fuel": "Essence",
+    "airConditioning": true,
+    "gallery": [
+      "/cars/avensis-manuelle-1.jpg",
+      "/cars/avensis-manuelle-2.jpg",
+      "/cars/avensis-manuelle-3.jpg",
+      "/cars/avensis-manuelle-4.jpg",
+      "/cars/avensis-manuelle-5.jpg"
+    ],
+    "bestFor": "Le meilleur rapport qualité-prix pour la ville",
+    "description": "Berline confortable et économique, parfaite pour la ville, les rendez-vous professionnels et les trajets en famille à Douala.",
+    "features": [
+      "Climatisation",
+      "5 places",
+      "Grand coffre",
+      "Faible consommation"
+    ],
+    "available": true,
+    "variant": "Grise, boîte manuelle"
+  },
+  {
+    "id": "avensis-auto",
+    "name": "Toyota Avensis",
+    "type": "Berline",
+    "pricePerDay": 25000,
+    "seats": 5,
+    "doors": 5,
+    "transmission": "Automatique",
+    "fuel": "Essence",
+    "airConditioning": true,
+    "gallery": [
+      "/cars/avensis-auto-1.jpg",
+      "/cars/avensis-auto-2.jpg",
+      "/cars/avensis-auto-3.jpg",
+      "/cars/avensis-auto-4.jpg"
+    ],
+    "bestFor": "Confortable dans les embouteillages de Douala",
+    "description": "La même berline en boîte automatique : plus reposante à conduire en ville, avec la même consommation raisonnable.",
+    "features": [
+      "Climatisation",
+      "Boîte automatique",
+      "5 places",
+      "Grand coffre"
+    ],
+    "available": true,
+    "variant": "Grise, boîte automatique"
+  },
+  {
+    "id": "avensis-bleue",
+    "name": "Toyota Avensis",
+    "type": "Berline",
+    "pricePerDay": 25000,
+    "seats": 5,
+    "doors": 4,
+    "transmission": "Automatique",
+    "fuel": "Essence",
+    "airConditioning": true,
+    "gallery": [
+      "/cars/avensis-bleue-1.jpg",
+      "/cars/avensis-bleue-2.jpg",
+      "/cars/avensis-bleue-3.jpg",
+      "/cars/avensis-bleue-4.jpg"
+    ],
+    "bestFor": "Sobre et confortable pour les déplacements professionnels",
+    "description": "Berline bleu nuit en boîte automatique, intérieur soigné avec finitions bois. Le choix discret pour un rendez-vous d'affaires, un déplacement en famille ou un transfert aéroport.",
+    "features": [
+      "Climatisation",
+      "Boîte automatique",
+      "5 places",
+      "Grand coffre"
+    ],
+    "available": true,
+    "variant": "Bleue, boîte automatique"
+  },
+  {
+    "id": "rav4-grise",
+    "name": "Toyota RAV4",
+    "type": "SUV",
+    "pricePerDay": 40000,
+    "seats": 5,
+    "doors": 5,
+    "transmission": "Automatique",
+    "fuel": "Essence",
+    "airConditioning": true,
+    "gallery": [
+      "/cars/rav4-grise-1.jpg",
+      "/cars/rav4-grise-2.jpg",
+      "/cars/rav4-grise-3.jpg",
+      "/cars/rav4-grise-4.jpg",
+      "/cars/rav4-grise-5.jpg",
+      "/cars/rav4-grise-6.jpg"
+    ],
+    "bestFor": "Routes dégradées, familles et bagages",
+    "description": "SUV robuste et surélevé, idéal pour la ville comme pour les sorties hors de Douala. Confortable pour 5 personnes avec bagages.",
+    "features": [
+      "Climatisation",
+      "Boîte automatique",
+      "Position de conduite haute",
+      "Grand volume"
+    ],
+    "available": true,
+    "variant": "Grise",
+    "hero": true
+  },
+  {
+    "id": "rav4-rouge",
+    "name": "Toyota RAV4",
+    "type": "SUV",
+    "pricePerDay": 40000,
+    "seats": 5,
+    "doors": 5,
+    "transmission": "Automatique",
+    "fuel": "Essence",
+    "airConditioning": true,
+    "gallery": [
+      "/cars/rav4-rouge-1.jpg",
+      "/cars/rav4-rouge-2.jpg",
+      "/cars/rav4-rouge-3.jpg",
+      "/cars/rav4-rouge-4.jpg",
+      "/cars/rav4-rouge-5.jpg",
+      "/cars/rav4-rouge-6.jpg"
+    ],
+    "bestFor": "Sorties hors de Douala, bagages et confort",
+    "description": "Le même SUV en rouge : hauteur de caisse, coffre généreux et boîte automatique pour affronter la ville comme la route.",
+    "features": [
+      "Climatisation",
+      "Boîte automatique",
+      "Position de conduite haute",
+      "Grand volume"
+    ],
+    "available": true,
+    "variant": "Rouge"
+  },
+  {
+    "id": "hilux",
+    "name": "Toyota Hilux",
+    "type": "Pick-up 4x4",
+    "pricePerDay": 60000,
+    "seats": 5,
+    "doors": 4,
+    "transmission": "Manuelle",
+    "fuel": "Diesel",
+    "airConditioning": true,
+    "gallery": [
+      "/cars/hilux-1.jpg"
+    ],
+    "bestFor": "Chantiers, pistes et longues routes hors de Douala",
+    "description": "Pick-up tout-terrain double cabine : 5 places à l'avant et une benne pour le matériel. Le véhicule qui passe là où une berline s'arrête — chantiers, plantations et routes dégradées.",
+    "features": [
+      "4x4",
+      "Double cabine",
+      "Benne de chargement",
+      "Climatisation"
+    ],
+    "available": true,
+    "variant": "Double cabine 4x4"
+  }
+];

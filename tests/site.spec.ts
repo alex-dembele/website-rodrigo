@@ -63,7 +63,7 @@ test.describe('Pages du site', () => {
     await expect(body).toContainText('+237 676 71 21 91');
     await expect(body).toContainText('Rodrigo Auto Services');
     await expect(body).toContainText('+237 695 85 99 80');
-    await expect(body).toContainText('Emmanuel Nations');
+    await expect(body).toContainText('Emmanuel Nations Azemkeng');
   });
 
   test('le badge du hero annonce le prix de la voiture photographiée', async ({ page }) => {

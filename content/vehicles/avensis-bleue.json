@@ -1,0 +1,28 @@
+{
+  "id": "avensis-bleue",
+  "order": 3,
+  "name": "Toyota Avensis",
+  "variant": "Bleue, boîte automatique",
+  "type": "Berline",
+  "pricePerDay": 25000,
+  "seats": 5,
+  "doors": 4,
+  "transmission": "Automatique",
+  "fuel": "Essence",
+  "airConditioning": true,
+  "gallery": [
+    "/cars/avensis-bleue-1.jpg",
+    "/cars/avensis-bleue-2.jpg",
+    "/cars/avensis-bleue-3.jpg",
+    "/cars/avensis-bleue-4.jpg"
+  ],
+  "bestFor": "Sobre et confortable pour les déplacements professionnels",
+  "description": "Berline bleu nuit en boîte automatique, intérieur soigné avec finitions bois. Le choix discret pour un rendez-vous d'affaires, un déplacement en famille ou un transfert aéroport.",
+  "features": [
+    "Climatisation",
+    "Boîte automatique",
+    "5 places",
+    "Grand coffre"
+  ],
+  "available": true
+}

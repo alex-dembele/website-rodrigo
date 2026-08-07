@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Lock } from 'lucide-react';
 import { LogoMark } from './Logo';
 import { site, waLink, telLink } from '@/lib/site';
 
@@ -70,7 +71,15 @@ export default function Footer() {
       <div className="border-t border-brand-line">
         <div className="container flex flex-col items-center justify-between gap-2 py-5 text-xs text-brand-gray sm:flex-row">
           <p>© {new Date().getFullYear()} {site.name} — Location de voiture à Douala.</p>
-          <p>Paiement Orange Money & MTN Mobile Money.</p>
+          <div className="flex items-center gap-4">
+            <p>Paiement Orange Money & MTN Mobile Money.</p>
+            <Link
+              href="/admin"
+              className="inline-flex items-center gap-1.5 rounded-full border border-brand-line px-3 py-1.5 font-semibold text-brand-gray transition hover:border-brand-red/40 hover:text-brand-red"
+            >
+              <Lock className="h-3.5 w-3.5" /> Gérer le site
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

@@ -11,10 +11,10 @@ const submit = (page: Page) => page.locator('[data-testid="submit-whatsapp"]:vis
 test.describe('Parcours de réservation', () => {
   test('la recherche du hero mène à un devis chiffré', async ({ page }) => {
     await page.goto('/');
-    await page.getByLabel('Voiture', { exact: true }).selectOption({ label: 'Toyota RAV4' });
+    await page.getByLabel('Voiture', { exact: true }).selectOption({ label: 'Toyota RAV4 — Grise' });
     await page.getByRole('button', { name: 'Voir le prix' }).click();
 
-    await expect(page).toHaveURL(/\/reservation\?.*vehicle=rav4/);
+    await expect(page).toHaveURL(/\/reservation\?.*vehicle=rav4-grise/);
     // les dates sont pré-remplies : le prix s'affiche sans aucune saisie
     await expect(total(page)).toHaveText('40 000 FCFA');
   });
@@ -23,13 +23,13 @@ test.describe('Parcours de réservation', () => {
     await page.goto('/vehicles');
     await page
       .getByRole('article')
-      .filter({ hasText: 'Boîte automatique' })
+      .filter({ hasText: 'Grise, boîte automatique' })
       .getByRole('link', { name: 'Réserver' })
       .click();
 
     await expect(page).toHaveURL(/vehicle=avensis-auto/);
     await expect(
-      page.getByRole('button', { name: /Toyota Avensis Boîte automatique/ })
+      page.getByRole('button', { name: /Toyota Avensis Grise, boîte automatique/ })
     ).toHaveAttribute('aria-pressed', 'true');
   });
 
@@ -51,7 +51,7 @@ test.describe('Parcours de réservation', () => {
   });
 
   test('une demande complète ouvre WhatsApp sur le bon numéro', async ({ page, context }) => {
-    await page.goto('/reservation?vehicle=rav4&from=2030-03-01&to=2030-03-03');
+    await page.goto('/reservation?vehicle=rav4-grise&from=2030-03-01&to=2030-03-03');
     await page.getByLabel('Nom complet').fill('Jean Mbarga');
     await page.getByLabel('Téléphone / WhatsApp').fill('677 00 11 22');
 
