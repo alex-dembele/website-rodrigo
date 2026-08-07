@@ -48,10 +48,13 @@ site : **compter 1 à 2 minutes** avant que la modification soit visible en lign
 1. Créer un jeton GitHub **fine-grained** limité à ce dépôt, permission
    « Contents: Read and write ».
 2. Sur Vercel → *Settings* → *Environment Variables*, définir les variables listées
-   dans [`.env.example`](.env.example) : `ADMIN_PASSWORD`, `GITHUB_TOKEN`,
-   `GITHUB_REPO`, `GITHUB_BRANCH`.
-3. Redéployer. `/admin` est alors actif ; sans `ADMIN_PASSWORD`, la page affiche
-   « pas encore activé » et refuse toute connexion.
+   dans [`.env.example`](.env.example) : `ADMIN_PASSWORD`, `CONTENT_REPO_TOKEN`,
+   `CONTENT_REPO`, `CONTENT_BRANCH`.
+   > Le préfixe `GITHUB_` est **réservé par Vercel** et refusé à la création :
+   > c'est pourquoi ces variables portent un nom neutre.
+3. **Redéployer** : les variables ne s'appliquent pas au déploiement déjà en ligne.
+   `/admin` est alors actif ; sans `ADMIN_PASSWORD`, la page affiche « pas encore
+   activé » et refuse toute connexion.
 
 Le mot de passe n'est jamais envoyé au navigateur : la page reçoit seulement
 l'information qu'un mot de passe existe. La session est un cookie signé qui expire

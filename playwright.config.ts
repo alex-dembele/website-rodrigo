@@ -28,9 +28,13 @@ export default defineConfig({
     url: 'http://127.0.0.1:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
-    // Mot de passe de test, valable uniquement pour le serveur local des tests :
-    // il active l'espace de gestion sans jamais toucher au dépôt (aucun
-    // GITHUB_TOKEN ici, donc aucun enregistrement possible).
-    env: { ADMIN_PASSWORD: MOT_DE_PASSE_TEST }
+    env: {
+      // Mot de passe valable uniquement pour le serveur local des tests.
+      ADMIN_PASSWORD: MOT_DE_PASSE_TEST,
+      // Neutralise le dépôt, même si un .env en définit un : les tests lisent
+      // les fiches du disque et ne peuvent commiter nulle part.
+      CONTENT_REPO: '',
+      CONTENT_REPO_TOKEN: ''
+    }
   }
 });

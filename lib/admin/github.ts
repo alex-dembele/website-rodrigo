@@ -23,9 +23,9 @@ export interface FileChange {
 }
 
 function config() {
-  const token = process.env.GITHUB_TOKEN;
-  const repo = process.env.GITHUB_REPO;
-  const branch = process.env.GITHUB_BRANCH || 'main';
+  const token = process.env.CONTENT_REPO_TOKEN;
+  const repo = process.env.CONTENT_REPO;
+  const branch = process.env.CONTENT_BRANCH || 'main';
   return { token, repo, branch };
 }
 
@@ -83,7 +83,7 @@ export async function commitFiles(changes: FileChange[], message: string): Promi
   const { repo, branch } = config();
   if (!githubConfigured()) {
     throw new Error(
-      "L'enregistrement n'est pas configuré : il manque GITHUB_TOKEN ou GITHUB_REPO."
+      "L'enregistrement n'est pas configuré : il manque CONTENT_REPO_TOKEN ou CONTENT_REPO."
     );
   }
   if (changes.length === 0) throw new Error('Aucune modification à enregistrer.');
