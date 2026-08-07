@@ -1,0 +1,31 @@
+{
+  "id": "rav4-grise",
+  "order": 4,
+  "name": "Toyota RAV4",
+  "variant": "Grise",
+  "type": "SUV",
+  "pricePerDay": 40000,
+  "seats": 5,
+  "doors": 5,
+  "transmission": "Automatique",
+  "fuel": "Essence",
+  "airConditioning": true,
+  "bestFor": "Routes dégradées, familles et bagages",
+  "features": [
+    "Climatisation",
+    "Boîte automatique",
+    "Position de conduite haute",
+    "Grand volume"
+  ],
+  "available": true,
+  "gallery": [
+    "/cars/rav4-grise-1.jpg",
+    "/cars/rav4-grise-2.jpg",
+    "/cars/rav4-grise-3.jpg",
+    "/cars/rav4-grise-4.jpg",
+    "/cars/rav4-grise-5.jpg",
+    "/cars/rav4-grise-6.jpg"
+  ],
+  "description": "SUV robuste et surélevé, idéal pour la ville comme pour les sorties hors de Douala. Confortable pour 5 personnes avec bagages.",
+  "hero": true
+}

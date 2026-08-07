@@ -69,23 +69,40 @@ def split_fleet():
     tile(m, (0, r1, xm, r2), 'avensis-manuelle-4')  # poste de conduite
     tile(m, (xm, r1, W, r2), 'avensis-manuelle-5')  # sièges avant
 
+    # Toyota Avensis bleue — planche 2x2
+    b = Image.open(f'{SRC}/avensis-bleue.jpeg')
+    W, H = b.size
+    bx, by = 578, 458
+    tile(b, (0, 0, bx, by), 'avensis-bleue-1')      # 3/4 avant
+    tile(b, (0, by, bx, H), 'avensis-bleue-2')      # 3/4 avant, autre angle
+    tile(b, (bx, by, W, H), 'avensis-bleue-3')      # profil
+    tile(b, (bx, 0, W, by), 'avensis-bleue-4')      # tableau de bord, boîte auto
+
     # Toyota RAV4 gris — planche 2 colonnes x 3 rangées, fond blanc
     g = Image.open(f'{SRC}/rav4-grise.jpeg')
     gx = [(21, 437), (460, 876)]
     gy = [(20, 335), (425, 735), (812, 1128)]
-    tile(g, (gx[0][0], gy[0][0], gx[0][1], gy[0][1]), 'rav4-1')  # 3/4 avant
-    tile(g, (gx[1][0], gy[1][0], gx[1][1], gy[1][1]), 'rav4-2')  # profil avant
-    tile(g, (gx[1][0], gy[0][0], gx[1][1], gy[0][1]), 'rav4-3')  # 3/4 arrière
-    tile(g, (gx[1][0], gy[2][0], gx[1][1], gy[2][1]), 'rav4-4')  # arrière
-    tile(g, (gx[0][0], gy[1][0], gx[0][1], gy[1][1]), 'rav4-5')  # tableau de bord
-    tile(g, (gx[0][0], gy[2][0], gx[0][1], gy[2][1]), 'rav4-6')  # sièges arrière
+    tile(g, (gx[0][0], gy[0][0], gx[0][1], gy[0][1]), 'rav4-grise-1')  # 3/4 avant
+    tile(g, (gx[1][0], gy[1][0], gx[1][1], gy[1][1]), 'rav4-grise-2')  # profil avant
+    tile(g, (gx[1][0], gy[0][0], gx[1][1], gy[0][1]), 'rav4-grise-3')  # 3/4 arrière
+    tile(g, (gx[1][0], gy[2][0], gx[1][1], gy[2][1]), 'rav4-grise-4')  # arrière
+    tile(g, (gx[0][0], gy[1][0], gx[0][1], gy[1][1]), 'rav4-grise-5')  # tableau de bord
+    tile(g, (gx[0][0], gy[2][0], gx[0][1], gy[2][1]), 'rav4-grise-6')  # sièges arrière
 
     # Toyota Hilux — photo unique, pas de planche à découper
     h = Image.open(f'{SRC}/hilux.jpeg')
     tile(h, (0, 0, h.width, h.height), 'hilux-1')
 
-    # La planche du RAV4 rouge reste dans assets-source/ mais n'est plus publiée :
-    # le véhicule de l'agence est le RAV4 gris ci-dessus.
+    # Toyota RAV4 rouge — planche 3x2 (séparateurs gris détectés à ces positions)
+    r = Image.open(f'{SRC}/rav4.jpeg')
+    cx = [(12, 444), (453, 884)]
+    cy = [(12, 394), (403, 796), (806, 1186)]
+    tile(r, (cx[1][0], cy[1][0], cx[1][1], cy[1][1]), 'rav4-rouge-1')  # 3/4 avant
+    tile(r, (cx[1][0], cy[0][0], cx[1][1], cy[0][1]), 'rav4-rouge-2')  # face avant
+    tile(r, (cx[0][0], cy[2][0], cx[0][1], cy[2][1]), 'rav4-rouge-3')  # profil
+    tile(r, (cx[1][0], cy[2][0], cx[1][1], cy[2][1]), 'rav4-rouge-4')  # arrière
+    tile(r, (cx[0][0], cy[0][0], cx[0][1], cy[0][1]), 'rav4-rouge-5')  # tableau de bord
+    tile(r, (cx[0][0], cy[1][0], cx[0][1], cy[1][1]), 'rav4-rouge-6')  # poste de conduite
 
 
 def extract_mark():
@@ -139,7 +156,7 @@ def write_brand(mark):
 
 def write_og(mark):
     """Carte de partage 1200x630 : identité à gauche, vraie photo à droite."""
-    photo = Image.open(f'{CARS}/rav4-2.jpg').convert('RGB')
+    photo = Image.open(f'{CARS}/rav4-grise-1.jpg').convert('RGB')
     pp = photo.load()
     bx0, by0, bx1, by1 = photo.width, photo.height, 0, 0
     for y in range(photo.height):

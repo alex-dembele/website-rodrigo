@@ -2,7 +2,7 @@
   "id": "avensis-manuelle",
   "order": 1,
   "name": "Toyota Avensis",
-  "variant": "Boîte manuelle",
+  "variant": "Grise, boîte manuelle",
   "type": "Berline",
   "pricePerDay": 25000,
   "seats": 5,
@@ -19,6 +19,11 @@
   ],
   "bestFor": "Le meilleur rapport qualité-prix pour la ville",
   "description": "Berline confortable et économique, parfaite pour la ville, les rendez-vous professionnels et les trajets en famille à Douala.",
-  "features": ["Climatisation", "5 places", "Grand coffre", "Faible consommation"],
+  "features": [
+    "Climatisation",
+    "5 places",
+    "Grand coffre",
+    "Faible consommation"
+  ],
   "available": true
 }

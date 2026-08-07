@@ -71,6 +71,7 @@ export function toVehicleFile(v: VehiclePayload, gallery: string[]) {
     description: v.description.trim(),
     features: (v.features ?? []).map((f) => f.trim()).filter(Boolean),
     available: v.available !== false,
-    ...(v.comingSoon ? { comingSoon: true } : {})
+    ...(v.comingSoon ? { comingSoon: true } : {}),
+    ...(v.hero ? { hero: true } : {})
   };
 }

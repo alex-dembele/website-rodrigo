@@ -1,0 +1,30 @@
+{
+  "id": "rav4-rouge",
+  "order": 5,
+  "name": "Toyota RAV4",
+  "variant": "Rouge",
+  "type": "SUV",
+  "pricePerDay": 40000,
+  "seats": 5,
+  "doors": 5,
+  "transmission": "Automatique",
+  "fuel": "Essence",
+  "airConditioning": true,
+  "bestFor": "Sorties hors de Douala, bagages et confort",
+  "features": [
+    "Climatisation",
+    "Boîte automatique",
+    "Position de conduite haute",
+    "Grand volume"
+  ],
+  "available": true,
+  "gallery": [
+    "/cars/rav4-rouge-1.jpg",
+    "/cars/rav4-rouge-2.jpg",
+    "/cars/rav4-rouge-3.jpg",
+    "/cars/rav4-rouge-4.jpg",
+    "/cars/rav4-rouge-5.jpg",
+    "/cars/rav4-rouge-6.jpg"
+  ],
+  "description": "Le même SUV en rouge : hauteur de caisse, coffre généreux et boîte automatique pour affronter la ville comme la route."
+}

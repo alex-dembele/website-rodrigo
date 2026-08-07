@@ -108,7 +108,8 @@ function readVehicle(file) {
     description: text('description'),
     features,
     available,
-    comingSoon: raw.comingSoon === true
+    comingSoon: raw.comingSoon === true,
+    hero: raw.hero === true
   };
 }
 
@@ -137,10 +138,11 @@ vehicles.sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
 
 const body = vehicles
   .map((v) => {
-    const { order, variant, comingSoon, ...rest } = v;
+    const { order, variant, comingSoon, hero, ...rest } = v;
     const fields = { ...rest };
     if (variant) fields.variant = variant;
     if (comingSoon) fields.comingSoon = true;
+    if (hero) fields.hero = true;
     return JSON.stringify(fields, null, 2)
       .split('\n')
       .map((line) => `  ${line}`)

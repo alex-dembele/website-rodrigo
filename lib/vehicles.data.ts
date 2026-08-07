@@ -29,7 +29,7 @@ export const vehiclesData: Vehicle[] = [
       "Faible consommation"
     ],
     "available": true,
-    "variant": "Boîte manuelle"
+    "variant": "Grise, boîte manuelle"
   },
   {
     "id": "avensis-auto",
@@ -56,10 +56,37 @@ export const vehiclesData: Vehicle[] = [
       "Grand coffre"
     ],
     "available": true,
-    "variant": "Boîte automatique"
+    "variant": "Grise, boîte automatique"
   },
   {
-    "id": "rav4",
+    "id": "avensis-bleue",
+    "name": "Toyota Avensis",
+    "type": "Berline",
+    "pricePerDay": 25000,
+    "seats": 5,
+    "doors": 4,
+    "transmission": "Automatique",
+    "fuel": "Essence",
+    "airConditioning": true,
+    "gallery": [
+      "/cars/avensis-bleue-1.jpg",
+      "/cars/avensis-bleue-2.jpg",
+      "/cars/avensis-bleue-3.jpg",
+      "/cars/avensis-bleue-4.jpg"
+    ],
+    "bestFor": "Sobre et confortable pour les déplacements professionnels",
+    "description": "Berline bleu nuit en boîte automatique, intérieur soigné avec finitions bois. Le choix discret pour un rendez-vous d'affaires, un déplacement en famille ou un transfert aéroport.",
+    "features": [
+      "Climatisation",
+      "Boîte automatique",
+      "5 places",
+      "Grand coffre"
+    ],
+    "available": true,
+    "variant": "Bleue, boîte automatique"
+  },
+  {
+    "id": "rav4-grise",
     "name": "Toyota RAV4",
     "type": "SUV",
     "pricePerDay": 40000,
@@ -69,12 +96,12 @@ export const vehiclesData: Vehicle[] = [
     "fuel": "Essence",
     "airConditioning": true,
     "gallery": [
-      "/cars/rav4-1.jpg",
-      "/cars/rav4-2.jpg",
-      "/cars/rav4-3.jpg",
-      "/cars/rav4-4.jpg",
-      "/cars/rav4-5.jpg",
-      "/cars/rav4-6.jpg"
+      "/cars/rav4-grise-1.jpg",
+      "/cars/rav4-grise-2.jpg",
+      "/cars/rav4-grise-3.jpg",
+      "/cars/rav4-grise-4.jpg",
+      "/cars/rav4-grise-5.jpg",
+      "/cars/rav4-grise-6.jpg"
     ],
     "bestFor": "Routes dégradées, familles et bagages",
     "description": "SUV robuste et surélevé, idéal pour la ville comme pour les sorties hors de Douala. Confortable pour 5 personnes avec bagages.",
@@ -84,7 +111,38 @@ export const vehiclesData: Vehicle[] = [
       "Position de conduite haute",
       "Grand volume"
     ],
-    "available": true
+    "available": true,
+    "variant": "Grise",
+    "hero": true
+  },
+  {
+    "id": "rav4-rouge",
+    "name": "Toyota RAV4",
+    "type": "SUV",
+    "pricePerDay": 40000,
+    "seats": 5,
+    "doors": 5,
+    "transmission": "Automatique",
+    "fuel": "Essence",
+    "airConditioning": true,
+    "gallery": [
+      "/cars/rav4-rouge-1.jpg",
+      "/cars/rav4-rouge-2.jpg",
+      "/cars/rav4-rouge-3.jpg",
+      "/cars/rav4-rouge-4.jpg",
+      "/cars/rav4-rouge-5.jpg",
+      "/cars/rav4-rouge-6.jpg"
+    ],
+    "bestFor": "Sorties hors de Douala, bagages et confort",
+    "description": "Le même SUV en rouge : hauteur de caisse, coffre généreux et boîte automatique pour affronter la ville comme la route.",
+    "features": [
+      "Climatisation",
+      "Boîte automatique",
+      "Position de conduite haute",
+      "Grand volume"
+    ],
+    "available": true,
+    "variant": "Rouge"
   },
   {
     "id": "hilux",

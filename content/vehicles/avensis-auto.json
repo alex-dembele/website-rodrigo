@@ -2,7 +2,7 @@
   "id": "avensis-auto",
   "order": 2,
   "name": "Toyota Avensis",
-  "variant": "Boîte automatique",
+  "variant": "Grise, boîte automatique",
   "type": "Berline",
   "pricePerDay": 25000,
   "seats": 5,
@@ -18,6 +18,11 @@
   ],
   "bestFor": "Confortable dans les embouteillages de Douala",
   "description": "La même berline en boîte automatique : plus reposante à conduire en ville, avec la même consommation raisonnable.",
-  "features": ["Climatisation", "Boîte automatique", "5 places", "Grand coffre"],
+  "features": [
+    "Climatisation",
+    "Boîte automatique",
+    "5 places",
+    "Grand coffre"
+  ],
   "available": true
 }

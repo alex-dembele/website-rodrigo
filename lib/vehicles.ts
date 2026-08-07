@@ -25,6 +25,8 @@ export interface Vehicle {
   available: boolean;
   /** true = pas encore en service ("bientôt disponible") */
   comingSoon?: boolean;
+  /** true = voiture mise en avant dans le hero de l'accueil (une seule) */
+  hero?: boolean;
 }
 
 // Supplément journalier si le client choisit un chauffeur (FCFA / jour).
@@ -42,6 +44,9 @@ export const availableVehicles = vehicles.filter((v) => v.available);
 export function vehicleLabel(v: Vehicle) {
   return v.variant ? `${v.name} — ${v.variant}` : v.name;
 }
+
+/** La voiture affichée dans le hero de l'accueil, à défaut la première. */
+export const heroVehicle = availableVehicles.find((v) => v.hero) ?? availableVehicles[0];
 
 export function findVehicle(id: string | undefined) {
   return id ? vehicles.find((v) => v.id === id) : undefined;
