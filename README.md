@@ -30,11 +30,39 @@ npm test                          # build + serveur + tests, sur ordinateur et m
 
 ---
 
-## ✏️ Ce que tu peux modifier facilement (sans être développeur)
+## 🔑 L'espace de gestion — la façon la plus simple
 
-Tout est regroupé dans le dossier `lib/`. Change juste les valeurs.
+Le gérant modifie le site lui-même depuis **`/admin`**, sans rien installer et depuis
+son téléphone : ajouter une voiture avec ses photos, changer un prix, masquer une
+voiture louée, corriger un numéro de téléphone ou un compte Mobile Money.
 
-### 1. Coordonnées, WhatsApp, numéros Orange Money / MoMo → `lib/site.ts`
+Chaque enregistrement écrit un commit dans ce dépôt et l'hébergeur reconstruit le
+site : **compter 1 à 2 minutes** avant que la modification soit visible en ligne.
+
+### Mise en service (une seule fois)
+
+1. Créer un jeton GitHub **fine-grained** limité à ce dépôt, permission
+   « Contents: Read and write ».
+2. Sur Vercel → *Settings* → *Environment Variables*, définir les variables listées
+   dans [`.env.example`](.env.example) : `ADMIN_PASSWORD`, `GITHUB_TOKEN`,
+   `GITHUB_REPO`, `GITHUB_BRANCH`.
+3. Redéployer. `/admin` est alors actif ; sans `ADMIN_PASSWORD`, la page affiche
+   « pas encore activé » et refuse toute connexion.
+
+Le mot de passe n'est jamais envoyé au navigateur : la page reçoit seulement
+l'information qu'un mot de passe existe. La session est un cookie signé qui expire
+au bout de 12 heures, et `/admin` est exclu des moteurs de recherche.
+
+> Changer le mot de passe déconnecte automatiquement tout le monde.
+
+---
+
+## ✏️ Modifier le contenu à la main (développeur)
+
+L'espace de gestion écrit dans `content/`. On peut aussi éditer ces fichiers
+directement.
+
+### 1. Coordonnées, WhatsApp, numéros Orange Money / MoMo → `content/settings.json`
 
 - `phone`, `email`, `address` : tes coordonnées.
 - `whatsapp` : le numéro qui **reçoit les réservations**, au format international sans
@@ -47,6 +75,9 @@ Tout est regroupé dans le dossier `lib/`. Change juste les valeurs.
   l'opérateur l'affiche avant validation. Il est montré au client pour qu'il vérifie
   avant d'envoyer l'argent — les deux comptes peuvent être à des noms différents.
 - `payment.depositPercent` : pourcentage d'acompte demandé (30 % par défaut).
+- `driverPricePerDay` : supplément chauffeur, par jour.
+
+`lib/site.ts` se contente de relire ce fichier : il n'y a rien à changer dans le code.
 
 ### 2. Voitures et prix → `content/vehicles/`
 
@@ -71,7 +102,7 @@ Pour **modifier** un prix ou retirer une voiture de la location, ouvre son fichi
 - `gallery: []` : pas encore de photo → cadre « photos bientôt disponibles » au lieu
   d'une image trompeuse. Interdit si la voiture est disponible.
 
-Le supplément chauffeur (`DRIVER_PRICE_PER_DAY`) reste dans `lib/vehicles.ts`.
+Le supplément chauffeur se règle dans `content/settings.json` (`driverPricePerDay`).
 
 > Les fiches sont **vérifiées avant chaque `dev`, `build` et `test`** : prix numérique,
 > type connu, identifiant unique, photos réellement présentes. Une erreur de saisie
@@ -98,6 +129,7 @@ il accepte des photos de téléphone brutes et les prépare (1400 px max, ~50 Ko
 | `public/cars/avensis-manuelle-*.jpg` | Toyota Avensis boîte manuelle |
 | `public/cars/avensis-auto-*.jpg` | Toyota Avensis boîte automatique |
 | `public/cars/rav4-*.jpg` | Toyota RAV4 |
+| `public/cars/hilux-*.jpg` | Toyota Hilux double cabine |
 | `public/brand/mark.png` | Monogramme du logo (en-tête, icônes) |
 | `public/og.jpg` | Image affichée quand on partage le lien |
 
@@ -144,7 +176,7 @@ Il n'y a **pas d'API de paiement** branchée (choix assumé, gratuit et immédia
 - Données structurées `AutoRental` (Google) dans `app/layout.tsx`.
 - `BlogPosting`, `FAQPage` et `BreadcrumbList` sur chaque article de conseils.
 - `sitemap.xml` et `robots.txt` générés automatiquement, articles compris.
-- **⚠️ Avant la mise en ligne**, change l'URL du site dans `lib/site.ts` (`url`) avec ton vrai domaine.
+- **⚠️ Avant la mise en ligne**, change l'URL du site dans `content/settings.json` (`url`) avec ton vrai domaine.
 
 Le référencement technique ne suffit pas à sortir premier sur « location de voiture à
 Douala » : il faut aussi une **fiche Google Business Profile** vérifiée à l'adresse de
@@ -157,7 +189,9 @@ l'agence, des avis clients réguliers et quelques liens depuis des sites camerou
 - `app/` : pages (accueil, `/vehicles`, `/tarifs`, `/services`, `/reservation`, `/about`,
   `/contact`, `/blog` et `/blog/[slug]` pour les articles).
 - `components/` : composants (Navbar, Footer, formulaire de réservation, cartes voitures…).
-- `lib/site.ts` : **config à éditer** (contacts, paiement).
+- `content/settings.json` : **config à éditer** (contacts, paiement, acompte).
+- `lib/admin/` : session, écriture GitHub et validation de l'espace de gestion.
+- `app/admin/` + `components/admin/` : l'espace de gestion lui-même.
 - `content/vehicles/` : **flotte à éditer** (une voiture = un fichier JSON).
 - `lib/vehicles.ts` : types de la flotte et supplément chauffeur.
 - `lib/vehicles.data.ts` : *généré* depuis `content/vehicles/` — ne pas modifier.
