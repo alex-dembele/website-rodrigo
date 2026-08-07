@@ -12,8 +12,12 @@ export function messageOperateur(erreur: unknown): string {
   if (texte.includes("n'est pas configuré")) {
     return "L’enregistrement n’est pas encore activé sur ce site. Préviens ton développeur.";
   }
-  if (texte.includes('GitHub 401') || texte.includes('GitHub 403')) {
-    return "L’accès au site a expiré. Préviens ton développeur : la clé d’enregistrement doit être renouvelée.";
+  if (texte.includes('GitHub 401')) {
+    return "La clé d’enregistrement n’est plus valable. Préviens ton développeur : elle doit être renouvelée.";
+  }
+  if (texte.includes('GitHub 403')) {
+    // cas le plus fréquent : jeton créé en lecture seule
+    return "La clé d’enregistrement n’a pas le droit de modifier le site. Préviens ton développeur : il manque l’autorisation d’écriture.";
   }
   if (texte.includes('GitHub 404')) {
     return "Le site n’a pas été retrouvé. Préviens ton développeur.";
