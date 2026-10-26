@@ -55,20 +55,20 @@ export default function Navbar() {
         <div className="flex items-center gap-1 lg:hidden">
           <Link
             href="/reservation"
-            className="rounded-full bg-brand-red px-4 py-2 text-sm font-semibold text-white shadow-red"
+            className="rounded-full bg-brand-red px-4 py-2 text-sm font-semibold text-white shadow-red max-[359px]:px-3"
           >
             Réserver
           </Link>
           <a
             href={telLink()}
             aria-label={`Appeler ${site.phone}`}
-            className="grid h-10 w-10 place-items-center rounded-full border border-brand-line text-brand-ink"
+            className="grid h-10 w-10 place-items-center rounded-full border border-brand-line text-brand-ink max-[359px]:h-9 max-[359px]:w-9"
           >
             <Phone className="h-4 w-4 text-brand-red" />
           </a>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="flex flex-col gap-1.5 p-2"
+            className="flex flex-col gap-1.5 p-2 max-[359px]:p-1.5"
             aria-label="Menu principal"
             aria-expanded={isOpen}
           >
