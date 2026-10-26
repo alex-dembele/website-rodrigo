@@ -52,6 +52,34 @@ test.describe('Pages du site', () => {
     );
   });
 
+  test('le second numéro peut être appelé depuis le pied de page et la page contact', async ({ page }) => {
+    for (const path of ['/', '/contact']) {
+      await page.goto(path);
+      const lien = page.locator('main, footer').locator('a[href="tel:+4917663048623"]').first();
+      await expect(lien).toBeVisible();
+      await expect(lien).toHaveText('+49 176 63048623');
+    }
+  });
+
+  test('sur un petit écran, le logo ne passe pas sous les boutons de l’en-tête', async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 640 });
+    await page.goto('/');
+    const marge = await page.evaluate(() => {
+      const barre = document.querySelector('header .container')!;
+      const logo = barre.children[0];
+      let finTexte = 0;
+      const textes = document.createTreeWalker(logo, NodeFilter.SHOW_TEXT);
+      while (textes.nextNode()) {
+        const r = document.createRange();
+        r.selectNodeContents(textes.currentNode);
+        for (const rect of r.getClientRects()) finTexte = Math.max(finTexte, rect.right);
+      }
+      const boutons = [...barre.children].find((c) => c !== logo && getComputedStyle(c).display !== 'none')!;
+      return boutons.getBoundingClientRect().left - finTexte;
+    });
+    expect(marge).toBeGreaterThanOrEqual(0);
+  });
+
   test('aucun numéro fictif n’est affiché aux clients', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('body')).not.toContainText('6XX XX XX XX', { useInnerText: true });

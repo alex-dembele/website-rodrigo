@@ -49,6 +49,15 @@ export default function ContactForm() {
                 <p className="text-xs text-brand-gray">Appels — agence de Douala</p>
               </div>
             </li>
+            {site.phone2 && (
+              <li className="flex items-center gap-3">
+                <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-red/10 text-brand-red"><Phone className="h-5 w-5" /></span>
+                <div>
+                  <a href={telLink(site.phone2)} className="font-semibold text-brand-ink hover:text-brand-red">{site.phone2}</a>
+                  <p className="text-xs text-brand-gray">Appels — second numéro</p>
+                </div>
+              </li>
+            )}
             <li className="flex items-center gap-3">
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-red/10 text-brand-red"><MessageCircle className="h-5 w-5" /></span>
               <div>

@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import MapEmbed from '@/components/MapEmbed';
-import { site } from '@/lib/site';
+import { site, telLink } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'À propos de Rodrigo Auto Services',
@@ -66,7 +66,16 @@ export default function AboutPage() {
               </ul>
               <div className="mt-6 rounded-xl bg-brand-soft p-4 text-sm text-brand-gray">
                 <p><strong className="text-brand-ink">Adresse :</strong> {site.address}, {site.city}</p>
-                <p className="mt-1"><strong className="text-brand-ink">Téléphone :</strong> {site.phone}</p>
+                <p className="mt-1">
+                  <strong className="text-brand-ink">Téléphone :</strong>{' '}
+                  <a href={telLink()} className="hover:text-brand-red">{site.phone}</a>
+                  {site.phone2 && (
+                    <>
+                      {' · '}
+                      <a href={telLink(site.phone2)} className="whitespace-nowrap hover:text-brand-red">{site.phone2}</a>
+                    </>
+                  )}
+                </p>
                 <p className="mt-1"><strong className="text-brand-ink">Email :</strong> {site.email}</p>
               </div>
             </div>

@@ -62,7 +62,10 @@ function StructuredData() {
     logo: `${site.url}/brand/logo.png`,
     telephone: clean(site.phone),
     contactPoint: [
-      { '@type': 'ContactPoint', contactType: 'reservations', telephone: clean(site.whatsappDisplay), availableLanguage: ['fr', 'en'] }
+      { '@type': 'ContactPoint', contactType: 'reservations', telephone: clean(site.whatsappDisplay), availableLanguage: ['fr', 'en'] },
+      ...(site.phone2
+        ? [{ '@type': 'ContactPoint', contactType: 'customer service', telephone: clean(site.phone2), availableLanguage: ['fr', 'en'] }]
+        : [])
     ],
     email: site.email,
     priceRange: 'FCFA',
