@@ -102,3 +102,38 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: messageOperateur(e) }, { status: 500 });
   }
 }
+
+/** Met une voiture en ligne ou la masque, sans toucher au reste de sa fiche. */
+export async function PATCH(request: Request) {
+  if (!(await isLoggedIn())) {
+    return NextResponse.json({ error: 'Session expirée.' }, { status: 401 });
+  }
+
+  const { id, available } = await request.json().catch(() => ({ id: '', available: undefined }));
+  if (!id || !/^[a-z0-9-]+$/.test(id) || typeof available !== 'boolean') {
+    return NextResponse.json({ error: 'Voiture inconnue.' }, { status: 400 });
+  }
+
+  try {
+    const path = `content/vehicles/${id}.json`;
+    const contenu = await readFile(path);
+    if (!contenu) return NextResponse.json({ error: 'Cette voiture n’existe plus.' }, { status: 404 });
+    const fiche = JSON.parse(contenu);
+
+    if (available && !(fiche.gallery?.length > 0)) {
+      return NextResponse.json(
+        { error: 'Ajoute au moins une photo dans sa fiche avant de la remettre en ligne.' },
+        { status: 422 }
+      );
+    }
+
+    fiche.available = available;
+    const commit = await commitFiles(
+      [{ path, content: `${JSON.stringify(fiche, null, 2)}\n` }],
+      `flotte: ${available ? 'remet en ligne' : 'masque'} ${fiche.name}${fiche.variant ? ` (${fiche.variant})` : ''}`
+    );
+    return NextResponse.json({ ok: true, commit });
+  } catch (e) {
+    return NextResponse.json({ error: messageOperateur(e) }, { status: 500 });
+  }
+}

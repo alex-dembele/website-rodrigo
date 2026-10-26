@@ -4,7 +4,7 @@ import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import VehicleCard from '@/components/VehicleCard';
 import Reveal from '@/components/Reveal';
-import { vehicles } from '@/lib/vehicles';
+import { listedVehicles } from '@/lib/vehicles';
 
 export const metadata: Metadata = {
   title: 'Nos voitures à louer à Douala',
@@ -31,7 +31,7 @@ export default function VehiclesPage() {
 
         <section className="container py-10 sm:py-12">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {vehicles.map((v, idx) => (
+            {listedVehicles.map((v, idx) => (
               <Reveal key={v.id} delay={idx * 90} className="h-full">
                 <VehicleCard vehicle={v} />
               </Reveal>

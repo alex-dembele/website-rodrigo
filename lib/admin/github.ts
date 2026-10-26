@@ -8,7 +8,16 @@
  * Les fichiers sont écrits en UN SEUL commit via l'API « git data » — l'API
  * « contents », plus simple, ne sait écrire qu'un fichier à la fois, ce qui
  * déclencherait autant de reconstructions que de photos.
+ *
+ * Deux façons d'obtenir le droit d'écrire :
+ *  - une **application GitHub** (CONTENT_APP_ID + CONTENT_APP_PRIVATE_KEY) :
+ *    sa clé privée n'expire jamais, et le jeton d'une heure qu'elle sert à
+ *    obtenir est renouvelé ici tout seul. C'est le choix pour un site livré
+ *    clé en main ;
+ *  - un **jeton personnel** (CONTENT_REPO_TOKEN), plus rapide à créer mais
+ *    qui expire à la date choisie à sa création.
  */
+import { createSign } from 'node:crypto';
 
 const API = 'https://api.github.com';
 
@@ -24,23 +33,76 @@ export interface FileChange {
 
 function config() {
   const token = process.env.CONTENT_REPO_TOKEN;
+  const appId = process.env.CONTENT_APP_ID;
+  // Vercel garde les retours à la ligne, mais une clé collée sur une seule
+  // ligne arrive avec des « \n » littéraux : on les rétablit.
+  const appKey = process.env.CONTENT_APP_PRIVATE_KEY?.replace(/\\n/g, '\n');
   const repo = process.env.CONTENT_REPO;
   const branch = process.env.CONTENT_BRANCH || 'main';
-  return { token, repo, branch };
+  return { token, appId, appKey, repo, branch };
+}
+
+function appConfigured() {
+  const { appId, appKey } = config();
+  return Boolean(appId && appKey);
 }
 
 export function githubConfigured() {
   const { token, repo } = config();
-  return Boolean(token && repo);
+  return Boolean(repo && (token || appConfigured()));
+}
+
+const base64url = (value: string | Buffer) => Buffer.from(value).toString('base64url');
+
+/** Jeton signé par la clé privée de l'application, valable 9 minutes. */
+function appJwt() {
+  const { appId, appKey } = config();
+  const now = Math.floor(Date.now() / 1000);
+  const body = `${base64url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }))}.${base64url(
+    JSON.stringify({ iat: now - 60, exp: now + 540, iss: appId })
+  )}`;
+  const signature = createSign('RSA-SHA256').update(body).sign(appKey!);
+  return `${body}.${base64url(signature)}`;
+}
+
+// Jeton d'installation en cache : GitHub le délivre pour une heure.
+let installation: { token: string; until: number } | null = null;
+
+async function token() {
+  if (!appConfigured()) return config().token;
+  if (installation && installation.until > Date.now()) return installation.token;
+
+  const { repo } = config();
+  const asApp = async (path: string, init?: RequestInit) => {
+    const response = await fetch(`${API}${path}`, {
+      ...init,
+      cache: 'no-store',
+      headers: {
+        Authorization: `Bearer ${appJwt()}`,
+        Accept: 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    });
+    if (!response.ok) {
+      const detail = await response.text();
+      throw new Error(`GitHub ${response.status} sur ${path} : ${detail.slice(0, 300)}`);
+    }
+    return response.json();
+  };
+
+  const { id } = await asApp(`/repos/${repo}/installation`);
+  const data = await asApp(`/app/installations/${id}/access_tokens`, { method: 'POST' });
+  // marge de 5 minutes avant l'expiration annoncée
+  installation = { token: data.token, until: new Date(data.expires_at).getTime() - 300_000 };
+  return installation.token;
 }
 
 async function api(path: string, init?: RequestInit) {
-  const { token } = config();
   const response = await fetch(`${API}${path}`, {
     ...init,
     cache: 'no-store',
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${await token()}`,
       Accept: 'application/vnd.github+json',
       'X-GitHub-Api-Version': '2022-11-28',
       'Content-Type': 'application/json',
@@ -83,7 +145,7 @@ export async function commitFiles(changes: FileChange[], message: string): Promi
   const { repo, branch } = config();
   if (!githubConfigured()) {
     throw new Error(
-      "L'enregistrement n'est pas configuré : il manque CONTENT_REPO_TOKEN ou CONTENT_REPO."
+      "L'enregistrement n'est pas configuré : il manque CONTENT_REPO, ou une clé (CONTENT_APP_ID + CONTENT_APP_PRIVATE_KEY, ou CONTENT_REPO_TOKEN)."
     );
   }
   if (changes.length === 0) throw new Error('Aucune modification à enregistrer.');

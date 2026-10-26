@@ -3,10 +3,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
-import { X, Plus, Star, Trash2, Loader2, ImagePlus } from 'lucide-react';
+import { X, Plus, Star, Trash2, Loader2, ImagePlus, CalendarPlus } from 'lucide-react';
 import { TYPES, TRANSMISSIONS, slugify, type VehiclePayload } from '@/lib/admin/vehicle-form';
 import { preparePhoto, type PhotoPreparee } from '@/lib/admin/resize-image';
 import type { Vehicle } from '@/lib/vehicles';
+import { todayIso, upcomingRentals, type Rental } from '@/lib/rentals';
 
 /** `order` fixe la place de la voiture sur le site ; il n'est pas modifiable ici. */
 export type FicheVehicule = Vehicle & { order?: number };
@@ -42,6 +43,8 @@ export default function VehicleModal({ vehicle, existingIds, onClose, onSaved }:
     hero: vehicle?.hero ?? false
   });
   const [gallery, setGallery] = useState<string[]>(vehicle?.gallery ?? []);
+  // les locations terminées ne servent plus : on ne montre que celles à venir
+  const [locations, setLocations] = useState<Rental[]>(() => upcomingRentals(vehicle?.rentals, todayIso()));
   const [photos, setPhotos] = useState<PhotoPreparee[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
@@ -100,7 +103,9 @@ export default function VehicleModal({ vehicle, existingIds, onClose, onSaved }:
       description: form.description,
       features: form.features.split('\n').map((f) => f.trim()).filter(Boolean),
       available: form.available,
+      comingSoon: vehicle?.comingSoon, // l'annonce « Bientôt » ne se règle pas ici
       hero: form.hero,
+      rentals: locations,
       gallery,
       newPhotos: photos.map((p) => p.base64)
     };
@@ -305,14 +310,54 @@ export default function VehicleModal({ vehicle, existingIds, onClose, onSaved }:
               </div>
             </div>
 
-            <label className="mt-4 flex items-start gap-3 rounded-xl bg-brand-soft p-4">
+            <div className="mt-4 rounded-xl border border-brand-line p-4">
+              <p className="font-medium text-brand-ink">Dates déjà louées</p>
+              <p className="text-sm text-brand-gray">
+                Les clients ne peuvent pas réserver ces jours-là. La voiture redevient libre toute
+                seule le lendemain de la fin.
+              </p>
+              {locations.length > 0 && (
+                <ul className="mt-3 space-y-3">
+                  {locations.map((l, i) => (
+                    <li key={i} className="flex items-end gap-2">
+                      <div className="grid min-w-0 flex-1 gap-2 sm:grid-cols-2">
+                        <div className="min-w-0">
+                          <label className="mb-1 block text-xs font-semibold text-brand-gray" htmlFor={`v-from-${i}`}>Du</label>
+                          <input id={`v-from-${i}`} type="date" className={`${champ} px-3`} value={l.from}
+                            onChange={(e) => setLocations((ls) => ls.map((x, j) => (j === i
+                              ? { from: e.target.value, to: x.to && x.to < e.target.value ? e.target.value : x.to }
+                              : x)))} />
+                        </div>
+                        <div className="min-w-0">
+                          <label className="mb-1 block text-xs font-semibold text-brand-gray" htmlFor={`v-to-${i}`}>Au</label>
+                          <input id={`v-to-${i}`} type="date" className={`${champ} px-3`} value={l.to} min={l.from || undefined}
+                            onChange={(e) => setLocations((ls) => ls.map((x, j) => (j === i ? { ...x, to: e.target.value } : x)))} />
+                        </div>
+                      </div>
+                      <button type="button" onClick={() => setLocations((ls) => ls.filter((_, j) => j !== i))}
+                        aria-label="Retirer cette location"
+                        className="grid h-12 w-12 shrink-0 place-items-center rounded-xl border border-brand-line text-brand-gray transition hover:text-brand-red">
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              <button type="button"
+                onClick={() => setLocations((ls) => [...ls, { from: todayIso(), to: todayIso() }])}
+                className="mt-3 inline-flex items-center gap-2 rounded-full border border-brand-line px-4 py-2.5 text-sm font-semibold text-brand-ink transition hover:border-brand-red/40">
+                <CalendarPlus className="h-4 w-4 text-brand-red" /> Ajouter une location
+              </button>
+            </div>
+
+            <label className="mt-3 flex items-start gap-3 rounded-xl bg-brand-soft p-4">
               <input type="checkbox" className="mt-0.5 h-5 w-5 accent-brand-red" checked={form.available}
                 onChange={(e) => set('available', e.target.checked)} />
               <span>
-                <span className="font-medium text-brand-ink">Disponible à la location</span>
+                <span className="font-medium text-brand-ink">En ligne</span>
                 <span className="block text-sm text-brand-gray">
-                  Décoche pendant qu’elle est louée ou au garage : elle disparaît du formulaire de
-                  réservation, sans être supprimée.
+                  Décoche pour la masquer du site (garage, vente…) sans la supprimer. Pour une
+                  location, indique plutôt les dates ci-dessus.
                 </span>
               </span>
             </label>

@@ -1,4 +1,5 @@
 import type { Vehicle, VehicleType } from '@/lib/vehicles';
+import { rentalErrors, todayIso, upcomingRentals } from '@/lib/rentals';
 
 export const TYPES: VehicleType[] = ['Berline', 'SUV', 'Pick-up 4x4'];
 export const TRANSMISSIONS: Vehicle['transmission'][] = ['Manuelle', 'Automatique'];
@@ -49,6 +50,7 @@ export function validateVehicle(v: Partial<VehiclePayload>): string[] {
   if (v.available !== false && photos.length === 0) {
     errors.push('Ajoute au moins une photo, ou marque la voiture comme non disponible.');
   }
+  errors.push(...rentalErrors(v.rentals));
   return errors;
 }
 
@@ -72,6 +74,13 @@ export function toVehicleFile(v: VehiclePayload, gallery: string[]) {
     features: (v.features ?? []).map((f) => f.trim()).filter(Boolean),
     available: v.available !== false,
     ...(v.comingSoon ? { comingSoon: true } : {}),
-    ...(v.hero ? { hero: true } : {})
+    ...(v.hero ? { hero: true } : {}),
+    ...rentalsField(v.rentals)
   };
+}
+
+/** Garde les locations à venir, triées ; les terminées sont oubliées. */
+function rentalsField(rentals: Vehicle['rentals']) {
+  const aVenir = upcomingRentals(rentals, todayIso()).map(({ from, to }) => ({ from, to }));
+  return aVenir.length > 0 ? { rentals: aVenir } : {};
 }

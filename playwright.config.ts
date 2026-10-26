@@ -34,7 +34,9 @@ export default defineConfig({
       // Neutralise le dépôt, même si un .env en définit un : les tests lisent
       // les fiches du disque et ne peuvent commiter nulle part.
       CONTENT_REPO: '',
-      CONTENT_REPO_TOKEN: ''
+      CONTENT_REPO_TOKEN: '',
+      CONTENT_APP_ID: '',
+      CONTENT_APP_PRIVATE_KEY: ''
     }
   }
 });

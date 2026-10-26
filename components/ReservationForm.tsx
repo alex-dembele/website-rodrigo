@@ -12,6 +12,7 @@ import {
   mailtoLink,
   type BookingInput
 } from '@/lib/booking';
+import { overlappingRental, shortDay } from '@/lib/rentals';
 
 /** yyyy-mm-dd, en heure locale (pas en UTC) */
 function isoDate(offsetDays = 0) {
@@ -57,6 +58,8 @@ export default function ReservationForm({
   const [sent, setSent] = useState(false);
 
   const q = useMemo(() => quote(form), [form]);
+  // voiture déjà louée sur une partie des dates choisies
+  const conflit = overlappingRental(q.vehicle?.rentals, form.pickupDate, form.returnDate);
 
   const fieldErrors = {
     name: form.name.trim() ? '' : 'Indique ton nom.',
@@ -66,7 +69,10 @@ export default function ReservationForm({
       ? 'Choisis la date de retour.'
       : form.returnDate < form.pickupDate
         ? 'Le retour doit être après la prise en charge.'
-        : ''
+        : '',
+    dates: conflit
+      ? `Cette voiture est déjà louée du ${shortDay(conflit.from)} au ${shortDay(conflit.to)} : choisis d’autres dates ou une autre voiture.`
+      : ''
   };
   const valid = Object.values(fieldErrors).every((e) => !e);
 
@@ -84,7 +90,9 @@ export default function ReservationForm({
   function submitWhatsApp() {
     setTouched(true);
     if (!valid) {
-      document.getElementById('coordonnees')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document
+        .getElementById(fieldErrors.dates ? 'dates' : 'coordonnees')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
     window.open(waLink(buildBookingMessage(form)), '_blank');
@@ -94,7 +102,9 @@ export default function ReservationForm({
   function submitEmail() {
     setTouched(true);
     if (!valid) {
-      document.getElementById('coordonnees')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document
+        .getElementById(fieldErrors.dates ? 'dates' : 'coordonnees')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
     window.location.href = mailtoLink(form);
@@ -114,6 +124,7 @@ export default function ReservationForm({
           <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {availableVehicles.map((v) => {
               const selected = form.vehicleId === v.id;
+              const louee = overlappingRental(v.rentals, form.pickupDate, form.returnDate);
               return (
                 <button
                   key={v.id}
@@ -150,6 +161,11 @@ export default function ReservationForm({
                     <span className="mt-1 block text-sm font-bold text-brand-red">
                       {fcfa(v.pricePerDay)}<span className="font-medium text-brand-gray">/jour</span>
                     </span>
+                    {louee && (
+                      <span className="mt-1 block text-xs font-semibold text-brand-gray">
+                        Déjà louée à ces dates
+                      </span>
+                    )}
                   </span>
                 </button>
               );
@@ -158,7 +174,7 @@ export default function ReservationForm({
         </section>
 
         {/* 2. Dates & lieu */}
-        <section className="rounded-2xl border border-brand-line bg-white p-5 shadow-soft sm:p-6">
+        <section id="dates" className="scroll-mt-24 rounded-2xl border border-brand-line bg-white p-5 shadow-soft sm:p-6">
           <StepTitle n={2}>Quand et où ?</StepTitle>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <div>
@@ -185,6 +201,11 @@ export default function ReservationForm({
               />
               <FieldError show={touched} message={fieldErrors.returnDate} />
             </div>
+            {fieldErrors.dates && (
+              <p role="alert" className="rounded-xl border border-brand-red/30 bg-brand-red/5 p-3 text-sm font-medium text-brand-redDark sm:col-span-2">
+                {fieldErrors.dates}
+              </p>
+            )}
             <div className="sm:col-span-2">
               <label className={labelCls} htmlFor="pickupLocation">Lieu de prise en charge</label>
               <select

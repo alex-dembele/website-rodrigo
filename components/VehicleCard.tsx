@@ -3,6 +3,7 @@ import { Users, Cog, Fuel, Snowflake, CarFront } from 'lucide-react';
 import type { Vehicle } from '@/lib/vehicles';
 import { fcfa } from '@/lib/site';
 import VehicleMedia from './VehicleMedia';
+import RentalBadge from './RentalBadge';
 
 export default function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
   const soon = vehicle.comingSoon;
@@ -26,13 +27,13 @@ export default function VehicleCard({ vehicle }: { vehicle: Vehicle }) {
         <span className="pointer-events-none absolute left-3 top-3 z-10 rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-brand-ink shadow-soft">
           {vehicle.type}
         </span>
-        <span
-          className={`pointer-events-none absolute right-3 top-3 z-10 rounded-full px-3 py-1 text-xs font-bold text-white ${
-            soon ? 'bg-brand-ink' : 'bg-green-600'
-          }`}
-        >
-          {soon ? 'Bientôt' : 'Disponible'}
-        </span>
+        {soon ? (
+          <span className="pointer-events-none absolute right-3 top-3 z-10 rounded-full bg-brand-ink px-3 py-1 text-xs font-bold text-white">
+            Bientôt
+          </span>
+        ) : (
+          <RentalBadge rentals={vehicle.rentals} className="pointer-events-none absolute right-3 top-3 z-10" />
+        )}
       </div>
 
       <div className="flex flex-1 flex-col p-5">

@@ -39,6 +39,49 @@ test.describe('Espace de gestion', () => {
   test('les modifications sont refusées sans être connecté', async ({ request }) => {
     const response = await request.post('/api/admin/vehicles', { data: { id: 'pirate' } });
     expect(response.status()).toBe(401);
+    const bascule = await request.patch('/api/admin/vehicles', { data: { id: 'hilux', available: false } });
+    expect(bascule.status()).toBe(401);
+    const ordre = await request.post('/api/admin/order', { data: { ids: ['hilux'] } });
+    expect(ordre.status()).toBe(401);
+  });
+
+  test('le gérant reste connecté : la session ne tombe pas au bout de quelques heures', async ({ page, context }) => {
+    await seConnecter(page);
+    const session = (await context.cookies()).find((c) => c.name === 'rodrigo_session');
+    expect(session).toBeDefined();
+    const joursRestants = (session!.expires * 1000 - Date.now()) / 86_400_000;
+    expect(joursRestants).toBeGreaterThan(300);
+  });
+
+  test('chaque voiture a un interrupteur « En ligne »', async ({ page }) => {
+    await seConnecter(page);
+    const interrupteurs = page.getByRole('switch');
+    await expect(interrupteurs.first()).toBeVisible();
+    expect(await interrupteurs.count()).toBe(await page.getByRole('article').count());
+    await expect(interrupteurs.first()).toHaveAttribute('aria-checked', 'true');
+  });
+
+  test('les flèches préparent un nouvel ordre, qu’on peut annuler', async ({ page }) => {
+    await seConnecter(page);
+    const premiere = (await page.getByRole('article').first().getByRole('heading').textContent())!;
+    await page.getByRole('button', { name: /^Descendre / }).first().click();
+
+    await expect(page.getByText('Nouvel ordre pas encore enregistré.')).toBeVisible();
+    await expect(page.getByRole('article').nth(1).getByRole('heading')).toHaveText(premiere);
+
+    await page.getByRole('button', { name: 'Annuler' }).click();
+    await expect(page.getByText('Nouvel ordre pas encore enregistré.')).toHaveCount(0);
+    await expect(page.getByRole('article').first().getByRole('heading')).toHaveText(premiere);
+  });
+
+  test('la fiche permet d’indiquer des dates de location', async ({ page }) => {
+    await seConnecter(page);
+    await page.getByRole('button', { name: 'Modifier' }).first().click();
+    await page.getByRole('button', { name: 'Ajouter une location' }).click();
+    await expect(page.getByLabel('Du', { exact: true })).toBeVisible();
+    await expect(page.getByLabel('Au', { exact: true })).toBeVisible();
+    await page.getByRole('button', { name: 'Retirer cette location' }).click();
+    await expect(page.getByLabel('Du', { exact: true })).toHaveCount(0);
   });
 
   test('affiche la flotte une fois connecté', async ({ page }) => {
@@ -105,13 +148,30 @@ test.describe('Retour après une modification', () => {
     await page.getByLabel('Phrase qui aide à choisir').fill('Petite et économique');
     await page.getByLabel('Description').fill('Une berline compacte pour la ville.');
     // sans photo : on la déclare indisponible pour que la fiche soit valable
-    await page.locator('label', { hasText: 'Disponible à la location' }).getByRole('checkbox').uncheck();
+    await page.locator('label', { hasText: 'En ligne' }).getByRole('checkbox').uncheck();
 
     await page.getByRole('button', { name: 'Enregistrer' }).click();
 
     // le bouton doit se débloquer et une explication doit apparaître
     await expect(page.getByText(/pas encore activé|échoué|connexion/i).first()).toBeVisible();
     await expect(page.getByRole('button', { name: 'Enregistrer' })).toBeEnabled();
+  });
+
+  test('masquer une voiture qui échoue est annoncé, et la voiture reste en ligne', async ({ page }) => {
+    await seConnecterAdmin(page);
+    const interrupteur = page.getByRole('switch').first();
+    await interrupteur.click();
+    await expect(page.getByRole('status')).toBeVisible();
+    await expect(page.getByText('Rien n’a été modifié sur le site.')).toBeVisible();
+    await expect(interrupteur).toHaveAttribute('aria-checked', 'true');
+  });
+
+  test('un nouvel ordre qui échoue est annoncé et reste à enregistrer', async ({ page }) => {
+    await seConnecterAdmin(page);
+    await page.getByRole('button', { name: /^Descendre / }).first().click();
+    await page.getByRole('button', { name: 'Enregistrer l’ordre' }).click();
+    await expect(page.getByText('Rien n’a été modifié sur le site.')).toBeVisible();
+    await expect(page.getByText('Nouvel ordre pas encore enregistré.')).toBeVisible();
   });
 
   test('une suppression qui échoue est annoncée', async ({ page }) => {

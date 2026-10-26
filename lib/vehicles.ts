@@ -1,5 +1,6 @@
 import { site } from './site';
 import { vehiclesData } from './vehicles.data';
+import type { Rental } from './rentals';
 
 export type VehicleType = 'Berline' | 'SUV' | 'Pick-up 4x4';
 
@@ -27,6 +28,8 @@ export interface Vehicle {
   comingSoon?: boolean;
   /** true = voiture mise en avant dans le hero de l'accueil (une seule) */
   hero?: boolean;
+  /** Périodes où la voiture est déjà louée (dates comprises) */
+  rentals?: Rental[];
 }
 
 // Supplément journalier si le client choisit un chauffeur (FCFA / jour).
@@ -39,6 +42,9 @@ export const DRIVER_PRICE_PER_DAY = site.driverPricePerDay;
 export const vehicles: Vehicle[] = vehiclesData;
 
 export const availableVehicles = vehicles.filter((v) => v.available);
+
+/** Ce que le public voit : les voitures en ligne et celles annoncées « bientôt ». */
+export const listedVehicles = vehicles.filter((v) => v.available || v.comingSoon);
 
 /** Nom complet affiché : « Toyota Avensis — Boîte automatique » */
 export function vehicleLabel(v: Vehicle) {
