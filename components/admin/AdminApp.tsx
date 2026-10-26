@@ -4,12 +4,14 @@ import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
-  Loader2, LogOut, Pencil, Plus, Trash2, CheckCircle2, AlertTriangle, Clock, ExternalLink
+  Loader2, LogOut, Pencil, Plus, Trash2, CheckCircle2, AlertTriangle, Clock, ExternalLink,
+  ChevronUp, ChevronDown, CalendarDays
 } from 'lucide-react';
 import { LogoMark } from '@/components/Logo';
 import VehicleModal, { type FicheVehicule } from './VehicleModal';
 import SettingsForm from './SettingsForm';
 import { fcfa } from '@/lib/site';
+import { currentRental, shortDay, todayIso, upcomingRentals } from '@/lib/rentals';
 
 
 type Onglet = 'voitures' | 'infos';
@@ -27,6 +29,10 @@ export default function AdminApp({ configured }: { configured: boolean }) {
   // savoir si son enregistrement est passé.
   const [message, setMessage] = useState<{ ton: 'succes' | 'erreur'; texte: string } | null>(null);
   const [occupe, setOccupe] = useState(false);
+  // nouvel ordre en cours de préparation, pas encore enregistré
+  const [rangement, setRangement] = useState<FicheVehicule[] | null>(null);
+  // voiture dont la mise en ligne est en cours d'enregistrement
+  const [bascule, setBascule] = useState<string | null>(null);
 
   const charger = useCallback(async () => {
     try {
@@ -91,6 +97,62 @@ export default function AdminApp({ configured }: { configured: boolean }) {
     // voit pas après avoir rempli un long formulaire sur téléphone
     window.scrollTo({ top: 0, behavior: 'smooth' });
     charger();
+  }
+
+  async function changerDisponibilite(vehicle: FicheVehicule) {
+    const available = !vehicle.available;
+    setBascule(vehicle.id);
+    try {
+      const response = await fetch('/api/admin/vehicles', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: vehicle.id, available })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (response.ok) {
+        apresEnregistrement(available ? `${vehicle.name} est de nouveau en ligne.` : `${vehicle.name} est masquée.`);
+      } else {
+        setMessage({ ton: 'erreur', texte: data.error ?? 'Le changement n’a pas été enregistré.' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } catch {
+      setMessage({ ton: 'erreur', texte: 'Pas de connexion : rien n’a été modifié.' });
+    } finally {
+      setBascule(null);
+    }
+  }
+
+  function deplacer(index: number, sens: -1 | 1) {
+    const liste = [...(rangement ?? vehicles)];
+    const cible = index + sens;
+    if (cible < 0 || cible >= liste.length) return;
+    [liste[index], liste[cible]] = [liste[cible], liste[index]];
+    // revenu à l'ordre enregistré : plus rien à enregistrer
+    setRangement(liste.every((v, i) => v.id === vehicles[i].id) ? null : liste);
+  }
+
+  async function enregistrerOrdre() {
+    if (!rangement) return;
+    setOccupe(true);
+    try {
+      const response = await fetch('/api/admin/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: rangement.map((v) => v.id) })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (response.ok) {
+        setRangement(null);
+        apresEnregistrement('Nouvel ordre des voitures enregistré.');
+      } else {
+        setMessage({ ton: 'erreur', texte: data.error ?? 'L’ordre n’a pas été enregistré.' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } catch {
+      setMessage({ ton: 'erreur', texte: 'Pas de connexion : l’ordre n’a pas été enregistré.' });
+    } finally {
+      setOccupe(false);
+    }
   }
 
   async function supprimer(vehicle: FicheVehicule) {
@@ -258,7 +320,7 @@ export default function AdminApp({ configured }: { configured: boolean }) {
                   {vehicles.length} voiture{vehicles.length > 1 ? 's' : ''}
                 </h2>
                 <p className="text-sm text-brand-gray">
-                  Modifie un prix, masque une voiture louée, ou ajoutes-en une nouvelle.
+                  Masque une voiture d’un geste, range-les avec les flèches, ou ajoutes-en une nouvelle.
                 </p>
               </div>
               <button onClick={() => setEdition({ open: true, vehicle: null })}
@@ -268,7 +330,11 @@ export default function AdminApp({ configured }: { configured: boolean }) {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {vehicles.map((v) => (
+              {(rangement ?? vehicles).map((v, index, liste) => {
+                const aujourdhui = todayIso();
+                const enCours = currentRental(v.rentals, aujourdhui);
+                const prochaine = enCours ? undefined : upcomingRentals(v.rentals, aujourdhui)[0];
+                return (
                 <article key={v.id} className="flex flex-col overflow-hidden rounded-2xl border border-brand-line bg-white shadow-soft">
                   <div className="relative aspect-[4/3] bg-[#EDEDF0]">
                     {v.gallery[0] ? (
@@ -276,11 +342,22 @@ export default function AdminApp({ configured }: { configured: boolean }) {
                     ) : (
                       <p className="grid h-full place-items-center text-sm text-brand-gray">Aucune photo</p>
                     )}
-                    <span className={`absolute right-2.5 top-2.5 rounded-full px-2.5 py-1 text-xs font-bold text-white ${
-                      v.available ? 'bg-green-600' : 'bg-brand-ink'
-                    }`}>
-                      {v.available ? 'En ligne' : 'Masquée'}
+                    <span className="absolute left-2.5 top-2.5 grid h-7 min-w-7 place-items-center rounded-full bg-white/95 px-2 text-xs font-bold text-brand-ink shadow-soft"
+                      title="Place sur le site">
+                      {index + 1}
                     </span>
+                    <div className="absolute right-2.5 top-2.5 flex gap-1.5">
+                      <button onClick={() => deplacer(index, -1)} disabled={index === 0 || occupe}
+                        aria-label={`Monter ${v.name}${v.variant ? ` ${v.variant}` : ''}`}
+                        className="grid h-9 w-9 place-items-center rounded-full bg-white/95 text-brand-ink shadow-soft transition hover:text-brand-red disabled:opacity-40">
+                        <ChevronUp className="h-5 w-5" />
+                      </button>
+                      <button onClick={() => deplacer(index, 1)} disabled={index === liste.length - 1 || occupe}
+                        aria-label={`Descendre ${v.name}${v.variant ? ` ${v.variant}` : ''}`}
+                        className="grid h-9 w-9 place-items-center rounded-full bg-white/95 text-brand-ink shadow-soft transition hover:text-brand-red disabled:opacity-40">
+                        <ChevronDown className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
                   <div className="flex flex-1 flex-col p-4">
                     <h3 className="font-display font-bold text-brand-ink">{v.name}</h3>
@@ -291,20 +368,70 @@ export default function AdminApp({ configured }: { configured: boolean }) {
                     <p className="mt-2 font-display text-lg font-extrabold text-brand-ink">
                       {fcfa(v.pricePerDay)}<span className="text-sm font-medium text-brand-gray">/jour</span>
                     </p>
-                    <div className="mt-4 flex gap-2">
-                      <button onClick={() => setEdition({ open: true, vehicle: v })}
-                        className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border border-brand-line px-4 py-2.5 text-sm font-semibold text-brand-ink transition hover:border-brand-red/40">
+                    {(enCours || prochaine) && (
+                      <p className="mt-2 flex items-center gap-1.5 text-sm font-medium text-brand-ink">
+                        <CalendarDays className="h-4 w-4 shrink-0 text-brand-red" />
+                        {enCours
+                          ? `Louée jusqu’au ${shortDay(enCours.to)}`
+                          : `Louée du ${shortDay(prochaine!.from)} au ${shortDay(prochaine!.to)}`}
+                      </p>
+                    )}
+
+                    <button role="switch" aria-checked={v.available}
+                      onClick={() => changerDisponibilite(v)} disabled={bascule !== null || rangement !== null}
+                      aria-label={`${v.name}${v.variant ? ` ${v.variant}` : ''} visible sur le site`}
+                      className="mt-4 flex items-center justify-between gap-3 rounded-xl bg-brand-soft px-4 py-3 text-left transition disabled:opacity-60">
+                      <span>
+                        <span className="block text-sm font-semibold text-brand-ink">
+                          {v.available ? 'En ligne' : 'Masquée'}
+                        </span>
+                        <span className="block text-xs text-brand-gray">
+                          {v.available ? 'Les clients peuvent la réserver.' : 'Invisible pour les clients.'}
+                        </span>
+                      </span>
+                      {bascule === v.id ? (
+                        <Loader2 className="h-5 w-5 shrink-0 animate-spin text-brand-red" />
+                      ) : (
+                        <span aria-hidden="true" className={`relative h-7 w-12 shrink-0 rounded-full transition ${v.available ? 'bg-green-600' : 'bg-brand-gray/40'}`}>
+                          <span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition-all ${v.available ? 'left-6' : 'left-1'}`} />
+                        </span>
+                      )}
+                    </button>
+
+                    <div className="mt-3 flex gap-2">
+                      <button onClick={() => setEdition({ open: true, vehicle: v })} disabled={rangement !== null}
+                        className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border border-brand-line px-4 py-2.5 text-sm font-semibold text-brand-ink transition hover:border-brand-red/40 disabled:opacity-60">
                         <Pencil className="h-4 w-4" /> Modifier
                       </button>
-                      <button onClick={() => setSuppression(v)} aria-label={`Supprimer ${v.name}`}
-                        className="grid h-10 w-10 place-items-center rounded-full border border-brand-line text-brand-gray transition hover:border-brand-red/40 hover:text-brand-red">
+                      <button onClick={() => setSuppression(v)} aria-label={`Supprimer ${v.name}`} disabled={rangement !== null}
+                        className="grid h-10 w-10 place-items-center rounded-full border border-brand-line text-brand-gray transition hover:border-brand-red/40 hover:text-brand-red disabled:opacity-60">
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
                 </article>
-              ))}
+                );
+              })}
             </div>
+
+            {rangement && (
+              <div className="sticky bottom-4 z-30 mt-6 flex flex-col gap-3 rounded-2xl border border-brand-line bg-white p-4 shadow-card sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm font-semibold text-brand-ink">
+                  Nouvel ordre pas encore enregistré.
+                </p>
+                <div className="flex gap-2">
+                  <button onClick={() => setRangement(null)} disabled={occupe}
+                    className="flex-1 rounded-full border border-brand-line px-5 py-2.5 text-sm font-semibold text-brand-ink transition hover:bg-brand-soft sm:flex-none">
+                    Annuler
+                  </button>
+                  <button onClick={enregistrerOrdre} disabled={occupe}
+                    className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-brand-red px-5 py-2.5 text-sm font-semibold text-white shadow-red transition disabled:opacity-60 sm:flex-none">
+                    {occupe && <Loader2 className="h-4 w-4 animate-spin" />}
+                    Enregistrer l’ordre
+                  </button>
+                </div>
+              </div>
+            )}
           </>
         )}
 
@@ -335,7 +462,7 @@ export default function AdminApp({ configured }: { configured: boolean }) {
                 </h2>
                 <p className="mt-1.5 text-sm text-brand-gray">
                   La voiture et ses photos disparaissent du site. Si c’est juste parce qu’elle est
-                  louée en ce moment, ferme cette fenêtre et décoche « Disponible » dans sa fiche.
+                  louée en ce moment, ferme cette fenêtre et indique plutôt ses dates de location dans sa fiche.
                 </p>
               </div>
             </div>

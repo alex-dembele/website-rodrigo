@@ -33,9 +33,14 @@ npm test                          # build + serveur + tests, sur ordinateur et m
 ## 🔑 L'espace de gestion — la façon la plus simple
 
 Le gérant modifie le site lui-même depuis **`/admin`**, sans rien installer et depuis
-son téléphone : ajouter une voiture avec ses photos, changer un prix, masquer une
-voiture louée, choisir celle qui s'affiche en haut de l'accueil, corriger un numéro
-de téléphone ou un compte Mobile Money.
+son téléphone : ajouter une voiture avec ses photos, changer un prix, la masquer ou
+la remettre en ligne d'un geste, ranger les voitures dans l'ordre voulu, indiquer
+les dates où une voiture est déjà louée, choisir celle qui s'affiche en haut de
+l'accueil, corriger un numéro de téléphone ou un compte Mobile Money.
+
+Une voiture louée du 3 au 10 affiche « Louée · libre le 11 » sur le site, et le
+formulaire refuse ces dates. Le 11, elle redevient « Disponible » toute seule : la
+date du jour est comparée dans le navigateur du client, sans nouvelle mise en ligne.
 
 On y accède par le bouton **« Gérer le site »** en bas de chaque page, ou
 directement par `/admin`.
@@ -45,15 +50,29 @@ site : **compter 1 à 2 minutes** avant que la modification soit visible en lign
 
 ### Mise en service (une seule fois)
 
-1. Créer un jeton GitHub **fine-grained** limité à ce dépôt, avec la permission
-   *Repository permissions → **Contents: Read and write***.
-   > ⚠️ En lecture seule, l'espace de gestion affiche bien les voitures mais
-   > **aucun enregistrement ne passe** : GitHub répond « Resource not accessible
-   > by personal access token ». C'est l'erreur la plus fréquente à la mise en
-   > service.
+L'espace de gestion est prévu pour être livré **clé en main** : une fois en place,
+rien n'expire. Le gérant se connecte une fois sur son téléphone et reste connecté
+(la session est renouvelée à chaque visite) ; la clé d'enregistrement ne périme pas.
+
+1. **Créer une application GitHub** (clé qui n'expire jamais — recommandé) :
+   - *GitHub → Settings → Developer settings → GitHub Apps → New GitHub App*.
+     Nom libre, URL du site comme *Homepage URL*, décocher *Webhook → Active*.
+   - *Repository permissions → **Contents: Read and write*** (rien d'autre).
+   - Créer, noter l'**App ID**, puis *Generate a private key* (fichier `.pem`).
+   - *Install App* → l'installer **uniquement sur ce dépôt**.
+
+   Le site obtient tout seul, à la demande, un jeton d'une heure signé par cette
+   clé : il n'y a plus jamais de jeton à renouveler.
+
+   > Plus rapide mais à durée limitée : un jeton **fine-grained** limité à ce dépôt
+   > (*Contents: Read and write*) dans `CONTENT_REPO_TOKEN`. Il expire à la date
+   > choisie à sa création ; l'espace de gestion l'annonce alors au gérant.
+   > En lecture seule, aucun enregistrement ne passe : GitHub répond « Resource not
+   > accessible by personal access token ».
 2. Sur Vercel → *Settings* → *Environment Variables*, définir les variables listées
-   dans [`.env.example`](.env.example) : `ADMIN_PASSWORD`, `CONTENT_REPO_TOKEN`,
-   `CONTENT_REPO`, `CONTENT_BRANCH`.
+   dans [`.env.example`](.env.example) : `ADMIN_PASSWORD`, `CONTENT_APP_ID`,
+   `CONTENT_APP_PRIVATE_KEY` (contenu complet du `.pem`), `CONTENT_REPO`,
+   `CONTENT_BRANCH`.
    > Le préfixe `GITHUB_` est **réservé par Vercel** et refusé à la création :
    > c'est pourquoi ces variables portent un nom neutre.
 3. **Redéployer** : les variables ne s'appliquent pas au déploiement déjà en ligne.
@@ -61,10 +80,11 @@ site : **compter 1 à 2 minutes** avant que la modification soit visible en lign
    activé » et refuse toute connexion.
 
 Le mot de passe n'est jamais envoyé au navigateur : la page reçoit seulement
-l'information qu'un mot de passe existe. La session est un cookie signé qui expire
-au bout de 12 heures, et `/admin` est exclu des moteurs de recherche.
+l'information qu'un mot de passe existe. La session est un cookie signé sans date
+de fin, et `/admin` est exclu des moteurs de recherche.
 
-> Changer le mot de passe déconnecte automatiquement tout le monde.
+> Changer le mot de passe déconnecte automatiquement tout le monde — c'est la
+> marche à suivre si le téléphone du gérant est perdu.
 
 ---
 
@@ -110,8 +130,11 @@ Pour **modifier** un prix ou retirer une voiture de la location, ouvre son fichi
 - `order` : ordre d'affichage sur le site (le plus petit en premier).
 - `hero: true` : la voiture mise en avant en haut de l'accueil. **Une seule** doit
   la porter ; l'espace de gestion s'en assure automatiquement.
-- `available: false` : la voiture disparaît du formulaire de réservation.
+- `available: false` : la voiture disparaît du site (masquée).
   Avec `comingSoon: true`, elle reste visible avec le badge « Bientôt ».
+- `rentals: [{ "from": "2026-11-03", "to": "2026-11-10" }]` : dates déjà louées,
+  bornes comprises. Le formulaire refuse ces dates ; les périodes passées sont
+  ignorées puis effacées au prochain enregistrement depuis l'espace de gestion.
 - `gallery: []` : pas encore de photo → cadre « photos bientôt disponibles » au lieu
   d'une image trompeuse. Interdit si la voiture est disponible.
 

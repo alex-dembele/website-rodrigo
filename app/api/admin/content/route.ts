@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { isLoggedIn } from '@/lib/admin/session';
+import { COOKIE, cookieOptions, currentSession, isLoggedIn } from '@/lib/admin/session';
 import { githubConfigured, listDir, readFile as readRepoFile } from '@/lib/admin/github';
 import { messageOperateur } from '@/lib/admin/messages';
 
@@ -48,7 +48,7 @@ export async function GET() {
   try {
     const depot = githubConfigured() ? await depuisLeDepot() : null;
     const { vehicles, settings } = depot ?? (await depuisLeDisque());
-    return NextResponse.json({
+    const response = NextResponse.json({
       vehicles: vehicles.sort(
         (a: { order?: number; id: string }, b: { order?: number; id: string }) =>
           (a.order ?? 99) - (b.order ?? 99) || a.id.localeCompare(b.id)
@@ -56,6 +56,9 @@ export async function GET() {
       settings,
       live: depot !== null
     });
+    // chaque visite repousse la fin du cookie : le gérant n'a jamais à se reconnecter
+    response.cookies.set(COOKIE, (await currentSession())!, cookieOptions);
+    return response;
   } catch (e) {
     return NextResponse.json({ error: messageOperateur(e) }, { status: 500 });
   }

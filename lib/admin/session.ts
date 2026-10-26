@@ -10,7 +10,11 @@ import { cookies } from 'next/headers';
  */
 
 export const COOKIE = 'rodrigo_session';
-const DUREE_HEURES = 12;
+
+// Le gérant reste connecté sur son téléphone : la session n'expire pas. Les
+// navigateurs plafonnent la durée de vie d'un cookie (400 jours pour Chrome),
+// on la renouvelle donc à chaque ouverture de l'espace de gestion.
+const DUREE_COOKIE_JOURS = 400;
 
 function password() {
   return process.env.ADMIN_PASSWORD ?? '';
@@ -40,17 +44,17 @@ export function checkPassword(candidate: string) {
   return adminConfigured() && equals(candidate, password());
 }
 
+/** Session sans date de fin : seul un changement de mot de passe l'annule. */
 export function createSession() {
-  const expiration = Date.now() + DUREE_HEURES * 3600_000;
-  return `${expiration}.${sign(String(expiration))}`;
+  const ouverture = String(Date.now());
+  return `${ouverture}.${sign(`gerant:${ouverture}`)}`;
 }
 
 export function validSession(value: string | undefined) {
   if (!value || !adminConfigured()) return false;
-  const [expiration, signature] = value.split('.');
-  if (!expiration || !signature) return false;
-  if (Number(expiration) < Date.now()) return false;
-  return equals(signature, sign(expiration));
+  const [ouverture, signature] = value.split('.');
+  if (!ouverture || !signature) return false;
+  return equals(signature, sign(`gerant:${ouverture}`));
 }
 
 /** À appeler au début de chaque route protégée. */
@@ -58,10 +62,15 @@ export async function isLoggedIn() {
   return validSession((await cookies()).get(COOKIE)?.value);
 }
 
+/** Valeur actuelle du cookie, pour le renouveler sans reconnexion. */
+export async function currentSession() {
+  return (await cookies()).get(COOKIE)?.value;
+}
+
 export const cookieOptions = {
   httpOnly: true,
   sameSite: 'lax' as const,
   secure: process.env.NODE_ENV === 'production',
   path: '/',
-  maxAge: DUREE_HEURES * 3600
+  maxAge: DUREE_COOKIE_JOURS * 24 * 3600
 };

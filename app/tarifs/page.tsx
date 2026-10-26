@@ -4,7 +4,7 @@ import { Check } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppButton from '@/components/WhatsAppButton';
-import { vehicles, DRIVER_PRICE_PER_DAY } from '@/lib/vehicles';
+import { listedVehicles, DRIVER_PRICE_PER_DAY } from '@/lib/vehicles';
 import { fcfa, site } from '@/lib/site';
 import Reveal from '@/components/Reveal';
 
@@ -35,7 +35,7 @@ export default function TarifsPage() {
 
         <section className="container py-10 sm:py-12">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {vehicles.map((v, idx) => (
+            {listedVehicles.map((v, idx) => (
               <Reveal key={v.id} delay={idx * 90} className="h-full">
               <article className="flex h-full flex-col rounded-2xl border border-brand-line bg-white p-6 shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:shadow-card">
                 <p className="text-sm font-semibold text-brand-gray">{v.type}</p>

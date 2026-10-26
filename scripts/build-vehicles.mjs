@@ -88,6 +88,19 @@ function readVehicle(file) {
     fail(file, 'une voiture proposée à la location doit avoir au moins une photo');
   }
 
+  const rentals = Array.isArray(raw.rentals) ? raw.rentals : [];
+  if (raw.rentals !== undefined && !Array.isArray(raw.rentals)) {
+    fail(file, 'le champ « rentals » doit être une liste de périodes { from, to }');
+  }
+  for (const r of rentals) {
+    const day = /^\d{4}-\d{2}-\d{2}$/;
+    if (!day.test(r?.from ?? '') || !day.test(r?.to ?? '')) {
+      fail(file, `la location ${JSON.stringify(r)} doit avoir « from » et « to » au format aaaa-mm-jj`);
+    } else if (r.to < r.from) {
+      fail(file, `la location du ${r.from} se termine avant de commencer (${r.to})`);
+    }
+  }
+
   const features = Array.isArray(raw.features) ? raw.features : [];
   if (!Array.isArray(raw.features)) fail(file, 'le champ « features » doit être une liste');
 
@@ -109,7 +122,8 @@ function readVehicle(file) {
     features,
     available,
     comingSoon: raw.comingSoon === true,
-    hero: raw.hero === true
+    hero: raw.hero === true,
+    rentals: rentals.map(({ from, to }) => ({ from, to }))
   };
 }
 
@@ -138,11 +152,12 @@ vehicles.sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
 
 const body = vehicles
   .map((v) => {
-    const { order, variant, comingSoon, hero, ...rest } = v;
+    const { order, variant, comingSoon, hero, rentals, ...rest } = v;
     const fields = { ...rest };
     if (variant) fields.variant = variant;
     if (comingSoon) fields.comingSoon = true;
     if (hero) fields.hero = true;
+    if (rentals.length > 0) fields.rentals = rentals;
     return JSON.stringify(fields, null, 2)
       .split('\n')
       .map((line) => `  ${line}`)
