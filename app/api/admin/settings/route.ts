@@ -8,6 +8,7 @@ export const dynamic = 'force-dynamic';
 /** Champs que le gérant peut modifier depuis l'espace de gestion. */
 interface Modifiables {
   phone: string;
+  phone2?: string;
   whatsappDisplay: string;
   email: string;
   address: string;
@@ -23,6 +24,9 @@ interface Modifiables {
 function validate(s: Partial<Modifiables>): string[] {
   const errors: string[] = [];
   if (!s.phone?.trim()) errors.push('Le numéro de téléphone est vide.');
+  if (s.phone2?.trim() && s.phone2.replace(/\D/g, '').length < 8) {
+    errors.push('Le second numéro de téléphone est trop court pour être valable.');
+  }
   if (!s.whatsappDisplay?.trim()) errors.push('Le numéro WhatsApp est vide.');
   else if (s.whatsappDisplay.replace(/\D/g, '').length < 8) {
     errors.push('Le numéro WhatsApp est trop court pour être valable.');
@@ -58,6 +62,7 @@ export async function POST(request: Request) {
     const settings = {
       ...actuel,
       phone: payload.phone!.trim(),
+      phone2: payload.phone2?.trim() ?? '',
       whatsappDisplay: payload.whatsappDisplay!.trim(),
       whatsapp: payload.whatsappDisplay!.replace(/\D/g, ''),
       email: payload.email!.trim(),

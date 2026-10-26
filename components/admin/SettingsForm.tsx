@@ -5,6 +5,7 @@ import { Loader2, Save } from 'lucide-react';
 
 interface Settings {
   phone: string;
+  phone2?: string;
   whatsappDisplay: string;
   email: string;
   address: string;
@@ -77,6 +78,12 @@ export default function SettingsForm({
             <label className={etiquette} htmlFor="s-phone">Téléphone (appels)</label>
             <input id="s-phone" className={champ} value={form.phone}
               onChange={(e) => set('phone', e.target.value)} />
+          </div>
+          <div>
+            <label className={etiquette} htmlFor="s-phone2">Second téléphone (appels)</label>
+            <input id="s-phone2" className={champ} value={form.phone2 ?? ''}
+              onChange={(e) => set('phone2', e.target.value)} />
+            <p className={aide}>Facultatif : laisse vide pour ne pas l’afficher.</p>
           </div>
           <div>
             <label className={etiquette} htmlFor="s-wa">WhatsApp (réservations)</label>

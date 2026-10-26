@@ -53,6 +53,12 @@ export default function Footer() {
               <a href={telLink()} className="hover:text-brand-red">{site.phone}</a>
               <span className="ml-2 text-xs text-brand-gray">Appels</span>
             </li>
+            {site.phone2 && (
+              <li>
+                <a href={telLink(site.phone2)} className="hover:text-brand-red">{site.phone2}</a>
+                <span className="ml-2 text-xs text-brand-gray">Appels</span>
+              </li>
+            )}
             <li>
               <a href={waLink('Bonjour, je souhaite louer une voiture.')} target="_blank" rel="noreferrer" className="hover:text-brand-red">
                 {site.whatsappDisplay}

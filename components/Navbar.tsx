@@ -107,6 +107,13 @@ export default function Navbar() {
             >
               Écrire sur WhatsApp
             </a>
+            <div className="mt-1 flex flex-wrap justify-center gap-x-5 gap-y-1 text-sm font-semibold text-brand-ink">
+              {[site.phone, site.phone2].filter(Boolean).map((n) => (
+                <a key={n} href={telLink(n)} className="inline-flex items-center gap-1.5 py-2 hover:text-brand-red">
+                  <Phone className="h-4 w-4 text-brand-red" /> {n}
+                </a>
+              ))}
+            </div>
           </nav>
         </div>
       )}

@@ -52,6 +52,15 @@ test.describe('Pages du site', () => {
     );
   });
 
+  test('le second numéro peut être appelé depuis le pied de page et la page contact', async ({ page }) => {
+    for (const path of ['/', '/contact']) {
+      await page.goto(path);
+      const lien = page.locator('main, footer').locator('a[href="tel:+4917663048623"]').first();
+      await expect(lien).toBeVisible();
+      await expect(lien).toHaveText('+49 176 63048623');
+    }
+  });
+
   test('aucun numéro fictif n’est affiché aux clients', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('body')).not.toContainText('6XX XX XX XX', { useInnerText: true });
